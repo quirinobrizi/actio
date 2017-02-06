@@ -1,0 +1,33 @@
+@CHARSET "UTF-8";
+
+body {
+}
+
+#view-container {
+	padding: 0;
+	margin: 0;
+}
+
+#single-value-widget {
+	width: 100%; min-width: 50px; max-width: 150px;
+	height: 100%; min-height: 50px; max-height: 150px;
+	border: 1px solid gray;
+	padding: 0; margin: 0;
+}
+
+#single-value-widget #single-value-widget-title {
+	display: flex; display: -webkit-box; display: -moz-box; display: -ms-flexbox; display: -webkit-flex;
+	text-transform: capitalize; font-size: 14px; font-weight: bold;
+	height: 20%;
+	text-align: center; align-items: center; justify-content: center;
+	border-bottom: 1px solid gray;
+	padding: 0; margin: 0;
+}
+
+#single-value-widget #single-value-widget-value {
+	display: flex; display: -webkit-box; display: -moz-box; display: -ms-flexbox; display: -webkit-flex;
+	text-transform: uppercase; font-size: 56px; 
+	height: 85%;
+	text-align: center; align-items: center; justify-content: center;
+	padding: 0; margin: 0;
+}

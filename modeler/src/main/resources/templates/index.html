@@ -1,0 +1,44 @@
+<html>
+
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Actio Modeler</title>
+
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"></link>
+<link rel="icon" href="/favicon.ico" type="image/x-icon"></link>
+
+<link href="css/angular-bootstrap.css" rel="stylesheet"></link>
+<link rel="stylesheet" href="css/style.css"></link>
+<link rel="stylesheet" href="css/angular-growl.min.css"></link>
+</head>
+
+<body ng-app="actio-modeler">
+	<nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#"> <img alt="Actio"
+				src="images/actio.png" />
+			</a>
+		</div>
+	</div>
+	</nav>
+	
+	<section id="view-container" ng-view=""></section>
+
+	<script src="js/angular-bootstrap.js" type="text/javascript"></script>
+	<script type="text/javascript" src="js/libs/angular-growl.min.js"></script>
+	<script type="text/javascript" src="js/actio.module.js"></script>
+	<script type="text/javascript" src="js/actio.config.js"></script>
+	<script type="text/javascript" src="js/core/module.js"></script>
+	<script type="text/javascript" src="js/core/configuration/module.js"></script>
+	<script type="text/javascript" src="js/core/configuration/service.js"></script>
+	<script type="text/javascript" src="js/core/processes/module.js"></script>
+	<script type="text/javascript" src="js/core/processes/service.js"></script>
+	<script type="text/javascript" src="js/core/widgets/module.js"></script>
+	<script type="text/javascript" src="js/core/widgets/directive.js"></script>
+	<script type="text/javascript" src="js/dashboard/module.js"></script>
+	<script type="text/javascript" src="js/dashboard/component.js"></script>
+</body>
+</html>

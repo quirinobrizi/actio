@@ -1,0 +1,9 @@
+<h1>Dashboard</h1>
+<pre>
+	{{$ctrl.metrics}}
+</pre>
+<div class="row">
+	<single-value class="col-md-2" ng-title="Completed Task Count" ng-value="{{$ctrl.metrics.completedTaskCount}}"></single-value>
+	<single-value class="col-md-2" ng-title="Completed Task Count Today" ng-value="{{$ctrl.metrics.completedTaskCountToday}}"></single-value>
+	<single-value class="col-md-2" ng-title="Open Task Count" ng-value="{{$ctrl.metrics.openTaskCount}}"></single-value>
+</div>
