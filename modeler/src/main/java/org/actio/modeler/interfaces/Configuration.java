@@ -13,31 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.modeler.controller;
+package org.actio.modeler.interfaces;
 
 import org.actio.modeler.infrastructure.config.ModelerConfigurationProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * @author quirino.brizi
  *
  */
 @RestController
-@RequestMapping(path = "/processes", produces = MediaType.APPLICATION_JSON_VALUE)
-public class Processes {
+public class Configuration {
 
 	@Autowired
 	private ModelerConfigurationProperties configuration;
 
-	@Autowired
-	private RestTemplate restTemplate;
-
-	@RequestMapping(value = "/metrics")
-	public String getMetrics() {
-		return restTemplate.getForObject(configuration.getEngine().getUrlFormat(), String.class, "activiti");
+	@RequestMapping(value = "/configuration")
+	public ModelerConfigurationProperties configuration() {
+		return configuration;
 	}
 }

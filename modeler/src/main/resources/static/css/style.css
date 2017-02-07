@@ -9,25 +9,26 @@ body {
 }
 
 #single-value-widget {
-	width: 100%; min-width: 50px; max-width: 150px;
-	height: 100%; min-height: 50px; max-height: 150px;
-	border: 1px solid gray;
-	padding: 0; margin: 0;
+	width: 100%; min-width: 60px;
+	height: 100%; min-height: 20px; max-height: 100px;
+	border: 1px solid #f9f9f9;
+	padding: 0; margin: 0 0 10px 0;
 }
 
 #single-value-widget #single-value-widget-title {
 	display: flex; display: -webkit-box; display: -moz-box; display: -ms-flexbox; display: -webkit-flex;
 	text-transform: capitalize; font-size: 14px; font-weight: bold;
-	height: 20%;
+	height: 40%;
 	text-align: center; align-items: center; justify-content: center;
-	border-bottom: 1px solid gray;
+	border-bottom: 1px solid #f9f9f9;
 	padding: 0; margin: 0;
+	background-color: #f9f9f9;
 }
 
 #single-value-widget #single-value-widget-value {
 	display: flex; display: -webkit-box; display: -moz-box; display: -ms-flexbox; display: -webkit-flex;
 	text-transform: uppercase; font-size: 56px; 
-	height: 85%;
+	height: 60%;
 	text-align: center; align-items: center; justify-content: center;
 	padding: 0; margin: 0;
 }

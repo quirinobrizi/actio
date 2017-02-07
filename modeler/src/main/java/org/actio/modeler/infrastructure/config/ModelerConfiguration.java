@@ -48,7 +48,8 @@ import org.springframework.web.client.RestTemplate;
 @EnableEurekaClient
 @EnableAutoConfiguration
 @EnableConfigurationProperties(value = { ModelerConfigurationProperties.class })
-@ComponentScan({ "org.actio.modeler.controller" })
+@ComponentScan({ "org.actio.modeler.interfaces", "org.actio.modeler.app",
+		"org.actio.modeler.infrastructure.repository" })
 public class ModelerConfiguration {
 
 	public static void main(String[] args) {

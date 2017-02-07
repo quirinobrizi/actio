@@ -13,20 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.modeler.controller;
+package org.actio.modeler.app;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.actio.modeler.domain.model.Metrics;
+import org.actio.modeler.domain.repository.MetricsRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author quirino.brizi
  *
  */
-@Controller
-public class Index {
+@Service
+public class MetricsService {
 
-	@RequestMapping(value="/")
-	public String index(){
-		return "index";
+	@Autowired
+	private MetricsRepository metricsRepository;
+
+	public Metrics getMetrics() {
+		return metricsRepository.get();
 	}
 }

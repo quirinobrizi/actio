@@ -13,29 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-angular
-  .module('core.widgets')
-  .directive('singleValue', [
-    function() {
-    	return {
-	      restrict: 'E',
-	      scope: {
-	    	ngTitle: '@',
-	        ngValue: '@'
-	      },
-	      templateUrl: 'js/core/widgets/single.value.template.html',
-	      controller: ['$scope', function SingleValueController($scope) { 
-	    	  $scope.bind = function(title, value) {
-	    		  $scope.title = title;
-	    		  $scope.value = value;
-	    	  }
-	      }],
-	 
-	      link: function(scope, iElement, iAttrs) {
-	    	  scope.$watch('ngValue', function(newValue, oldValue, scope) { 
-	    		  scope.bind(iAttrs.ngTitle, newValue); 
-	    	  }, true);
-	      }
-    	}
-    }
-]);
+package org.actio.modeler.interfaces;
+
+import org.actio.modeler.app.MetricsService;
+import org.actio.modeler.domain.model.Metrics;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * @author quirino.brizi
+ *
+ */
+@RestController
+@RequestMapping(path = "/processes", produces = MediaType.APPLICATION_JSON_VALUE)
+public class Processes {
+
+	@Autowired
+	private MetricsService metricsService;
+
+	@RequestMapping(value = "/metrics")
+	public Metrics getMetrics() {
+		return metricsService.getMetrics();
+	}
+}

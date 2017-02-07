@@ -13,29 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-angular
-  .module('core.widgets')
-  .directive('singleValue', [
-    function() {
-    	return {
-	      restrict: 'E',
-	      scope: {
-	    	ngTitle: '@',
-	        ngValue: '@'
-	      },
-	      templateUrl: 'js/core/widgets/single.value.template.html',
-	      controller: ['$scope', function SingleValueController($scope) { 
-	    	  $scope.bind = function(title, value) {
-	    		  $scope.title = title;
-	    		  $scope.value = value;
-	    	  }
-	      }],
-	 
-	      link: function(scope, iElement, iAttrs) {
-	    	  scope.$watch('ngValue', function(newValue, oldValue, scope) { 
-	    		  scope.bind(iAttrs.ngTitle, newValue); 
-	    	  }, true);
-	      }
-    	}
-    }
-]);
+package org.actio.modeler.domain.repository;
+
+import org.actio.modeler.domain.model.Metrics;
+
+/**
+ * @author quirino.brizi
+ *
+ */
+public interface MetricsRepository {
+
+	Metrics get();
+}

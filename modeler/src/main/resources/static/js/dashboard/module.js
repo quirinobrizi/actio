@@ -14,4 +14,4 @@
  * limitations under the License.
  *******************************************************************************/
 angular
-  .module('dashboard', ['core']);
+  .module('dashboard', ['core', 'smart-table']);

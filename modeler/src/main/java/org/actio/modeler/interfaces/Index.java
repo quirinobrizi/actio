@@ -13,25 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.modeler.controller;
+package org.actio.modeler.interfaces;
 
-import org.actio.modeler.infrastructure.config.ModelerConfigurationProperties;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author quirino.brizi
  *
  */
-@RestController
-public class Configuration {
+@Controller
+public class Index {
 
-	@Autowired
-	private ModelerConfigurationProperties configuration;
-
-	@RequestMapping(value = "/configuration")
-	public ModelerConfigurationProperties configuration() {
-		return configuration;
+	@RequestMapping(value="/")
+	public String index(){
+		return "index";
 	}
 }
