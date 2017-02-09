@@ -12,15 +12,23 @@
 <link href="css/angular-bootstrap.css" rel="stylesheet"></link>
 <link rel="stylesheet" href="css/style.css"></link>
 <link rel="stylesheet" href="css/angular-growl.min.css"></link>
+<link rel="stylesheet" href="css/diagram-js.css"></link>
+<link rel="stylesheet" href="css/bpmn-embedded.css"></link>
 </head>
 
 <body ng-app="actio-modeler">
 	<nav class="navbar navbar-default">
 	<div class="container-fluid">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="#"> <img alt="Actio"
-				src="images/actio.png" />
+			<a class="navbar-brand" href="#"> 
+				<img alt="Actio" src="images/actio.png" />
 			</a>
+		</div>
+		
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+        		<li><a href="#!/editor">Editor <span class="sr-only">(current)</span></a></li>
+        	</ul>
 		</div>
 	</div>
 	</nav>
@@ -29,6 +37,7 @@
 
 	<script src="js/angular-bootstrap.js" type="text/javascript"></script>
 	<script type="text/javascript" src="js/libs/angular-growl.min.js"></script>
+	<script type="text/javascript" src="js/libs/bpmn-modeler-actio.js"></script>
 	<script type="text/javascript" src="js/actio.module.js"></script>
 	<script type="text/javascript" src="js/actio.config.js"></script>
 	<script type="text/javascript" src="js/core/module.js"></script>
@@ -40,5 +49,7 @@
 	<script type="text/javascript" src="js/core/widgets/directive.js"></script>
 	<script type="text/javascript" src="js/dashboard/module.js"></script>
 	<script type="text/javascript" src="js/dashboard/component.js"></script>
+	<script type="text/javascript" src="js/editor/module.js"></script>
+	<script type="text/javascript" src="js/editor/component.js"></script>
 </body>
 </html>
