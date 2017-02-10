@@ -1,6 +1,15 @@
 @CHARSET "UTF-8";
+* { box-sizing: border-box; }
+body, html {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
 
-body {
+a:link {
+  text-decoration: none;
 }
 
 #view-container {
@@ -33,15 +42,35 @@ body {
 	padding: 0; margin: 0;
 }
 
+.editor {
+  margin: 0;
+  padding: 20px 0 0 0;
+  /* multiple bg images */
+  background-image: url(../images/ruler.png), url(../images/bg-dots.png);
+  background-repeat: no-repeat, repeat;
+}
+
 .editor .canvas {
   width: 80%;
-  position: relative;
   display: inline-block;
-  padding: 0;
+  padding: 0; margin: 0;
 }
 .editor .properties {
-  width: 18%;
-  position: relative;
+  width: 18%;  height: 100%;
+  vertical-align: top;
   display: inline-block;
-  padding: 0;
+  padding: 0; margin: 0;
+}
+
+.io-control-list {
+    list-style: none;
+    padding: 5px;
+    margin: 0
+}
+.io-control-list li { display: inline-block; }
+
+.vr {
+    height: 22px;
+    display: inline-block;
+    border-right: solid 1px #CCC
 }

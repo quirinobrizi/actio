@@ -1,5 +1,26 @@
-<h1>Editor</h1>
 <div class="editor">
-	<div class="canvas" id="canvas"></div>
+	<div class="canvas" id="canvas">
+		<div class="io-import-export">
+		    <ul class="io-control-list">
+		      <li>
+		        <button title="open BPMN diagram from local file system" jsaction="click:bio.openLocal">
+		          <i class="material-icons">file_upload</i>
+		        </button>
+		      </li>
+		      <li class="vr" style="margin-left: 2px"></li>
+		      <li>
+		        <button title="download BPMN diagram on local file system" jsaction="click:bio.openLocal">
+		          <i class="material-icons">file_download</i>
+		        </button>
+		      </li>
+		      <li class="vr" style="margin-left: 2px"></li>
+		      <li>
+		        <button title="create new BPMN diagram" jsaction="click:bio.createNew">
+		          <i class="material-icons">add</i>
+		        </button>
+		      </li>
+		    </ul>
+		</div>
+	</div>
 	<div class="properties" id="properties"></div>
 </div>
