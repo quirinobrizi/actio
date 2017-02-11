@@ -13,5 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-angular
-  .module('core', ['core.configuration', 'core.processes', 'core.models', 'core.widgets']);
+package org.actio.modeler.app;
+
+import org.actio.modeler.domain.model.Model;
+import org.actio.modeler.domain.repository.ModelRepository;
+import org.actio.modeler.infrastructure.repository.message.response.ModelResponseMessage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+/**
+ * @author quirino.brizi
+ *
+ */
+@Service
+public class ModelService {
+
+	@Autowired
+	private ModelRepository modelRespository;
+
+	public ModelResponseMessage create(Model model) {
+		return modelRespository.add(model);
+	}
+}

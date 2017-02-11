@@ -15,29 +15,43 @@
  ******************************************************************************/
 angular.module('editor').component('editor', {
 	templateUrl : 'js/editor/template.html',
-	controller : [ 'Processes', function EditorController(Processes) {
+	controller : [ 'Models', function EditorController(Models) {
 		var self = this;
 
-		self.modeler = new BpmnJS({
+		var modeler = new BpmnJS({
 			container : '#canvas',
 			propertiesPanel: {
 			    parent: '#properties'
 			  }
 		});
 
+		self.downloadBpmn = function(event) {
+			extractXml(function(err, xml) {
+				var blob = new Blob([xml], { type:"application/bpmn20-xml;charset=utf-8;" });			
+				var downloadLink = angular.element('<a></a>');
+                downloadLink.attr('href',window.URL.createObjectURL(blob));
+                downloadLink.attr('download', 'diagram.bpmn20.xml');
+				downloadLink[0].click();
+			});
+		};
+		
+		self.saveModel = function() {
+			extractXml(function(err, xml) {
+				var process = modeler.definitions.rootElements[0];
+				var model = {'key': process.id, 'name': process.name, 'descriptor': xml};
+				Models.save(model);
+			});
+		};
+		
+		var extractXml = function(callback) {
+			modeler.saveXML({ format: true }, callback);
+		}
+
 		var newDiagram = function() {
-			var diagram = '<?xml version="1.0" encoding="UTF-8"?> <bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd" id="sample-diagram" targetNamespace="http://bpmn.io/schema/bpmn"> <bpmn2:process id="Process_1" isExecutable="false"><bpmn2:startEvent id="StartEvent_1"/></bpmn2:process><bpmndi:BPMNDiagram id="BPMNDiagram_1"><bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1"><bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1"><dc:Bounds height="36.0" width="36.0" x="412.0" y="240.0"/></bpmndi:BPMNShape></bpmndi:BPMNPlane></bpmndi:BPMNDiagram></bpmn2:definitions>';
-			self.modeler.importXML(diagram, function(err) {
+			modeler.createDiagram(function(err) {
 			    if (err) {
-//			      container
-//			        .removeClass('with-diagram')
-//			        .addClass('with-error');
-//			      container.find('.error pre').text(err.message);
 			      console.error(err);
 			    } else {
-//			      container
-//			        .removeClass('hidden')
-//			        .addClass('with-diagram');
 			      console.log('loaded.....');
 			    }
 			});

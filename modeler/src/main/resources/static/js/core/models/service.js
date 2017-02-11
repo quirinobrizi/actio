@@ -14,4 +14,9 @@
  * limitations under the License.
  *******************************************************************************/
 angular
-  .module('core', ['core.configuration', 'core.processes', 'core.models', 'core.widgets']);
+  .module('core.models')
+  .factory('Models', ['$resource',
+    function($resource) {
+      return $resource('/models/:id');
+  }
+]);

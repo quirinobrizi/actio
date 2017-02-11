@@ -4,8 +4,8 @@ body, html {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 12px;
   height: 100%;
-  padding: 0;
-  margin: 0;
+  padding: 0; margin: 0;
+  color: #666;
 }
 
 a:link {
@@ -13,8 +13,8 @@ a:link {
 }
 
 #view-container {
-	padding: 0;
-	margin: 0;
+	padding: 0; margin: 0;
+	height: 75%;
 }
 
 #single-value-widget {
@@ -73,4 +73,8 @@ a:link {
     height: 22px;
     display: inline-block;
     border-right: solid 1px #CCC
+}
+
+.bpp-properties-header .label {
+	color: inherit;
 }

@@ -14,4 +14,4 @@
  * limitations under the License.
  *******************************************************************************/
 angular
-  .module('core', ['core.configuration', 'core.processes', 'core.models', 'core.widgets']);
+  .module('core.models', ['ngResource']);

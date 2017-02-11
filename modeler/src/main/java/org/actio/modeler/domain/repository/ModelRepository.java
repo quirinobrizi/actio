@@ -13,5 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-angular
-  .module('core', ['core.configuration', 'core.processes', 'core.models', 'core.widgets']);
+package org.actio.modeler.domain.repository;
+
+import org.actio.modeler.domain.model.Model;
+import org.actio.modeler.infrastructure.repository.message.response.ModelResponseMessage;
+
+/**
+ * @author quirino.brizi
+ *
+ */
+public interface ModelRepository {
+
+	ModelResponseMessage add(Model model);
+}
