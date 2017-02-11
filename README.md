@@ -1,3 +1,3 @@
 # Actio
 
-A Java based business process management service 
+Actio is a business process management (BPM) service, at its foundation
