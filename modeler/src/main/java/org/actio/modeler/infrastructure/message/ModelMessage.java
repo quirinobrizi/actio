@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.modeler.infrastructure.repository.message.response;
+package org.actio.modeler.infrastructure.message;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -24,14 +25,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author quirino.brizi
  *
  */
-public class ModelResponseMessage implements Serializable {
+public class ModelMessage implements Serializable {
 
-	private static final long serialVersionUID = 1447519471851571954L;
+	private static final long serialVersionUID = -5661050930873384828L;
 
 	@JsonProperty("id")
 	private String id;
-	@JsonProperty("url")
-	private String url;
 	@JsonProperty("name")
 	private String name;
 	@JsonProperty("key")
@@ -39,28 +38,39 @@ public class ModelResponseMessage implements Serializable {
 	@JsonProperty("category")
 	private String category;
 	@JsonProperty("version")
-	private String version;
+	private Integer version;
 	@JsonProperty("metaInfo")
 	private String metaInfo;
 	@JsonProperty("deploymentId")
 	private String deploymentId;
 	@JsonProperty("tenantId")
 	private String tenantId;
-	@JsonProperty("deploymentUrl")
-	private String deploymentUrl;
-	@JsonProperty("createTime")
-	private String createTime;
-	@JsonProperty("lastUpdateTime")
-	private String lastUpdateTime;
+	@JsonProperty("definition")
+	private String definition;
+	@JsonProperty("svg")
+	private String svg;
+
+	@JsonCreator
+	public ModelMessage(@JsonProperty("id") String id, @JsonProperty("name") String name,
+			@JsonProperty("key") String key, @JsonProperty("category") String category,
+			@JsonProperty("version") Integer version, @JsonProperty("metaInfo") String metaInfo,
+			@JsonProperty("deploymentId") String deploymentId, @JsonProperty("tenantId") String tenantId,
+			@JsonProperty("definition") String definition, @JsonProperty("svg") String svg) {
+		this.id = id;
+		this.name = name;
+		this.key = key;
+		this.category = category;
+		this.version = version;
+		this.metaInfo = metaInfo;
+		this.deploymentId = deploymentId;
+		this.tenantId = tenantId;
+		this.definition = definition;
+		this.svg = svg;
+	}
 
 	@JsonIgnore
 	public String getId() {
 		return id;
-	}
-
-	@JsonIgnore
-	public String getUrl() {
-		return url;
 	}
 
 	@JsonIgnore
@@ -79,7 +89,7 @@ public class ModelResponseMessage implements Serializable {
 	}
 
 	@JsonIgnore
-	public String getVersion() {
+	public Integer getVersion() {
 		return version;
 	}
 
@@ -99,17 +109,12 @@ public class ModelResponseMessage implements Serializable {
 	}
 
 	@JsonIgnore
-	public String getDeploymentUrl() {
-		return deploymentUrl;
+	public String getDefinition() {
+		return definition;
 	}
 
 	@JsonIgnore
-	public String getCreateTime() {
-		return createTime;
-	}
-
-	@JsonIgnore
-	public String getLastUpdateTime() {
-		return lastUpdateTime;
+	public String getSvg() {
+		return svg;
 	}
 }

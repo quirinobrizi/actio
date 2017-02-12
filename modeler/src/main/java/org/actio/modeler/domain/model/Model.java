@@ -38,7 +38,7 @@ public class Model implements Serializable {
 	@JsonProperty("category")
 	private String category;
 	@JsonProperty("version")
-	private String version;
+	private Integer version;
 	@JsonProperty("metaInfo")
 	private String metaInfo;
 	@JsonProperty("deploymentId")
@@ -66,7 +66,7 @@ public class Model implements Serializable {
 	}
 
 	@JsonIgnore
-	public String getVersion() {
+	public Integer getVersion() {
 		return version;
 	}
 

@@ -26,7 +26,7 @@ import org.actio.modeler.domain.model.Metrics;
 import org.actio.modeler.domain.model.ProcessMetrics;
 import org.actio.modeler.domain.repository.MetricsRepository;
 import org.actio.modeler.infrastructure.config.ModelerConfigurationProperties;
-import org.actio.modeler.infrastructure.repository.message.MetricsMessage;
+import org.actio.modeler.infrastructure.message.MetricsMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

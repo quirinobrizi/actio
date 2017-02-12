@@ -13,42 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.modeler.interfaces;
+package org.actio.engine.interfaces;
 
-import java.util.List;
-
-import org.actio.modeler.app.ModelService;
-import org.actio.modeler.domain.model.Model;
-import org.actio.modeler.infrastructure.message.ModelMessage;
+import org.actio.engine.interfaces.message.DeployProcessRequestMessage;
+import org.actio.engine.interfaces.message.ProcessMessage;
+import org.activiti.engine.RepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * Defines the contract for actions over processes. Is responsible for receiving
+ * HTTP requests and validate the content of the request.
+ * 
  * @author quirino.brizi
  *
  */
 @RestController
-@RequestMapping(path = "/models", produces = MediaType.APPLICATION_JSON_VALUE)
-public class Models {
+@RequestMapping(path = "/processes", produces = MediaType.APPLICATION_JSON_VALUE)
+public class ProcessInterface {
 
 	@Autowired
-	private ModelService modelService;
+	private RepositoryService repositoryService;
 
-	@ResponseStatus(code = HttpStatus.OK)
-	@RequestMapping(method = RequestMethod.GET)
-	public List<ModelMessage> getAllModels() {
-		return modelService.getAllModels();
-	}
-
-	@ResponseStatus(code = HttpStatus.CREATED)
-	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ModelMessage saveModel(@RequestBody Model model) {
-		return modelService.create(model);
+	@RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ProcessMessage deploy(@RequestBody DeployProcessRequestMessage deployProcessRequestMessage) {
+		return null;
 	}
 }

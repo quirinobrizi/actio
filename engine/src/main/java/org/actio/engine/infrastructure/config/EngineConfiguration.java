@@ -36,7 +36,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
  */
 @EnableAsync
 @Configuration
-@ComponentScan
+@ComponentScan(basePackages = { "org.actio.engine.interfaces", "org.actio.engine.infrastructure.config" })
 @EnableEurekaClient
 @EnableAutoConfiguration
 public class EngineConfiguration {

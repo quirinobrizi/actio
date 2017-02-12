@@ -37,5 +37,24 @@ angular
 	    	  }, true);
 	      }
     	}
-    }
-]);
+      }
+  ])
+  .directive('extSvg', [ '$compile',  function ($compile) {
+    return {
+      restrict: 'E',
+      scope: {
+
+        /**
+        * @doc property
+        * @propertyOf extSvg
+        * @name content
+        * @description
+        * Contains a SVG string.
+        */
+        content: '='
+      },
+      link: function($scope, $element) {
+        $element.replaceWith($compile('<svg width="100%" height="250px" viewBox="0 0 500 500" preserveAspectRatio="xMinYMin meet">' + $scope.content + '</svg>')($scope.$parent));
+      }
+    };
+  }]);

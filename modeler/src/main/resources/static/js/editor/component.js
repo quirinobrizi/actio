@@ -21,8 +21,8 @@ angular.module('editor').component('editor', {
 		var modeler = new BpmnJS({
 			container : '#canvas',
 			propertiesPanel: {
-			    parent: '#properties'
-			  }
+			  parent: '#properties'
+			}
 		});
 
 		self.downloadBpmn = function(event) {
@@ -35,17 +35,22 @@ angular.module('editor').component('editor', {
 			});
 		};
 		
-		self.saveModel = function() {
-			extractXml(function(err, xml) {
-				var process = modeler.definitions.rootElements[0];
-				var model = {'key': process.id, 'name': process.name, 'descriptor': xml};
-				Models.save(model);
+		self.publishModel = function() {
+			modeler.saveXML({ format: true }, function(err, xml) {
+				if(err) {
+					alert('unable to export model to XML' + err);
+				} else {
+					var process = modeler.definitions.rootElements[0],
+						model = {'key': process.id, 'name': process.name, 'definition': xml};
+					modeler.saveSVG(function(err, svg) {
+						if(!err) {
+							model['svg'] = svg;
+						}
+						Models.save(model);
+					});
+				}
 			});
 		};
-		
-		var extractXml = function(callback) {
-			modeler.saveXML({ format: true }, callback);
-		}
 
 		var newDiagram = function() {
 			modeler.createDiagram(function(err) {

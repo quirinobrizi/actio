@@ -15,8 +15,10 @@
  *******************************************************************************/
 package org.actio.modeler.domain.repository;
 
+import java.util.List;
+
 import org.actio.modeler.domain.model.Model;
-import org.actio.modeler.infrastructure.repository.message.response.ModelResponseMessage;
+import org.actio.modeler.infrastructure.message.ModelMessage;
 
 /**
  * @author quirino.brizi
@@ -24,5 +26,7 @@ import org.actio.modeler.infrastructure.repository.message.response.ModelRespons
  */
 public interface ModelRepository {
 
-	ModelResponseMessage add(Model model);
+	ModelMessage add(Model model);
+
+	List<ModelMessage> getAllModels();
 }

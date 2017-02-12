@@ -7,6 +7,9 @@ angular.module('actio-modeler')
         when('/dashboard', {
           template: '<dashboard></dashboard>'
         }).
+        when('/models', {
+            template: '<models></models>'
+          }).
         when('/editor', {
             template: '<editor></editor>'
           }).

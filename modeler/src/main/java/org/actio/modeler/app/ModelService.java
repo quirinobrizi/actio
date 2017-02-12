@@ -15,9 +15,11 @@
  *******************************************************************************/
 package org.actio.modeler.app;
 
+import java.util.List;
+
 import org.actio.modeler.domain.model.Model;
 import org.actio.modeler.domain.repository.ModelRepository;
-import org.actio.modeler.infrastructure.repository.message.response.ModelResponseMessage;
+import org.actio.modeler.infrastructure.message.ModelMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +33,11 @@ public class ModelService {
 	@Autowired
 	private ModelRepository modelRespository;
 
-	public ModelResponseMessage create(Model model) {
+	public ModelMessage create(Model model) {
 		return modelRespository.add(model);
+	}
+
+	public List<ModelMessage> getAllModels() {
+		return modelRespository.getAllModels();
 	}
 }

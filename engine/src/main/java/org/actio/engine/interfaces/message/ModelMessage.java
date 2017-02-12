@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.modeler.infrastructure.repository.message;
+package org.actio.engine.interfaces.message;
 
 import java.io.Serializable;
 
@@ -22,13 +22,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
+ * A request message that allows to exchange information between UI and modeler
+ * service
+ * 
  * @author quirino.brizi
  *
  */
 public class ModelMessage implements Serializable {
 
-	private static final long serialVersionUID = -5661050930873384828L;
+	private static final long serialVersionUID = -8545462369415759403L;
 
+	@JsonProperty("id")
+	private String id;
 	@JsonProperty("name")
 	private String name;
 	@JsonProperty("key")
@@ -36,19 +41,25 @@ public class ModelMessage implements Serializable {
 	@JsonProperty("category")
 	private String category;
 	@JsonProperty("version")
-	private String version;
+	private Integer version;
 	@JsonProperty("metaInfo")
 	private String metaInfo;
 	@JsonProperty("deploymentId")
 	private String deploymentId;
 	@JsonProperty("tenantId")
 	private String tenantId;
+	@JsonProperty("definition")
+	private String definition;
+	@JsonProperty("svg")
+	private String svg;
 
 	@JsonCreator
-	public ModelMessage(@JsonProperty("name") String name, @JsonProperty("key") String key,
-			@JsonProperty("category") String category, @JsonProperty("version") String version,
-			@JsonProperty("metaInfo") String metaInfo, @JsonProperty("deploymentId") String deploymentId,
-			@JsonProperty("tenantId") String tenantId) {
+	public ModelMessage(@JsonProperty("id") String id, @JsonProperty("name") String name,
+			@JsonProperty("key") String key, @JsonProperty("category") String category,
+			@JsonProperty("version") Integer version, @JsonProperty("metaInfo") String metaInfo,
+			@JsonProperty("deploymentId") String deploymentId, @JsonProperty("tenantId") String tenantId,
+			@JsonProperty("definition") String definition, @JsonProperty("svg") String svg) {
+		this.id = id;
 		this.name = name;
 		this.key = key;
 		this.category = category;
@@ -56,6 +67,13 @@ public class ModelMessage implements Serializable {
 		this.metaInfo = metaInfo;
 		this.deploymentId = deploymentId;
 		this.tenantId = tenantId;
+		this.definition = definition;
+		this.svg = svg;
+	}
+
+	@JsonIgnore
+	public String getId() {
+		return id;
 	}
 
 	@JsonIgnore
@@ -74,7 +92,7 @@ public class ModelMessage implements Serializable {
 	}
 
 	@JsonIgnore
-	public String getVersion() {
+	public Integer getVersion() {
 		return version;
 	}
 
@@ -92,4 +110,15 @@ public class ModelMessage implements Serializable {
 	public String getTenantId() {
 		return tenantId;
 	}
+
+	@JsonIgnore
+	public String getDefinition() {
+		return definition;
+	}
+
+	@JsonIgnore
+	public String getSvg() {
+		return svg;
+	}
+
 }

@@ -13,8 +13,8 @@ a:link {
 }
 
 #view-container {
-	padding: 0; margin: 0;
-	height: 75%;
+	padding: 0; margin: 0 auto;
+	width: 90%; height: 75%;
 }
 
 #single-value-widget {
@@ -75,6 +75,25 @@ a:link {
     border-right: solid 1px #CCC
 }
 
+.djs-palette{
+	margin-left: -20px;
+	margin-top: -20px;	
+}
+
+.bpp-properties-panel {
+    background-color: #f8f8f8;
+    position: relative;
+    margin-right: -20px;
+}
+
 .bpp-properties-header .label {
 	color: inherit;
+}
+
+/* Models template */
+.models {
+}
+
+.svg-area {
+	width: 100%; height: 250px;
 }

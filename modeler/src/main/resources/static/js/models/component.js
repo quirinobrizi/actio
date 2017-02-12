@@ -13,4 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-angular.module('actio-modeler', ['ngRoute', 'angular-growl', 'core', 'dashboard', 'editor', "models"]);
+angular
+  .module('models')
+  .component('models', {
+    templateUrl: 'js/models/template.html',
+    controller: ['Models', function DashboardController(Models) {
+    	var self = this;
+    	self.models = Models.query();
+    }]});

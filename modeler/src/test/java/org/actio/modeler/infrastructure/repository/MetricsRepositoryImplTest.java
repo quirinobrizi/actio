@@ -26,7 +26,7 @@ import org.actio.modeler.domain.model.ProcessMetrics;
 import org.actio.modeler.domain.model.VersionMetrics;
 import org.actio.modeler.infrastructure.config.ModelerConfigurationProperties;
 import org.actio.modeler.infrastructure.config.ModelerConfigurationProperties.Engine;
-import org.actio.modeler.infrastructure.repository.message.MetricsMessage;
+import org.actio.modeler.infrastructure.message.MetricsMessage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

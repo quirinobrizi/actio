@@ -13,4 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-angular.module('actio-modeler', ['ngRoute', 'angular-growl', 'core', 'dashboard', 'editor', "models"]);
+angular
+  .module('models', ['core', 'smart-table']);

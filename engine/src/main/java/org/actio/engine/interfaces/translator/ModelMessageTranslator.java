@@ -13,4 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-angular.module('actio-modeler', ['ngRoute', 'angular-growl', 'core', 'dashboard', 'editor', "models"]);
+package org.actio.engine.interfaces.translator;
+
+import org.actio.engine.interfaces.message.ModelMessage;
+import org.activiti.engine.repository.Model;
+import org.springframework.stereotype.Component;
+
+/**
+ * @author quirino.brizi
+ *
+ */
+@Component
+public class ModelMessageTranslator {
+
+	public ModelMessage translate(Model model, String definition, String svg) {
+		return new ModelMessage(model.getId(), model.getName(), model.getKey(), model.getCategory(), model.getVersion(),
+				model.getMetaInfo(), model.getDeploymentId(), model.getTenantId(), definition, svg);
+	}
+}
