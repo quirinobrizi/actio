@@ -6,3 +6,5 @@ Actio is composed by microservices that can be deployed in isolation providing h
 
 ## Microservices
 ### Actio Engine 
+Actio engine is the central part of Action and is able to run BPMN2
+### Actio Modeler
