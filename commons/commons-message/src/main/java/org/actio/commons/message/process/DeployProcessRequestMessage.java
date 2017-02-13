@@ -15,10 +15,30 @@
  *******************************************************************************/
 package org.actio.commons.message.process;
 
+import org.actio.commons.message.Message;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * @author quirino.brizi
  *
  */
-public class DeployProcessRequestMessage {
+public class DeployProcessRequestMessage implements Message {
 
+	private static final long serialVersionUID = -7569472415400927832L;
+
+	@JsonProperty("modelId")
+	private String modelId;
+
+	@JsonCreator
+	public DeployProcessRequestMessage(@JsonProperty("modelId") String modelId) {
+		this.modelId = modelId;
+	}
+
+	@JsonIgnore
+	public String getModelId() {
+		return modelId;
+	}
 }

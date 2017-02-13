@@ -15,7 +15,11 @@
  *******************************************************************************/
 package org.actio.commons.message.process;
 
-import org.actio.commons.message.AbstractDiscoverableMessage;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.actio.commons.message.Message;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -25,21 +29,28 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author quirino.brizi
  *
  */
-public class ProcessMessage extends AbstractDiscoverableMessage {
+public class UpdateProcessStateRequestMessage implements Message {
 
-	private static final long serialVersionUID = -1127228873734980140L;
+	private static final long serialVersionUID = -3835476952876798738L;
 
+	@JsonProperty("action")
+	private String action;
 	@JsonProperty("processId")
 	private String processId;
-	@JsonProperty("processName")
-	private String processName;
+	@JsonProperty("inputs")
+	private Map<String, Object> inputs;
 
 	@JsonCreator
-	public ProcessMessage(@JsonProperty("processId") String processId, @JsonProperty("processName") String processName,
-			@JsonProperty("href") String href) {
-		super(href);
+	public UpdateProcessStateRequestMessage(@JsonProperty("action") String action,
+			@JsonProperty("processId") String processId, @JsonProperty("inputs") Map<String, Object> inputs) {
+		this.action = action;
 		this.processId = processId;
-		this.processName = processName;
+		this.inputs = inputs == null ? new HashMap<>() : inputs;
+	}
+
+	@JsonIgnore
+	public String getAction() {
+		return action;
 	}
 
 	@JsonIgnore
@@ -48,7 +59,7 @@ public class ProcessMessage extends AbstractDiscoverableMessage {
 	}
 
 	@JsonIgnore
-	public String getProcessName() {
-		return processName;
+	public Map<String, Object> getInputs() {
+		return Collections.unmodifiableMap(inputs);
 	}
 }

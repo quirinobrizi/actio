@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.actio.commons.message.model.ModelMessage;
 import org.actio.modeler.app.ModelService;
-import org.actio.modeler.domain.model.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -48,7 +47,7 @@ public class Models {
 
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ModelMessage saveModel(@RequestBody Model model) {
+	public ModelMessage saveModel(@RequestBody ModelMessage model) {
 		return modelService.create(model);
 	}
 }

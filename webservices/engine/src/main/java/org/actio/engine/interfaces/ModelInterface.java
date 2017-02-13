@@ -61,7 +61,8 @@ public class ModelInterface {
 	@ResponseStatus(code = HttpStatus.CREATED)
 	@RequestMapping(method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
 	public ModelMessage createModel(@RequestBody ModelMessage modelMessage) {
-		Model model = repositoryService.newModel();
+		Model model = null != modelMessage.getId() ? repositoryService.getModel(modelMessage.getId())
+				: repositoryService.newModel();
 		model.setCategory(modelMessage.getCategory());
 		model.setDeploymentId(modelMessage.getDeploymentId());
 		model.setKey(modelMessage.getKey());

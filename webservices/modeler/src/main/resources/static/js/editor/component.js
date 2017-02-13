@@ -16,7 +16,25 @@
 angular.module('editor').component('editor', {
 	templateUrl : 'js/editor/template.html',
 	controller : [ 'Models', function EditorController(Models) {
-		var self = this;
+		var self = this,
+			initialDiagram = '<?xml version="1.0" encoding="UTF-8"?>' +
+		  '<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+          	'xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" ' +
+          	'xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" ' +
+          	'xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" ' +
+          	'targetNamespace="http://bpmn.io/schema/bpmn" ' +
+          	'id="Definitions_1">' +
+          	  '<bpmn:process id="process_id">' +
+			    '<bpmn:startEvent id="StartEvent_1"/>' +
+			  '</bpmn:process>' +
+			  '<bpmndi:BPMNDiagram id="BPMNDiagram_1">' +
+			    '<bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1">' +
+			      '<bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">' +
+			        '<dc:Bounds height="36.0" width="36.0" x="173.0" y="102.0"/>' +
+			      '</bpmndi:BPMNShape>' +
+			    '</bpmndi:BPMNPlane>' +
+			  '</bpmndi:BPMNDiagram>' +
+		  '</bpmn:definitions>';
 
 		var modeler = new BpmnJS({
 			container : '#canvas',
@@ -41,19 +59,21 @@ angular.module('editor').component('editor', {
 					alert('unable to export model to XML' + err);
 				} else {
 					var process = modeler.definitions.rootElements[0],
-						model = {'key': process.id, 'name': process.name, 'definition': xml};
+						model = {'id': self.modelId, 'key': process.id, 'name': process.name, 'definition': xml};
 					modeler.saveSVG(function(err, svg) {
 						if(!err) {
 							model['svg'] = svg;
 						}
-						Models.save(model);
+						Models.save(model).$promise.then(function(newModel) { 
+							self.modelId = newModel.id; 
+						});
 					});
 				}
 			});
 		};
 
 		var newDiagram = function() {
-			modeler.createDiagram(function(err) {
+			modeler.importXML(initialDiagram, function(err) {
 			    if (err) {
 			      console.error(err);
 			    } else {

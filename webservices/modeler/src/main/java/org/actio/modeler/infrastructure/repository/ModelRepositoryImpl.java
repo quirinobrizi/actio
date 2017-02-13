@@ -18,7 +18,8 @@ package org.actio.modeler.infrastructure.repository;
 import java.util.List;
 
 import org.actio.commons.message.model.ModelMessage;
-import org.actio.modeler.domain.model.Model;
+import org.actio.commons.message.process.DeployProcessRequestMessage;
+import org.actio.commons.message.process.ProcessMessage;
 import org.actio.modeler.domain.repository.ModelRepository;
 import org.actio.modeler.infrastructure.config.ModelerConfigurationProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,12 +50,12 @@ public class ModelRepositoryImpl implements ModelRepository {
 	 * .domain.model.Model)
 	 */
 	@Override
-	public ModelMessage add(Model model) {
-		ModelMessage message = new ModelMessage(null, model.getName(), model.getKey(), model.getCategory(),
-				model.getVersion(), model.getMetaInfo(), model.getDeploymentId(), model.getTenantId(),
-				model.getDefinition(), model.getSvg());
+	public ModelMessage add(ModelMessage model) {
 		String urlFormat = configuration.getEngine().getUrlFormat();
-		return restTemplate.postForObject(urlFormat, message, ModelMessage.class, "models");
+		ModelMessage modelMessage = restTemplate.postForObject(urlFormat, model, ModelMessage.class, "models");
+		DeployProcessRequestMessage request = new DeployProcessRequestMessage(modelMessage.getId());
+		restTemplate.postForObject(urlFormat, request, ProcessMessage.class, "processes");
+		return modelMessage;
 	}
 
 	@Override

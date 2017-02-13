@@ -18,7 +18,6 @@ package org.actio.modeler.domain.repository;
 import java.util.List;
 
 import org.actio.commons.message.model.ModelMessage;
-import org.actio.modeler.domain.model.Model;
 
 /**
  * @author quirino.brizi
@@ -26,7 +25,7 @@ import org.actio.modeler.domain.model.Model;
  */
 public interface ModelRepository {
 
-	ModelMessage add(Model model);
+	ModelMessage add(ModelMessage model);
 
 	List<ModelMessage> getAllModels();
 }

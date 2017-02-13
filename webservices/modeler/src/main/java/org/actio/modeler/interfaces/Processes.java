@@ -20,6 +20,7 @@ import org.actio.modeler.domain.model.Metrics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -33,7 +34,7 @@ public class Processes {
 	@Autowired
 	private MetricsService metricsService;
 
-	@RequestMapping(value = "/metrics")
+	@RequestMapping(value = "/metrics", method = RequestMethod.GET)
 	public Metrics getMetrics() {
 		return metricsService.getMetrics();
 	}

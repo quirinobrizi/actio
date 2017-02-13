@@ -13,30 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.modeler.app;
+package org.actio.commons.message;
 
-import java.util.List;
-
-import org.actio.commons.message.model.ModelMessage;
-import org.actio.modeler.domain.repository.ModelRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
+ * Defines the basics of a discoverable message.
+ * 
  * @author quirino.brizi
  *
  */
-@Service
-public class ModelService {
+public abstract class AbstractDiscoverableMessage implements Message {
 
-	@Autowired
-	private ModelRepository modelRespository;
+	private static final long serialVersionUID = 6780908151439155813L;
 
-	public ModelMessage create(ModelMessage model) {
-		return modelRespository.add(model);
+	private String href;
+
+	public AbstractDiscoverableMessage(String href) {
+		this.href = href;
 	}
 
-	public List<ModelMessage> getAllModels() {
-		return modelRespository.getAllModels();
+	@JsonProperty("href")
+	public String href() {
+		return this.href;
 	}
 }

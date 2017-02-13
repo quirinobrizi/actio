@@ -30,12 +30,8 @@ import org.actio.modeler.infrastructure.config.ModelerConfigurationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author quirino.brizi
@@ -44,7 +40,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Repository
 public class MetricsRepositoryImpl implements MetricsRepository {
 
-	private final static Pattern KEY_VERSION_PATTERN = Pattern.compile("(.*) \\(([a-zA-Z]+[0-9]+)\\)");
+	private final static Pattern KEY_VERSION_PATTERN = Pattern.compile("(.*) \\((v[0-9]+)\\)");
 	private static final Logger LOGGER = LoggerFactory.getLogger(MetricsRepositoryImpl.class);
 
 	@Autowired
@@ -61,7 +57,6 @@ public class MetricsRepositoryImpl implements MetricsRepository {
 	public Metrics get() {
 		MetricsMessage metrics = restTemplate.getForObject(configuration.getEngine().getUrlFormat(),
 				MetricsMessage.class, "activiti");
-		// MetricsMessage metrics = metrics();
 		return new Metrics(metrics.getCompletedActivities(), metrics.getProcessDefinitionCount(),
 				metrics.getCachedProcessDefinitionCount(), extractProcessesMetrics(metrics));
 	}
@@ -76,11 +71,11 @@ public class MetricsRepositoryImpl implements MetricsRepository {
 				String key = matcher.group(1);
 				String version = matcher.group(2);
 				ProcessMetrics processMetrics = null;
-				if (processes.containsKey(processDefinition)) {
-					processMetrics = processes.get(processDefinition);
+				if (processes.containsKey(key)) {
+					processMetrics = processes.get(key);
 				} else {
 					processMetrics = new ProcessMetrics(key);
-					processes.put(processDefinition, processMetrics);
+					processes.put(key, processMetrics);
 				}
 				processMetrics.updateOrCreate(version, completedProcessInstanceCount.get(processDefinition),
 						runningProcessInstanceCount.get(processDefinition));
@@ -90,16 +85,6 @@ public class MetricsRepositoryImpl implements MetricsRepository {
 			}
 		}
 		return new HashSet<>(processes.values());
-	}
-
-	private MetricsMessage metrics() {
-		try {
-			ResourceLoader loader = new DefaultResourceLoader();
-			return new ObjectMapper().readValue(loader.getResource("classpath:metrics.json").getFile(),
-					MetricsMessage.class);
-		} catch (Exception e) {
-			return null;
-		}
 	}
 
 }

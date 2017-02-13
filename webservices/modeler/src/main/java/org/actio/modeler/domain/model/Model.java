@@ -17,9 +17,6 @@ package org.actio.modeler.domain.model;
 
 import java.io.Serializable;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * A request message that allows to exchange information between UI and modeler
  * service
@@ -31,66 +28,48 @@ public class Model implements Serializable {
 
 	private static final long serialVersionUID = -8545462369415759403L;
 
-	@JsonProperty("name")
 	private String name;
-	@JsonProperty("key")
 	private String key;
-	@JsonProperty("category")
 	private String category;
-	@JsonProperty("version")
 	private Integer version;
-	@JsonProperty("metaInfo")
 	private String metaInfo;
-	@JsonProperty("deploymentId")
 	private String deploymentId;
-	@JsonProperty("tenantId")
 	private String tenantId;
-	@JsonProperty("definition")
 	private String definition;
-	@JsonProperty("svg")
 	private String svg;
 
-	@JsonIgnore
 	public String getName() {
 		return name;
 	}
 
-	@JsonIgnore
 	public String getKey() {
 		return key;
 	}
 
-	@JsonIgnore
 	public String getCategory() {
 		return category;
 	}
 
-	@JsonIgnore
 	public Integer getVersion() {
 		return version;
 	}
 
-	@JsonIgnore
 	public String getMetaInfo() {
 		return metaInfo;
 	}
 
-	@JsonIgnore
 	public String getDeploymentId() {
 		return deploymentId;
 	}
 
-	@JsonIgnore
 	public String getTenantId() {
 		return tenantId;
 	}
 
-	@JsonIgnore
 	public String getDefinition() {
 		return definition;
 	}
 
-	@JsonIgnore
 	public String getSvg() {
 		return svg;
 	}
