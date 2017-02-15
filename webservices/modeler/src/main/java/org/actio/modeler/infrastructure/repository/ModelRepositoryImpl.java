@@ -37,35 +37,34 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Repository
 public class ModelRepositoryImpl implements ModelRepository {
 
-	@Autowired
-	private RestTemplate restTemplate;
-	@Autowired
-	private ModelerConfigurationProperties configuration;
+    @Autowired
+    private RestTemplate restTemplate;
+    @Autowired
+    private ModelerConfigurationProperties configuration;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.actio.modeler.domain.repository.ModelRepository#add(org.actio.modeler
-	 * .domain.model.Model)
-	 */
-	@Override
-	public ModelMessage add(ModelMessage model) {
-		String urlFormat = configuration.getEngine().getUrlFormat();
-		ModelMessage modelMessage = restTemplate.postForObject(urlFormat, model, ModelMessage.class, "models");
-		DeployProcessRequestMessage request = new DeployProcessRequestMessage(modelMessage.getId());
-		restTemplate.postForObject(urlFormat, request, ProcessMessage.class, "processes");
-		return modelMessage;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.actio.modeler.domain.repository.ModelRepository#add(org.actio.modeler
+     * .domain.model.Model)
+     */
+    @Override
+    public ModelMessage add(ModelMessage model) {
+        String urlFormat = configuration.getEngine().getUrlFormat();
+        ModelMessage modelMessage = restTemplate.postForObject(urlFormat, model, ModelMessage.class, "models");
+        DeployProcessRequestMessage request = new DeployProcessRequestMessage(modelMessage.getId());
+        restTemplate.postForObject(urlFormat, request, ProcessMessage.class, "processes");
+        return modelMessage;
+    }
 
-	@Override
-	public List<ModelMessage> getAllModels() {
-		String urlFormat = configuration.getEngine().getUrlFormat();
-		ParameterizedTypeReference<List<ModelMessage>> responseType = new ParameterizedTypeReference<List<ModelMessage>>() {
-		};
-		UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(urlFormat);
-		RequestEntity<Void> requestEntity = new RequestEntity<>(HttpMethod.GET,
-				builder.buildAndExpand("models").toUri());
-		return restTemplate.exchange(requestEntity, responseType).getBody();
-	}
+    @Override
+    public List<ModelMessage> getAllModels() {
+        String urlFormat = configuration.getEngine().getUrlFormat();
+        ParameterizedTypeReference<List<ModelMessage>> responseType = new ParameterizedTypeReference<List<ModelMessage>>() {
+        };
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(urlFormat);
+        RequestEntity<Void> requestEntity = new RequestEntity<>(HttpMethod.GET, builder.buildAndExpand("models").toUri());
+        return restTemplate.exchange(requestEntity, responseType).getBody();
+    }
 }
