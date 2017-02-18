@@ -17,10 +17,13 @@ angular
   .module('core.processes')
   .factory('Processes', ['$resource',
     function($resource) {
-      return $resource('', {}, {
+      return $resource('/processes/:key', {}, {
     	  metrics: {
     		  method: 'GET',
     		  url: '/processes/metrics'
+    	  },
+    	  start: {
+    		  method: 'PUT'
     	  }
       });
   }

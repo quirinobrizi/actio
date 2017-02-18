@@ -15,8 +15,9 @@
  ******************************************************************************/
 angular.module('editor').component('editor', {
 	templateUrl : 'js/editor/template.html',
-	controller : [ 'Models', function EditorController(Models) {
+	controller : [ 'Models', '$routeParams', function EditorController(Models, $routeParams) {
 		var self = this,
+			modelKey = $routeParams.modelKey,
 			initialDiagram = '<?xml version="1.0" encoding="UTF-8"?>' +
 		  '<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
           	'xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" ' +
@@ -65,23 +66,24 @@ angular.module('editor').component('editor', {
 							model['svg'] = svg;
 						}
 						Models.save(model).$promise.then(function(newModel) { 
-							self.modelId = newModel.id; 
+							self.modelId = newModel.id;
+							alert("model " + newModel.key + " published");
 						});
 					});
 				}
 			});
 		};
 
-		var newDiagram = function() {
-			modeler.importXML(initialDiagram, function(err) {
-			    if (err) {
-			      console.error(err);
-			    } else {
-			      console.log('loaded.....');
-			    }
+		var openDiagram = function(diagram) {
+			modeler.importXML(diagram, function(err) {
+			    if (err) { console.error(err); } else { console.log('loaded.....'); }
 			});
 		};
 		
-		newDiagram();
+		if(modelKey) {
+			Models.get({key:modelKey}).$promise.then(function(model) { openDiagram(model.definition); });
+		} else {
+			openDiagram(initialDiagram);
+		}
 	} ]
 });

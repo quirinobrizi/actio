@@ -13,21 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.modeler.domain.repository;
+package org.actio.modeler.app;
 
-import java.util.List;
-
-import org.actio.commons.message.model.ModelMessage;
+import org.actio.commons.message.process.ProcessMessage;
+import org.actio.commons.message.process.UpdateProcessStateRequestMessage;
+import org.actio.modeler.domain.model.Metrics;
+import org.actio.modeler.domain.repository.ProcessRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author quirino.brizi
  *
  */
-public interface ModelRepository {
+@Service
+public class ProcessService {
 
-    ModelMessage add(ModelMessage model);
+    @Autowired
+    private ProcessRepository processRepository;
 
-    List<ModelMessage> getAllModels();
+    public Metrics getMetrics() {
+        return processRepository.getProcessesMetrics();
+    }
 
-    ModelMessage getModel(String modelKey);
+    public ProcessMessage update(UpdateProcessStateRequestMessage message) {
+        return processRepository.update(message);
+    }
+
+    public void delete(String process) {
+        processRepository.delete(process);
+    }
 }

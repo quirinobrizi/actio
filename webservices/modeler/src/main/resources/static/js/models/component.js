@@ -17,7 +17,19 @@ angular
   .module('models')
   .component('models', {
     templateUrl: 'js/models/template.html',
-    controller: ['Models', function DashboardController(Models) {
+    controller: ['Models', 'Processes', function DashboardController(Models, Processes) {
     	var self = this;
     	self.models = Models.query();
+    	
+    	self.launchBpmn = function(key) {
+    		Processes.start({processId: key, action: "start"}).$promise.then(function(resp){
+    			alert("process " + key + " started")
+    		});
+    	};
+    	self.deleteBpmn = function(key) {
+    		Processes.remove({key: key}).$promise.then(function(resp){
+    			alert("process " + key + " deleted")
+    		});
+    	};
+    	self.editBpmn = function(key) { };
     }]});

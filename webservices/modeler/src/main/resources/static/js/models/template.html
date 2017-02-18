@@ -1,11 +1,12 @@
 <div class="models">
-	<table st-table="displayedCollection" st-safe-src="$ctrl.models" class="table table-striped">
+	<table st-table="displayedCollection" st-safe-src="$ctrl.models"
+		class="table table-striped">
 		<thead>
-			<!-- <tr>
+			<tr class="hidden">
 				<th st-sort="key" style="width: 15%">Model Key</th>
 				<th style="width: 15%">Model Name</th>
 				<th style="width: 70%">Model</th>
-			</tr> -->
+			</tr>
 			<tr>
 				<!-- <th>
 					<input st-search="key" placeholder="search model by key" class="input-sm form-control" type="search"/>
@@ -13,20 +14,37 @@
 				<th>
 					<input st-search="name" placeholder="search model by name" class="input-sm form-control" type="search"/>
 				</th> -->
-				<th colspan="4">
-					<input st-search placeholder="global search" class="input-sm form-control" type="search"/>
-				</th>
+				<th colspan="1"><input st-search placeholder="global search"
+					class="input-sm form-control" type="search" /></th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr ng-repeat="model in displayedCollection">
 				<td>
-					<span>{{model.key}}</span>
-				</td>
-				<td>
-					<span>{{model.name}}</span>
-				</td>
-				<td>
+					<div class="info">
+						<span>{{model.key}}</span><span ng-if="model.name">
+							({{model.name}})</span> <span class="controls pull-right">
+							<ul class="io-control-list">
+								<li>
+									<button title="launch BPMN process" ng-click="$ctrl.launchBpmn(model.key)">
+										<i class="material-icons">launch</i>
+									</button>
+								</li>
+								<li class="vr" style="margin-left: 2px"></li>
+								<li>
+									<button title="delete BPMN deployment and process" ng-click="$ctrl.deleteBpmn(model.key)">
+										<i class="material-icons">delete_forever</i>
+									</button>
+								</li>
+								<li class="vr" style="margin-left: 2px"></li>
+								<li>
+									<button title="delete BPMN deployment and process" ng-click="$ctrl.editBpmn(model.key)">
+										<i class="material-icons">mode_edit</i>
+									</button>
+								</li>
+							</ul>
+						</span>
+					</div>
 					<div class="svg-area">
 						<ext-svg data-content="model.svg"></ext-svg>
 					</div>

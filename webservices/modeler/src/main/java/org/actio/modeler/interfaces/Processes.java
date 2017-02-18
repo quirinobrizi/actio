@@ -15,10 +15,14 @@
  *******************************************************************************/
 package org.actio.modeler.interfaces;
 
-import org.actio.modeler.app.MetricsService;
+import org.actio.commons.message.process.ProcessMessage;
+import org.actio.commons.message.process.UpdateProcessStateRequestMessage;
+import org.actio.modeler.app.ProcessService;
 import org.actio.modeler.domain.model.Metrics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,11 +35,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/processes", produces = MediaType.APPLICATION_JSON_VALUE)
 public class Processes {
 
-	@Autowired
-	private MetricsService metricsService;
+    @Autowired
+    private ProcessService metricsService;
 
-	@RequestMapping(value = "/metrics", method = RequestMethod.GET)
-	public Metrics getMetrics() {
-		return metricsService.getMetrics();
-	}
+    @RequestMapping(value = "/metrics", method = RequestMethod.GET)
+    public Metrics getMetrics() {
+        return metricsService.getMetrics();
+    }
+
+    @RequestMapping(method = RequestMethod.PUT)
+    public ProcessMessage updateProcess(@RequestBody UpdateProcessStateRequestMessage message) {
+        return metricsService.update(message);
+    }
+
+    @RequestMapping(path = "/{processId}", method = RequestMethod.DELETE)
+    public void deleteProcess(@PathVariable(name = "processId") String process) {
+        metricsService.delete(process);
+    }
 }

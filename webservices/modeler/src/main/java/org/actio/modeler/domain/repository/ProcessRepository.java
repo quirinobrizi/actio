@@ -15,13 +15,19 @@
  *******************************************************************************/
 package org.actio.modeler.domain.repository;
 
+import org.actio.commons.message.process.ProcessMessage;
+import org.actio.commons.message.process.UpdateProcessStateRequestMessage;
 import org.actio.modeler.domain.model.Metrics;
 
 /**
  * @author quirino.brizi
  *
  */
-public interface MetricsRepository {
+public interface ProcessRepository {
 
-	Metrics get();
+    Metrics getProcessesMetrics();
+
+    ProcessMessage update(UpdateProcessStateRequestMessage message);
+
+    void delete(String process);
 }

@@ -13,6 +13,9 @@ angular.module('actio-modeler')
         when('/editor', {
             template: '<editor></editor>'
           }).
+        when('/editor/:modelKey', {
+            template: '<editor></editor>'
+          }).
         otherwise('/dashboard');
     }
   ]);

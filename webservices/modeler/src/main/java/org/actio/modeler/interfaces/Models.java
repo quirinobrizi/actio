@@ -22,6 +22,7 @@ import org.actio.modeler.app.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,18 +37,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/models", produces = MediaType.APPLICATION_JSON_VALUE)
 public class Models {
 
-	@Autowired
-	private ModelService modelService;
+    @Autowired
+    private ModelService modelService;
 
-	@ResponseStatus(code = HttpStatus.OK)
-	@RequestMapping(method = RequestMethod.GET)
-	public List<ModelMessage> getAllModels() {
-		return modelService.getAllModels();
-	}
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(method = RequestMethod.GET)
+    public List<ModelMessage> getAllModels() {
+        return modelService.getAllModels();
+    }
 
-	@ResponseStatus(code = HttpStatus.CREATED)
-	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ModelMessage saveModel(@RequestBody ModelMessage model) {
-		return modelService.create(model);
-	}
+    @ResponseStatus(code = HttpStatus.OK)
+    @RequestMapping(path = "/{modelKey}", method = RequestMethod.GET)
+    public ModelMessage getModel(@PathVariable("modelKey") String modelKey) {
+        return modelService.getModel(modelKey);
+    }
+
+    @ResponseStatus(code = HttpStatus.CREATED)
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ModelMessage saveModel(@RequestBody ModelMessage model) {
+        return modelService.create(model);
+    }
 }

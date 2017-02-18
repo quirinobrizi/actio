@@ -29,14 +29,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class ModelService {
 
-	@Autowired
-	private ModelRepository modelRespository;
+    @Autowired
+    private ModelRepository modelRespository;
 
-	public ModelMessage create(ModelMessage model) {
-		return modelRespository.add(model);
-	}
+    public ModelMessage create(ModelMessage model) {
+        return modelRespository.add(model);
+    }
 
-	public List<ModelMessage> getAllModels() {
-		return modelRespository.getAllModels();
-	}
+    public List<ModelMessage> getAllModels() {
+        return modelRespository.getAllModels();
+    }
+
+    public ModelMessage getModel(String modelKey) {
+        return modelRespository.getModel(modelKey);
+    }
 }

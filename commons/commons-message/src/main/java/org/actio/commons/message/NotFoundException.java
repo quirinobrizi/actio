@@ -13,24 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.modeler.app;
+package org.actio.commons.message;
 
-import org.actio.modeler.domain.model.Metrics;
-import org.actio.modeler.domain.repository.MetricsRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * @author quirino.brizi
  *
  */
-@Service
-public class MetricsService {
+@ResponseStatus(code = HttpStatus.NOT_FOUND)
+public class NotFoundException extends RuntimeException implements Message {
 
-	@Autowired
-	private MetricsRepository metricsRepository;
+    private static final long serialVersionUID = -4099072393183757440L;
 
-	public Metrics getMetrics() {
-		return metricsRepository.get();
-	}
+    public static NotFoundException newInstance(String format, Object... args) {
+        return new NotFoundException(format, args);
+    }
+
+    private NotFoundException(String format, Object... args) {
+        super(String.format(format, args));
+    }
 }

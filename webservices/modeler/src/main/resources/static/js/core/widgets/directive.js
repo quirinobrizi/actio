@@ -54,7 +54,7 @@ angular
         content: '='
       },
       link: function($scope, $element) {
-        $element.replaceWith($compile('<svg width="100%" height="250px" viewBox="0 0 500 500" preserveAspectRatio="xMinYMin meet">' + $scope.content + '</svg>')($scope.$parent));
+        $element.replaceWith($compile('<svg class="svg-content" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet">' + $scope.content + '</svg>')($scope.$parent));
       }
     };
   }]);

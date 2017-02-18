@@ -67,4 +67,10 @@ public class ModelRepositoryImpl implements ModelRepository {
         RequestEntity<Void> requestEntity = new RequestEntity<>(HttpMethod.GET, builder.buildAndExpand("models").toUri());
         return restTemplate.exchange(requestEntity, responseType).getBody();
     }
+
+    @Override
+    public ModelMessage getModel(String modelKey) {
+        String urlFormat = configuration.getEngine().getUrlFormat();
+        return restTemplate.getForObject(urlFormat, ModelMessage.class, "models", modelKey);
+    }
 }

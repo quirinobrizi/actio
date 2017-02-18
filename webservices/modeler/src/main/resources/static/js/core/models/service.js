@@ -17,6 +17,6 @@ angular
   .module('core.models')
   .factory('Models', ['$resource',
     function($resource) {
-      return $resource('/models/:id');
+      return $resource('/models/:key');
   }
 ]);

@@ -39,44 +39,41 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(MockitoJUnitRunner.class)
-public class MetricsRepositoryImplTest {
+public class ProcesRepositoryImplTest {
 
-	@Mock
-	private RestTemplate restTemplate;
-	@Mock
-	private ModelerConfigurationProperties configuration;
+    @Mock
+    private RestTemplate restTemplate;
+    @Mock
+    private ModelerConfigurationProperties configuration;
 
-	@InjectMocks
-	private MetricsRepositoryImpl testObj;
+    @InjectMocks
+    private ProcessRepositoryImpl testObj;
 
-	@Mock
-	private Engine engine;
+    @Mock
+    private Engine engine;
 
-	@Test
-	public void testGet() throws Exception {
-		when(configuration.getEngine()).thenReturn(engine);
-		when(engine.getUrlFormat()).thenReturn("http://actio.org/{activiti}");
-		when(restTemplate.getForObject("http://actio.org/{activiti}", MetricsMessage.class, "activiti"))
-				.thenReturn(metrics());
-		// act
-		Metrics metrics = testObj.get();
-		// assert
-		assertEquals(11622, metrics.getCompletedActivities().intValue());
-		assertEquals(1241, metrics.getProcessDefinitionCount().intValue());
-		assertEquals(0, metrics.getCachedProcessDefinitionCount().intValue());
-		ArrayList<ProcessMetrics> processes = new ArrayList<>(metrics.getProcessesMetrics());
-		ProcessMetrics processMetrics = processes
-				.get(processes.indexOf(new ProcessMetrics("PLATFORM_AD_1883_RM_onboard")));
-		List<VersionMetrics> versions = processMetrics.getVersions();
-		VersionMetrics versionMetrics = versions.get(versions.indexOf(new VersionMetrics("v1")));
-		assertEquals(10, versionMetrics.getCompleted().intValue());
-		assertEquals(0, versionMetrics.getRunning().intValue());
-	}
+    @Test
+    public void testGet() throws Exception {
+        when(configuration.getEngine()).thenReturn(engine);
+        when(engine.getUrlFormat()).thenReturn("http://actio.org/{activiti}");
+        when(restTemplate.getForObject("http://actio.org/{activiti}", MetricsMessage.class, "activiti")).thenReturn(metrics());
+        // act
+        Metrics metrics = testObj.getProcessesMetrics();
+        // assert
+        assertEquals(11622, metrics.getCompletedActivities().intValue());
+        assertEquals(1241, metrics.getProcessDefinitionCount().intValue());
+        assertEquals(0, metrics.getCachedProcessDefinitionCount().intValue());
+        ArrayList<ProcessMetrics> processes = new ArrayList<>(metrics.getProcessesMetrics());
+        ProcessMetrics processMetrics = processes.get(processes.indexOf(new ProcessMetrics("PLATFORM_AD_1883_RM_onboard")));
+        List<VersionMetrics> versions = processMetrics.getVersions();
+        VersionMetrics versionMetrics = versions.get(versions.indexOf(new VersionMetrics("v1")));
+        assertEquals(10, versionMetrics.getCompleted().intValue());
+        assertEquals(0, versionMetrics.getRunning().intValue());
+    }
 
-	private MetricsMessage metrics() throws Exception {
-		ResourceLoader loader = new DefaultResourceLoader();
-		return new ObjectMapper().readValue(loader.getResource("classpath:metrics.json").getFile(),
-				MetricsMessage.class);
-	}
+    private MetricsMessage metrics() throws Exception {
+        ResourceLoader loader = new DefaultResourceLoader();
+        return new ObjectMapper().readValue(loader.getResource("classpath:metrics.json").getFile(), MetricsMessage.class);
+    }
 
 }

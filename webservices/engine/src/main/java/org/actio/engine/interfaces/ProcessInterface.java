@@ -30,6 +30,7 @@ import org.activiti.engine.repository.Model;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -46,75 +47,82 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/processes", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProcessInterface {
 
-	@Autowired
-	private RuntimeService runtimeService;
-	@Autowired
-	private RepositoryService repositoryService;
+    @Autowired
+    private RuntimeService runtimeService;
+    @Autowired
+    private RepositoryService repositoryService;
 
-	@RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
-	public ProcessMessage deploy(@RequestBody DeployProcessRequestMessage deployProcessRequestMessage) {
-		String modelId = deployProcessRequestMessage.getModelId();
-		Model model = repositoryService.getModel(modelId);
-		if (null != model) {
-			String name = String.format("%s.bpmn20.xml", model.getKey());
-			byte[] source = repositoryService.getModelEditorSource(modelId);
-			Deployment deployment = repositoryService.createDeployment().name(name)
-					.addInputStream(name, new ByteArrayInputStream(source)).tenantId(model.getTenantId())
-					.category(model.getCategory()).deploy();
-			return new ProcessMessage(deployment.getId(), deployment.getName(), null);
-		}
-		// TODO: QB define custom exception...
-		throw new RuntimeException("cannot deploy requested model");
-	}
+    @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+    public ProcessMessage deploy(@RequestBody DeployProcessRequestMessage deployProcessRequestMessage) {
+        String modelId = deployProcessRequestMessage.getModelId();
+        Model model = repositoryService.getModel(modelId);
+        if (null != model) {
+            String name = String.format("%s.bpmn20.xml", model.getKey());
+            byte[] source = repositoryService.getModelEditorSource(modelId);
+            Deployment deployment = repositoryService.createDeployment().name(name).addInputStream(name, new ByteArrayInputStream(source))
+                    .tenantId(model.getTenantId()).category(model.getCategory()).deploy();
+            return new ProcessMessage(deployment.getId(), deployment.getName(), null);
+        }
+        // TODO: QB define custom exception...
+        throw new RuntimeException("cannot deploy requested model");
+    }
 
-	@RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.PUT)
-	public ProcessMessage start(@RequestBody UpdateProcessStateRequestMessage updateProcessStatusRequestMessage) {
-		String alias = updateProcessStatusRequestMessage.getAction();
-		String processId = updateProcessStatusRequestMessage.getProcessId();
-		Map<String, Object> inputs = updateProcessStatusRequestMessage.getInputs();
-		ProcessInstance processInstance = Action.get(alias).execute(runtimeService, processId, inputs);
-		return new ProcessMessage(processInstance.getId(), processInstance.getName(), null);
-	}
+    @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.PUT)
+    public ProcessMessage start(@RequestBody UpdateProcessStateRequestMessage updateProcessStatusRequestMessage) {
+        String alias = updateProcessStatusRequestMessage.getAction();
+        String processId = updateProcessStatusRequestMessage.getProcessId();
+        Map<String, Object> inputs = updateProcessStatusRequestMessage.getInputs();
+        ProcessInstance processInstance = Action.get(alias).execute(runtimeService, processId, inputs);
+        return new ProcessMessage(processInstance.getId(), processInstance.getName(), null);
+    }
 
-	private static enum Action {
-		START("start") {
-			@Override
-			public ProcessInstance execute(RuntimeService runtimeService, String processId,
-					Map<String, Object> inputs) {
-				return runtimeService.startProcessInstanceByKey(processId, inputs);
-			};
-		},
-		STOP("stop") {
-			@Override
-			public ProcessInstance execute(RuntimeService runtimeService, String processId,
-					Map<String, Object> inputs) {
-				return null;
-			};
-		},
-		RESUME("resume") {
-			@Override
-			public ProcessInstance execute(RuntimeService runtimeService, String processId,
-					Map<String, Object> inputs) {
-				return null;
-			};
-		};
+    @RequestMapping(path = "/{processKey}", method = RequestMethod.DELETE)
+    public void delete(@PathVariable(name = "processKey") String processKey) {
+        Deployment deployment = repositoryService.createDeploymentQuery().processDefinitionKey(processKey).singleResult();
+        if (null != deployment) {
+            Model model = repositoryService.createModelQuery().modelKey(processKey).singleResult();
+            if (null != model) {
+                repositoryService.deleteDeployment(deployment.getId(), true);
+                repositoryService.deleteModel(model.getId());
+            }
+        }
+    }
 
-		private final List<String> aliases;
+    private static enum Action {
+        START("start") {
+            @Override
+            public ProcessInstance execute(RuntimeService runtimeService, String processId, Map<String, Object> inputs) {
+                return runtimeService.startProcessInstanceByKey(processId, inputs);
+            };
+        },
+        STOP("stop") {
+            @Override
+            public ProcessInstance execute(RuntimeService runtimeService, String processId, Map<String, Object> inputs) {
+                return null;
+            };
+        },
+        RESUME("resume") {
+            @Override
+            public ProcessInstance execute(RuntimeService runtimeService, String processId, Map<String, Object> inputs) {
+                return null;
+            };
+        };
 
-		private Action(String... aliases) {
-			this.aliases = Arrays.asList(aliases);
-		}
+        private final List<String> aliases;
 
-		public abstract ProcessInstance execute(RuntimeService runtimeService, String processId,
-				Map<String, Object> inputs);
+        private Action(String... aliases) {
+            this.aliases = Arrays.asList(aliases);
+        }
 
-		public static Action get(String alias) {
-			for (Action action : values()) {
-				if (action.aliases.contains(alias.toLowerCase())) {
-					return action;
-				}
-			}
-			throw new IllegalArgumentException();
-		}
-	}
+        public abstract ProcessInstance execute(RuntimeService runtimeService, String processId, Map<String, Object> inputs);
+
+        public static Action get(String alias) {
+            for (Action action : values()) {
+                if (action.aliases.contains(alias.toLowerCase())) {
+                    return action;
+                }
+            }
+            throw new IllegalArgumentException();
+        }
+    }
 }
