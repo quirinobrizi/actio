@@ -31,6 +31,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 /**
+ * Allow access models from Action engine.
+ * 
  * @author quirino.brizi
  *
  */
@@ -71,6 +73,6 @@ public class ModelRepositoryImpl implements ModelRepository {
     @Override
     public ModelMessage getModel(String modelKey) {
         String urlFormat = configuration.getEngine().getUrlFormat();
-        return restTemplate.getForObject(urlFormat, ModelMessage.class, "models", modelKey);
+        return restTemplate.getForObject(urlFormat, ModelMessage.class, String.format("models/%s", modelKey));
     }
 }

@@ -17,19 +17,15 @@ angular
   .module('models')
   .component('models', {
     templateUrl: 'js/models/template.html',
-    controller: ['Models', 'Processes', function DashboardController(Models, Processes) {
+    controller: ['Models', 'Processes', '$location', function DashboardController(Models, Processes, $location) {
     	var self = this;
     	self.models = Models.query();
     	
     	self.launchBpmn = function(key) {
-    		Processes.start({processId: key, action: "start"}).$promise.then(function(resp){
-    			alert("process " + key + " started")
-    		});
+    		Processes.start({processId: key, action: "start"}).$promise.then(function(resp){ alert("process " + key + " started"); });
     	};
     	self.deleteBpmn = function(key) {
-    		Processes.remove({key: key}).$promise.then(function(resp){
-    			alert("process " + key + " deleted")
-    		});
+    		Processes.remove({key: key}).$promise.then(function(resp){ self.models = Models.query(); alert("process " + key + " deleted"); });
     	};
-    	self.editBpmn = function(key) { };
+    	self.editBpmn = function(key) { $location.url('/editor/' + key); };
     }]});

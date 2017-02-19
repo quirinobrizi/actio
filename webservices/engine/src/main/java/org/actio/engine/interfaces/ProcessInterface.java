@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.actio.commons.message.NotFoundException;
 import org.actio.commons.message.process.DeployProcessRequestMessage;
 import org.actio.commons.message.process.ProcessMessage;
 import org.actio.commons.message.process.UpdateProcessStateRequestMessage;
@@ -63,8 +64,7 @@ public class ProcessInterface {
                     .tenantId(model.getTenantId()).category(model.getCategory()).deploy();
             return new ProcessMessage(deployment.getId(), deployment.getName(), null);
         }
-        // TODO: QB define custom exception...
-        throw new RuntimeException("cannot deploy requested model");
+        throw NotFoundException.newInstance("cannot deploy requested model");
     }
 
     @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.PUT)
@@ -78,12 +78,14 @@ public class ProcessInterface {
 
     @RequestMapping(path = "/{processKey}", method = RequestMethod.DELETE)
     public void delete(@PathVariable(name = "processKey") String processKey) {
-        Deployment deployment = repositoryService.createDeploymentQuery().processDefinitionKey(processKey).singleResult();
-        if (null != deployment) {
-            Model model = repositoryService.createModelQuery().modelKey(processKey).singleResult();
-            if (null != model) {
-                repositoryService.deleteDeployment(deployment.getId(), true);
-                repositoryService.deleteModel(model.getId());
+        List<Deployment> deployments = repositoryService.createDeploymentQuery().processDefinitionKey(processKey).list();
+        if (null != deployments) {
+            for (Deployment deployment : deployments) {
+                Model model = repositoryService.createModelQuery().modelKey(processKey).singleResult();
+                if (null != model) {
+                    repositoryService.deleteDeployment(deployment.getId(), true);
+                    repositoryService.deleteModel(model.getId());
+                }
             }
         }
     }

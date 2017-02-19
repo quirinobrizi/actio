@@ -68,6 +68,8 @@ angular.module('editor').component('editor', {
 						Models.save(model).$promise.then(function(newModel) { 
 							self.modelId = newModel.id;
 							alert("model " + newModel.key + " published");
+						}, function(error) {
+							alert("unable to publish model " + newModel.key);
 						});
 					});
 				}
@@ -81,7 +83,11 @@ angular.module('editor').component('editor', {
 		};
 		
 		if(modelKey) {
-			Models.get({key:modelKey}).$promise.then(function(model) { openDiagram(model.definition); });
+			Models.get({key:modelKey}).$promise.then(function(model) {
+					self.modelId = model.id; openDiagram(model.definition); 
+			}, function(err) {
+				alert("unable to open model " + modelKey); openDiagram(initialDiagram);
+			});
 		} else {
 			openDiagram(initialDiagram);
 		}

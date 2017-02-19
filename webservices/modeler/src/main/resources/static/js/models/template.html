@@ -26,6 +26,12 @@
 							({{model.name}})</span> <span class="controls pull-right">
 							<ul class="io-control-list">
 								<li>
+									<button title="delete BPMN deployment and process" ng-click="$ctrl.editBpmn(model.key)">
+										<i class="material-icons">mode_edit</i>
+									</button>
+								</li>
+								<li class="vr" style="margin-left: 2px"></li>
+								<li>
 									<button title="launch BPMN process" ng-click="$ctrl.launchBpmn(model.key)">
 										<i class="material-icons">launch</i>
 									</button>
@@ -34,12 +40,6 @@
 								<li>
 									<button title="delete BPMN deployment and process" ng-click="$ctrl.deleteBpmn(model.key)">
 										<i class="material-icons">delete_forever</i>
-									</button>
-								</li>
-								<li class="vr" style="margin-left: 2px"></li>
-								<li>
-									<button title="delete BPMN deployment and process" ng-click="$ctrl.editBpmn(model.key)">
-										<i class="material-icons">mode_edit</i>
 									</button>
 								</li>
 							</ul>
