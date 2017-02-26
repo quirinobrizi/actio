@@ -6,8 +6,9 @@
   font-style: normal;
 }
 .bpp-properties-panel {
-  background-color: #f8f8f8;
+  background-color: #ffffff;
   position: relative;
+  margin-right: -20px;
 }
 .bpp-properties-panel:empty {
   display: none;
@@ -70,11 +71,12 @@
   /* Internet Explorer 5.5+ */
 }
 .bpp-properties-panel label {
-  font-weight: bolder;
+  font-weight: normal;
   display: inline-block;
   vertical-align: middle;
   color: #666;
   margin-bottom: 3px;
+  font-size: 85%;
 }
 .bpp-properties-panel label[for] {
   cursor: pointer;
@@ -179,7 +181,9 @@
 }
 .bpp-radios-group input,
 .bpp-checkbox input {
-  margin-left: 0;
+	margin-right: 5px;
+    vertical-align: baseline;
+  	margin-left: 0;
 }
 .bpp-radios-group label:after,
 .bpp-checkbox label:after {
@@ -220,7 +224,7 @@
   right: 23px;
 }
 .bpp-properties-entry {
-  margin-bottom: 9px;
+  margin-bottom: 5px;
 }
 .bpp-properties-entry .bpp-field-wrapper {
   position: relative;
@@ -369,15 +373,12 @@ label.bpp-hidden {
   background-color: #8fc071;
 }
 .bpp-properties-group > .group-label {
-  font-weight: bolder;
   display: inline-block;
   vertical-align: middle;
-  color: #666;
-  font-size: 120%;
-  margin-top: 5px;
-  margin-bottom: 10px;
+  color: #8FC1FF;
+  margin-bottom: 5px;
   transition: margin 0.218s linear;
-  font-style: italic;
+  border-bottom: 1px solid black;
 }
 .bpp-properties-group > .group-label[for] {
   cursor: pointer;

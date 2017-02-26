@@ -23,7 +23,7 @@ a:link { text-decoration: none; }
     color: #FFFFFF;
 }
 
-
+.navbar { margin-bottom: 15px; }
 .navbar-default { 
 	background-color: #8FC1FF;
     /* For WebKit (Safari, Chrome, etc) */
@@ -40,7 +40,7 @@ a:link { text-decoration: none; }
 
 #view-container {
 	padding: 0; margin: 0 auto;
-	width: 95%; height: 75%;
+	width: 98%; height: 78%;
 }
 
 #single-value-widget {
@@ -104,12 +104,6 @@ a:link { text-decoration: none; }
 .djs-palette{
 	margin-left: -20px;
 	margin-top: -20px;	
-}
-
-.bpp-properties-panel {
-    background-color: #f8f8f8;
-    position: relative;
-    margin-right: -20px;
 }
 
 .bpp-properties-header .label {

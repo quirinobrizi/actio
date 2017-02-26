@@ -15,37 +15,14 @@
  ******************************************************************************/
 angular.module('editor').component('editor', {
 	templateUrl : 'js/editor/template.html',
-	controller : [ 'Models', '$routeParams', function EditorController(Models, $routeParams) {
+	controller : [ 'Models', 'Modeler', '$routeParams', function EditorController(Models, Modeler, $routeParams) {
 		var self = this,
-			modelKey = $routeParams.modelKey,
-			initialDiagram = '<?xml version="1.0" encoding="UTF-8"?>' +
-		  '<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
-          	'xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" ' +
-          	'xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" ' +
-          	'xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" ' +
-          	'targetNamespace="http://bpmn.io/schema/bpmn" ' +
-          	'id="Definitions_1">' +
-          	  '<bpmn:process id="process_id">' +
-			    '<bpmn:startEvent id="StartEvent_1"/>' +
-			  '</bpmn:process>' +
-			  '<bpmndi:BPMNDiagram id="BPMNDiagram_1">' +
-			    '<bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1">' +
-			      '<bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">' +
-			        '<dc:Bounds height="36.0" width="36.0" x="173.0" y="102.0"/>' +
-			      '</bpmndi:BPMNShape>' +
-			    '</bpmndi:BPMNPlane>' +
-			  '</bpmndi:BPMNDiagram>' +
-		  '</bpmn:definitions>';
+			modelKey = $routeParams.modelKey;
 
-		var modeler = new BpmnJS({
-			container : '#canvas',
-			propertiesPanel: {
-			  parent: '#properties'
-			}
-		});
+		var modeler = Modeler.newInstance('#canvas','#properties');
 
 		self.downloadBpmn = function(event) {
-			extractXml(function(err, xml) {
+			modeler.saveXML({ format: true }, function(err, xml) {
 				var blob = new Blob([xml], { type:"application/bpmn20-xml;charset=utf-8;" });			
 				var downloadLink = angular.element('<a></a>');
                 downloadLink.attr('href',window.URL.createObjectURL(blob));
@@ -86,10 +63,10 @@ angular.module('editor').component('editor', {
 			Models.get({key:modelKey}).$promise.then(function(model) {
 					self.modelId = model.id; openDiagram(model.definition); 
 			}, function(err) {
-				alert("unable to open model " + modelKey); openDiagram(initialDiagram);
+				alert("unable to open model " + modelKey); openDiagram(Modeler.initialDiagram());
 			});
 		} else {
-			openDiagram(initialDiagram);
+			openDiagram(Modeler.initialDiagram());
 		}
 	} ]
 });
