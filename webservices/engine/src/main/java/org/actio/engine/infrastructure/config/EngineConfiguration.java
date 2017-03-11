@@ -36,35 +36,36 @@ import org.springframework.scheduling.annotation.EnableAsync;
  */
 @EnableAsync
 @Configuration
-@ComponentScan(basePackages = { "org.actio.engine.interfaces", "org.actio.engine.infrastructure.config" })
+@ComponentScan(basePackages = { "org.actio.engine.interfaces", "org.actio.engine.infrastructure.config",
+        "org.actio.engine.infrastructure.bpmn" })
 @EnableEurekaClient
 @EnableAutoConfiguration
 public class EngineConfiguration {
 
-	public static void main(String[] args) {
-		SpringApplication.run(EngineConfiguration.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(EngineConfiguration.class, args);
+    }
 
-	@Bean
-	InitializingBean usersAndGroupsInitializer(final IdentityService identityService,
-			final EngineConfigurationProperties engineConfigurationProperties) {
+    @Bean
+    InitializingBean usersAndGroupsInitializer(final IdentityService identityService,
+            final EngineConfigurationProperties engineConfigurationProperties) {
 
-		return new InitializingBean() {
-			@Override
-			public void afterPropertiesSet() throws Exception {
-				Authentication authentication = engineConfigurationProperties.getAuthentication();
-				Group group = identityService.newGroup("administrators");
-				group.setName("administrators");
-				group.setType("security-role");
-				identityService.saveGroup(group);
+        return new InitializingBean() {
+            @Override
+            public void afterPropertiesSet() throws Exception {
+                Authentication authentication = engineConfigurationProperties.getAuthentication();
+                Group group = identityService.newGroup("administrators");
+                group.setName("administrators");
+                group.setType("security-role");
+                identityService.saveGroup(group);
 
-				User user = identityService.newUser(authentication.getUsername());
-				user.setPassword(authentication.getPassword());
-				identityService.saveUser(user);
+                User user = identityService.newUser(authentication.getUsername());
+                user.setPassword(authentication.getPassword());
+                identityService.saveUser(user);
 
-				identityService.createMembership(user.getId(), group.getId());
-			}
-		};
-	}
+                identityService.createMembership(user.getId(), group.getId());
+            }
+        };
+    }
 
 }

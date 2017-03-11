@@ -48,15 +48,15 @@ public class ModelInterface {
 
     @ResponseStatus(code = HttpStatus.OK)
     @RequestMapping(path = "/{modelKey}", method = RequestMethod.GET)
-    public ModelMessage getModel(@PathVariable("modelKey") String modelKey) {
-        Model model = repositoryService.createModelQuery().modelKey(modelKey).singleResult();
+    public ModelMessage getModel(@PathVariable("modelKey") String modelId) {
+        Model model = repositoryService.createModelQuery().modelId(modelId).singleResult();
         if (null != model) {
             String id = model.getId();
             String definition = model.hasEditorSource() ? new String(repositoryService.getModelEditorSource(id)) : null;
             String svg = model.hasEditorSourceExtra() ? new String(repositoryService.getModelEditorSourceExtra(id)) : null;
             return modelMessageTranslator.translate(model, definition, svg);
         }
-        throw NotFoundException.newInstance("unable to find model %s", modelKey);
+        throw NotFoundException.newInstance("unable to find model %s", modelId);
     }
 
     @ResponseStatus(code = HttpStatus.OK)

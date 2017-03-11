@@ -58,7 +58,7 @@ public class ProcessInterface {
         String modelId = deployProcessRequestMessage.getModelId();
         Model model = repositoryService.getModel(modelId);
         if (null != model) {
-            String name = String.format("%s.bpmn20.xml", model.getKey());
+            String name = String.format("%s_%s.bpmn20.xml", model.getKey(), modelId);
             byte[] source = repositoryService.getModelEditorSource(modelId);
             Deployment deployment = repositoryService.createDeployment().name(name).addInputStream(name, new ByteArrayInputStream(source))
                     .tenantId(model.getTenantId()).category(model.getCategory()).deploy();
@@ -81,10 +81,12 @@ public class ProcessInterface {
         List<Deployment> deployments = repositoryService.createDeploymentQuery().processDefinitionKey(processKey).list();
         if (null != deployments) {
             for (Deployment deployment : deployments) {
-                Model model = repositoryService.createModelQuery().modelKey(processKey).singleResult();
-                if (null != model) {
-                    repositoryService.deleteDeployment(deployment.getId(), true);
-                    repositoryService.deleteModel(model.getId());
+                List<Model> models = repositoryService.createModelQuery().modelKey(processKey).list();
+                if (null != models) {
+                    for (Model model : models) {
+                        repositoryService.deleteDeployment(deployment.getId(), true);
+                        repositoryService.deleteModel(model.getId());
+                    }
                 }
             }
         }

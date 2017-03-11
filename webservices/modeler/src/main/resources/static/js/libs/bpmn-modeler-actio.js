@@ -6327,6 +6327,7 @@ var map = require('lodash/collection/map');
 var DEFAULT_DELEGATE_PROPS = [ 'class', 'expression', 'delegateExpression' ];
 
 var DELEGATE_PROPS = {
+  'actio:type': undefined,
   'actio:class': undefined,
   'actio:expression': undefined,
   'actio:delegateExpression': undefined,
