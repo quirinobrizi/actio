@@ -492,6 +492,15 @@ angular.module('core.modeler').factory('Modeler', [ function() {
 				      ]
 				    },
 				    {
+				      "name": "MailCapable",
+				      "extends": [
+				        "actio:ExternalCapable"
+				      ],
+				      "properties": [
+				        
+				      ]
+				    },
+				    {
 				      "name": "TaskPriorized",
 				      "extends": [
 				        "bpmn:Process",
