@@ -36,6 +36,7 @@ import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.impl.bpmn.parser.BpmnParser;
+import org.activiti.engine.impl.cfg.SpringBeanFactoryProxyMap;
 import org.activiti.spring.ProcessEngineFactoryBean;
 import org.activiti.spring.SpringAsyncExecutor;
 import org.activiti.spring.SpringCallerRunsRejectedJobsHandler;
@@ -56,6 +57,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
@@ -82,6 +84,9 @@ public class DatasourceProcessEngineConfiguration {
         private static final Logger logger = LoggerFactory.getLogger(JpaConfiguration.class);
 
         protected ActivitiProperties activitiProperties;
+
+        @Autowired
+        private ApplicationContext applicationContext;
 
         @Autowired
         private ResourcePatternResolver resourceLoader;
@@ -174,6 +179,7 @@ public class DatasourceProcessEngineConfiguration {
             engine.setBpmnParser(bpmnParser);
             engine.setProcessValidator(createDefaultProcessValidator());
             engine.setActivityBehaviorFactory(new DefaultActivityBehaviorFactory());
+            engine.setExpressionManager(new ExpressionManagerConfig(applicationContext, new SpringBeanFactoryProxyMap(applicationContext)));
 
             return engine;
         }
