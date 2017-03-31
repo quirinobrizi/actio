@@ -14,4 +14,19 @@
  * limitations under the License.
  *******************************************************************************/
 angular
-  .module('core', ['core.configuration', 'core.processes', 'core.models', 'core.widgets', 'core.modeler', 'core.authentication']);
+  .module('core.authentication')
+  .factory('AuthenticationInterceptor', [function() {
+	  return {
+		request: function(config) {
+			console.log('AuthenticationInterceptor - intercepted request');
+			config.headers['Authentication'] = 'Basic abcd';
+			return config;
+		},
+		requestError: function(response) {
+			if (response.status === 401) {
+	            console.log('unauthorized');
+	        }
+			return response;
+		}
+	  };
+  }]);

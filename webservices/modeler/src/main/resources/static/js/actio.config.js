@@ -4,6 +4,9 @@ angular.module('actio-modeler')
       growlProvider.globalTimeToLive(10000);
       $locationProvider.hashPrefix('!');
       $routeProvider.
+      	when('/login', {
+      	  templateUrl: 'js/core/authentication/template.html'
+        }).
         when('/dashboard', {
           template: '<dashboard></dashboard>'
         }).
@@ -16,6 +19,9 @@ angular.module('actio-modeler')
         when('/editor/:modelKey', {
             template: '<editor></editor>'
           }).
-        otherwise('/dashboard');
+        otherwise('/login');
     }
-  ]);
+  ])
+  .config(['$httpProvider', function($httpProvider) {  
+    $httpProvider.interceptors.push('AuthenticationInterceptor');
+}]);

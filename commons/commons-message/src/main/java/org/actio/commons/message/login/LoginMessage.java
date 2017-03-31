@@ -13,5 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-angular
-  .module('core', ['core.configuration', 'core.processes', 'core.models', 'core.widgets', 'core.modeler', 'core.authentication']);
+package org.actio.commons.message.login;
+
+import org.actio.commons.message.Message;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+/**
+ * @author quirino.brizi
+ *
+ */
+public class LoginMessage implements Message {
+
+    private static final long serialVersionUID = 5794425906883838763L;
+
+    @JsonProperty("username")
+    private String username;
+    @JsonProperty("password")
+    private String password;
+
+    @JsonIgnore
+    public String getUsername() {
+        return username;
+    }
+
+    @JsonIgnore
+    public String getPassword() {
+        return password;
+    }
+}

@@ -13,5 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-angular
-  .module('core', ['core.configuration', 'core.processes', 'core.models', 'core.widgets', 'core.modeler', 'core.authentication']);
+package org.actio.modeler.infrastructure.repository;
+
+import org.actio.modeler.domain.repository.LoginRepository;
+import org.springframework.stereotype.Repository;
+
+/**
+ * @author quirino.brizi
+ *
+ */
+@Repository
+public class LoginRepositoryImpl implements LoginRepository {
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.actio.modeler.domain.repository.LoginRepository#authenticate(java.
+     * lang.String, java.lang.String)
+     */
+    @Override
+    public String authenticate(String username, String password) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+}

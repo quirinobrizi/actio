@@ -13,5 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-angular
-  .module('core', ['core.configuration', 'core.processes', 'core.models', 'core.widgets', 'core.modeler', 'core.authentication']);
+package org.actio.modeler.domain.repository;
+
+/**
+ * @author quirino.brizi
+ *
+ */
+public interface LoginRepository {
+
+    String authenticate(String username, String password);
+}
