@@ -13,31 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.engine.infrastructure.config;
+package org.actio.commons.authentication.exception;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableAsync;
+import org.activiti.engine.ActivitiException;
 
 /**
- * Actio engine entrypoint
+ * Exception thrown on operation not supported
  * 
  * @author quirino.brizi
  *
  */
-@EnableAsync
-@Configuration
-@ComponentScan(basePackages = { "org.actio.engine.interfaces", "org.actio.engine.infrastructure.config",
-        "org.actio.engine.infrastructure.bpmn" })
-@EnableEurekaClient
-@EnableAutoConfiguration
-public class EngineConfiguration {
+public class AuthenticationProviderNotFoundException extends ActivitiException {
 
-    public static void main(String[] args) {
-        SpringApplication.run(EngineConfiguration.class, args);
+    private static final long serialVersionUID = 6578844795253090617L;
+
+    public static AuthenticationProviderNotFoundException newInstance(String message) {
+        return new AuthenticationProviderNotFoundException(message);
+    }
+
+    private AuthenticationProviderNotFoundException(String message) {
+        super(String.format("authentication provider for type %s not found", message));
     }
 
 }

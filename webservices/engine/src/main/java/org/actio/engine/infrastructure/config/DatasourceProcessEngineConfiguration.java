@@ -19,11 +19,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+import org.actio.commons.authentication.AuthenticationConfigurer;
+import org.actio.commons.authentication.AuthenticationProvider;
+import org.actio.commons.authentication.AuthenticationProviderFactory;
+import org.actio.commons.authentication.db.DbAuthenticationProvider;
+import org.actio.commons.authentication.ldap.LdapAuthenticationProvider;
 import org.actio.engine.interfaces.parser.DefaultBpmnParseFactory;
 import org.actio.engine.interfaces.parser.behavior.DefaultActivityBehaviorFactory;
 import org.actio.engine.interfaces.validator.ValidatorFactory;
@@ -37,6 +43,7 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.impl.bpmn.parser.BpmnParser;
 import org.activiti.engine.impl.cfg.SpringBeanFactoryProxyMap;
+import org.activiti.engine.impl.interceptor.SessionFactory;
 import org.activiti.spring.ProcessEngineFactoryBean;
 import org.activiti.spring.SpringAsyncExecutor;
 import org.activiti.spring.SpringCallerRunsRejectedJobsHandler;
@@ -50,6 +57,7 @@ import org.activiti.validation.ProcessValidator;
 import org.activiti.validation.ProcessValidatorImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -219,7 +227,35 @@ public class DatasourceProcessEngineConfiguration {
         }
 
         @Bean
-        public ProcessEngineFactoryBean processEngine(SpringProcessEngineConfiguration configuration) throws Exception {
+        InitializingBean usersAndGroupsInitializer(final ProcessEngineConfiguration engine,
+                final EngineConfigurationProperties engineConfigurationProperties,
+                final AuthenticationProviderFactory authenticationProviderFactory) {
+
+            return new InitializingBean() {
+                @Override
+                public void afterPropertiesSet() throws Exception {
+                    AuthenticationProvider authenticationProvider = authenticationProviderFactory
+                            .getProviderFor(defaultText(engineConfigurationProperties.getAuthentication().getType(), "db"));
+                    configureAuthentication(engine, authenticationProvider, engineConfigurationProperties);
+
+                    AuthenticationConfigurer authenticationConfigurer = authenticationProvider.authenticationConfigurer();
+                    if (null != authenticationConfigurer) {
+                        authenticationConfigurer.configure(engine.getIdentityService(), engineConfigurationProperties.getAuthentication());
+                    }
+                }
+            };
+        }
+
+        @Bean
+        AuthenticationProviderFactory authenticationProviderFactory() {
+            AuthenticationProviderFactory answer = new AuthenticationProviderFactory();
+            answer.register(new LdapAuthenticationProvider(null));
+            answer.register(new DbAuthenticationProvider());
+            return answer;
+        }
+
+        @Bean
+        ProcessEngineFactoryBean processEngine(SpringProcessEngineConfiguration configuration) throws Exception {
             ProcessEngineFactoryBean processEngineFactoryBean = new ProcessEngineFactoryBean();
             processEngineFactoryBean.setProcessEngineConfiguration(configuration);
             return processEngineFactoryBean;
@@ -227,54 +263,54 @@ public class DatasourceProcessEngineConfiguration {
 
         @Bean
         @ConditionalOnMissingBean
-        public RuntimeService runtimeServiceBean(ProcessEngine processEngine) {
+        RuntimeService runtimeServiceBean(ProcessEngine processEngine) {
             return processEngine.getRuntimeService();
         }
 
         @Bean
         @ConditionalOnMissingBean
-        public RepositoryService repositoryServiceBean(ProcessEngine processEngine) {
+        RepositoryService repositoryServiceBean(ProcessEngine processEngine) {
             return processEngine.getRepositoryService();
         }
 
         @Bean
         @ConditionalOnMissingBean
-        public TaskService taskServiceBean(ProcessEngine processEngine) {
+        TaskService taskServiceBean(ProcessEngine processEngine) {
             return processEngine.getTaskService();
         }
 
         @Bean
         @ConditionalOnMissingBean
-        public HistoryService historyServiceBean(ProcessEngine processEngine) {
+        HistoryService historyServiceBean(ProcessEngine processEngine) {
             return processEngine.getHistoryService();
         }
 
         @Bean
         @ConditionalOnMissingBean
-        public ManagementService managementServiceBeanBean(ProcessEngine processEngine) {
+        ManagementService managementServiceBeanBean(ProcessEngine processEngine) {
             return processEngine.getManagementService();
         }
 
         @Bean
         @ConditionalOnMissingBean
-        public FormService formServiceBean(ProcessEngine processEngine) {
+        FormService formServiceBean(ProcessEngine processEngine) {
             return processEngine.getFormService();
         }
 
         @Bean
         @ConditionalOnMissingBean
-        public IdentityService identityServiceBean(ProcessEngine processEngine) {
+        IdentityService identityServiceBean(ProcessEngine processEngine) {
             return processEngine.getIdentityService();
         }
 
         @Bean
         @ConditionalOnMissingBean
-        public TaskExecutor taskExecutor() {
+        TaskExecutor taskExecutor() {
             return new SimpleAsyncTaskExecutor();
         }
 
-        public List<Resource> discoverProcessDefinitionResources(ResourcePatternResolver applicationContext, String prefix,
-                List<String> suffixes, boolean checkPDs) throws IOException {
+        List<Resource> discoverProcessDefinitionResources(ResourcePatternResolver applicationContext, String prefix, List<String> suffixes,
+                boolean checkPDs) throws IOException {
             if (checkPDs) {
 
                 List<Resource> result = new ArrayList<Resource>();
@@ -295,6 +331,20 @@ public class DatasourceProcessEngineConfiguration {
                 return result;
             }
             return new ArrayList<Resource>();
+        }
+
+        private void configureAuthentication(ProcessEngineConfiguration engine, AuthenticationProvider authenticationProvider,
+                EngineConfigurationProperties engineConfigurationProperties) {
+            SessionFactory userManagerFactory = authenticationProvider.getUserManagerFactory();
+            SessionFactory groupManagerFactory = authenticationProvider.getGroupManagerFactory();
+            SessionFactory membershiprManagerFactory = authenticationProvider.getMembershiprManagerFactory();
+
+            Map<Class<?>, SessionFactory> sessionFactories = engine.getSessionFactories();
+            sessionFactories.put(userManagerFactory.getSessionType(), userManagerFactory);
+            sessionFactories.put(groupManagerFactory.getSessionType(), groupManagerFactory);
+            if (!"ldap".equals(authenticationProvider.authenticationType())) {
+                sessionFactories.put(membershiprManagerFactory.getSessionType(), membershiprManagerFactory);
+            }
         }
     }
 }

@@ -1,0 +1,18 @@
+{
+	"groups": [
+		{
+		 	"id": "administrators",
+			"name": "Administrators",
+			"role": "security-role"
+		}
+	],
+	"users":[
+		{
+			"name": "actio",
+			"password": "actio",
+			"groups": [
+				"administrators"
+			]
+		}
+	]
+}

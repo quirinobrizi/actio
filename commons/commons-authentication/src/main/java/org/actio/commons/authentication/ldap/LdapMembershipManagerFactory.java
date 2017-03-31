@@ -15,24 +15,21 @@
  *******************************************************************************/
 package org.actio.commons.authentication.ldap;
 
-import javax.naming.NamingException;
-
-import org.actio.commons.authentication.ldap.translator.GroupTranslator;
-import org.activiti.engine.ActivitiException;
+import org.actio.commons.authentication.exception.OperationNotSupportedExcepion;
 import org.activiti.engine.impl.interceptor.Session;
 import org.activiti.engine.impl.interceptor.SessionFactory;
-import org.activiti.engine.impl.persistence.entity.GroupIdentityManager;
+import org.activiti.engine.impl.persistence.entity.MembershipIdentityManager;
 
 /**
  * @author quirino.brizi
  *
  */
-public class LdapGroupManagerFactory implements SessionFactory {
+public class LdapMembershipManagerFactory implements SessionFactory {
 
     private LdapConfiguration ldapConfiguration;
     private LdapUtils ldapUtils;
 
-    public LdapGroupManagerFactory(LdapConfiguration ldapConfiguration) {
+    public LdapMembershipManagerFactory(LdapConfiguration ldapConfiguration) {
         this.ldapConfiguration = ldapConfiguration;
         this.ldapUtils = new LdapUtils();
     }
@@ -44,7 +41,7 @@ public class LdapGroupManagerFactory implements SessionFactory {
      */
     @Override
     public Class<?> getSessionType() {
-        return GroupIdentityManager.class;
+        return MembershipIdentityManager.class;
     }
 
     /*
@@ -54,12 +51,7 @@ public class LdapGroupManagerFactory implements SessionFactory {
      */
     @Override
     public Session openSession() {
-        try {
-            return LdapGroupManagerService.newInstance(LdapTemplate.newInstance(ldapUtils.bind(ldapConfiguration),
-                    ldapUtils.prepareSearchControls(ldapConfiguration), ldapConfiguration), new GroupTranslator());
-        } catch (NamingException e) {
-            throw new ActivitiException("uanble to open LDAP session", e);
-        }
+        throw OperationNotSupportedExcepion.newInstance("Memberships are not supported in LDAP");
     }
 
 }

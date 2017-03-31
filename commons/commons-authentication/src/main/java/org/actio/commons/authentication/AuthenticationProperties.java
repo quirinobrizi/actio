@@ -1,3 +1,4 @@
+package org.actio.commons.authentication;
 /*******************************************************************************
  * Copyright [2016] [Quirino Brizi (quirino.brizi@gmail.com)]
  *  
@@ -13,31 +14,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.engine.infrastructure.config;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
- * Actio engine entrypoint
- * 
  * @author quirino.brizi
  *
  */
-@EnableAsync
-@Configuration
-@ComponentScan(basePackages = { "org.actio.engine.interfaces", "org.actio.engine.infrastructure.config",
-        "org.actio.engine.infrastructure.bpmn" })
-@EnableEurekaClient
-@EnableAutoConfiguration
-public class EngineConfiguration {
+public class AuthenticationProperties {
 
-    public static void main(String[] args) {
-        SpringApplication.run(EngineConfiguration.class, args);
+    private String type;
+    private Identity identity = new Identity();
+
+    public String getType() {
+        return type;
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Identity getIdentity() {
+        return identity;
+    }
+
+    public void setIdentity(Identity identity) {
+        this.identity = identity;
+    }
+
+    public class Identity {
+        /**
+         * the source of the identity configuration as a URI.
+         */
+        private String source;
+
+        public String getSource() {
+            return source;
+        }
+
+        public void setSource(String source) {
+            this.source = source;
+        }
+
+    }
 }

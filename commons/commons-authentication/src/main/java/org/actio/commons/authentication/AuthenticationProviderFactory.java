@@ -13,31 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.engine.infrastructure.config;
+package org.actio.commons.authentication;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableAsync;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.actio.commons.authentication.exception.AuthenticationProviderNotFoundException;
 
 /**
- * Actio engine entrypoint
- * 
  * @author quirino.brizi
  *
  */
-@EnableAsync
-@Configuration
-@ComponentScan(basePackages = { "org.actio.engine.interfaces", "org.actio.engine.infrastructure.config",
-        "org.actio.engine.infrastructure.bpmn" })
-@EnableEurekaClient
-@EnableAutoConfiguration
-public class EngineConfiguration {
+public class AuthenticationProviderFactory {
 
-    public static void main(String[] args) {
-        SpringApplication.run(EngineConfiguration.class, args);
+    private Map<String, AuthenticationProvider> authenticationProviders = new HashMap<>();
+
+    public AuthenticationProvider getProviderFor(String authenticationType) {
+        if (authenticationProviders.containsKey(authenticationType)) {
+            return authenticationProviders.get(authenticationType);
+        }
+        throw AuthenticationProviderNotFoundException.newInstance(authenticationType);
     }
 
+    public void register(AuthenticationProvider authenticationProvider) {
+        this.authenticationProviders.put(authenticationProvider.authenticationType(), authenticationProvider);
+    }
 }

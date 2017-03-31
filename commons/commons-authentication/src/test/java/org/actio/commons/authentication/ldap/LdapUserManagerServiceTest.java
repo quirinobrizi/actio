@@ -77,7 +77,7 @@ public class LdapUserManagerServiceTest {
     @Test
     public void testFindUserById() {
         String identifier = "id";
-        when(ldapTemplate.findById(identifier)).thenReturn(searchResult);
+        when(ldapTemplate.findUserById(identifier)).thenReturn(searchResult);
         when(userTranslator.translate(searchResult)).thenReturn(user);
         // act
         User actual = testObj.findUserById(identifier);
@@ -95,7 +95,7 @@ public class LdapUserManagerServiceTest {
     public void testFindUserByQueryCriteria_identifier() {
         when(query.getId()).thenReturn("id");
         when(query.getFullNameLike()).thenReturn(null);
-        when(ldapTemplate.findById("id")).thenReturn(searchResult);
+        when(ldapTemplate.findUserById("id")).thenReturn(searchResult);
         when(userTranslator.translate(searchResult)).thenReturn(user);
         // act
         List<User> actual = testObj.findUserByQueryCriteria(query, page);
@@ -108,7 +108,7 @@ public class LdapUserManagerServiceTest {
         when(query.getId()).thenReturn(null);
         when(query.getFullNameLike()).thenReturn("fullName");
         List<SearchResult> searchResults = Arrays.asList(searchResult);
-        when(ldapTemplate.findByName("fullName")).thenReturn(searchResults);
+        when(ldapTemplate.findUserByName("fullName")).thenReturn(searchResults);
         List<User> users = Arrays.asList(user);
         when(userTranslator.translate(searchResults)).thenReturn(users);
         // act
@@ -130,7 +130,7 @@ public class LdapUserManagerServiceTest {
         when(query.getId()).thenReturn(null);
         when(query.getFullNameLike()).thenReturn("fullName");
         List<SearchResult> searchResults = Arrays.asList(searchResult);
-        when(ldapTemplate.findByName("fullName")).thenReturn(searchResults);
+        when(ldapTemplate.findUserByName("fullName")).thenReturn(searchResults);
         List<User> users = Arrays.asList(user);
         when(userTranslator.translate(searchResults)).thenReturn(users);
         // act
@@ -174,7 +174,7 @@ public class LdapUserManagerServiceTest {
 
     @Test
     public void testCheckPassword_valid_password() {
-        when(ldapTemplate.findById("userId")).thenReturn(searchResult);
+        when(ldapTemplate.findUserById("userId")).thenReturn(searchResult);
         when(searchResult.getNameInNamespace()).thenReturn("userDn");
         when(ldapTemplate.tryBind("userDn", "password")).thenReturn(true);
         // act

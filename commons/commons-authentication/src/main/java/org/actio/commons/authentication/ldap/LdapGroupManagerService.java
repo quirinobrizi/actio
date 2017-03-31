@@ -102,8 +102,8 @@ public class LdapGroupManagerService extends AbstractManager implements GroupIde
      */
     @Override
     public List<Group> findGroupsByUser(String userId) {
-        // TODO Auto-generated method stub
-        return null;
+        List<SearchResult> searchResults = ldapTemplate.findGroupByUserId(userId);
+        return groupTranslator.translate(searchResults);
     }
 
     /*
@@ -120,7 +120,7 @@ public class LdapGroupManagerService extends AbstractManager implements GroupIde
         if (null != id) {
             return findGroupsByUser(id);
         } else if (null != fullNameLike) {
-            List<SearchResult> searchResults = ldapTemplate.findByName(fullNameLike.replaceAll("%", ""));
+            List<SearchResult> searchResults = ldapTemplate.findGroupByName(fullNameLike.replaceAll("%", ""));
             return groupTranslator.translate(searchResults);
         } else {
             throw OperationNotSupportedExcepion.newInstance("only id and full name like are supported");

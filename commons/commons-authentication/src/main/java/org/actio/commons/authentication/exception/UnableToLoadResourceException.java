@@ -13,28 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.commons.authentication;
+package org.actio.commons.authentication.exception;
 
-import org.springframework.beans.factory.InitializingBean;
+import org.activiti.engine.ActivitiException;
 
 /**
- * A simple identity provider that loads identity configuration from a file.
+ * Exception thrown on operation not supported
  * 
  * @author quirino.brizi
  *
  */
-public class SimpleIdentityProvider implements InitializingBean {
+public class UnableToLoadResourceException extends ActivitiException {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
-     */
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        // TODO Auto-generated method stub
+    private static final long serialVersionUID = 6578844795253090617L;
 
+    public static UnableToLoadResourceException newInstance(String message) {
+        return new UnableToLoadResourceException(message);
+    }
+
+    private UnableToLoadResourceException(String message) {
+        super(message);
     }
 
 }

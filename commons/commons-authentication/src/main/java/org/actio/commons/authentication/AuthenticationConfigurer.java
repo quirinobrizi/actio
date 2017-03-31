@@ -13,24 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.engine.infrastructure.config;
+package org.actio.commons.authentication;
 
-import org.actio.commons.authentication.AuthenticationProperties;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import org.activiti.engine.IdentityService;
 
 /**
+ * Allow to configure additional entities for the specific authentication type.
+ * i.e. create users, groups and membership on DB.
+ * 
  * @author quirino.brizi
  *
  */
-@Component
-@ConfigurationProperties(prefix = "actio.engine")
-public class EngineConfigurationProperties {
+public interface AuthenticationConfigurer {
 
-    private AuthenticationProperties authentication = new AuthenticationProperties();
-
-    public AuthenticationProperties getAuthentication() {
-        return authentication;
-    }
-
+    /**
+     * Configure authentication structures
+     * 
+     * @param authenticationProperties
+     */
+    void configure(IdentityService identityService, AuthenticationProperties authenticationProperties);
 }

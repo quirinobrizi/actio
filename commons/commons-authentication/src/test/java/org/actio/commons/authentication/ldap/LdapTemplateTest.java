@@ -60,7 +60,7 @@ public class LdapTemplateTest {
         when(searchResults.hasMoreElements()).thenReturn(true, false);
         when(searchResults.nextElement()).thenReturn(searchResult);
         // act
-        SearchResult actual = testObj.findById(identifier);
+        SearchResult actual = testObj.findUserById(identifier);
         // assert
         assertEquals(searchResult, actual);
     }
@@ -73,7 +73,7 @@ public class LdapTemplateTest {
         when(searchResults.hasMoreElements()).thenReturn(true, true, false);
         when(searchResults.nextElement()).thenReturn(searchResult, searchResult);
         // act
-        SearchResult actual = testObj.findById(identifier);
+        SearchResult actual = testObj.findUserById(identifier);
         // assert
         assertEquals(searchResult, actual);
     }
@@ -86,7 +86,7 @@ public class LdapTemplateTest {
         when(searchResults.hasMoreElements()).thenReturn(true, false);
         when(searchResults.nextElement()).thenReturn(searchResult);
         // act
-        List<SearchResult> actual = testObj.findByName(identifier);
+        List<SearchResult> actual = testObj.findUserByName(identifier);
         // assert
         assertEquals(Arrays.asList(searchResult), actual);
     }

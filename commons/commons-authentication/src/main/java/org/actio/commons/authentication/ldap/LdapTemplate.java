@@ -49,7 +49,7 @@ public class LdapTemplate {
         this.ldapConfiguration = ldapConfiguration;
     }
 
-    public SearchResult findById(String identifier) {
+    public SearchResult findUserById(String identifier) {
         try {
             String search = this.ldapConfiguration.getUserIdSearchFilter().replaceAll("\\{userId\\}", identifier);
             NamingEnumeration<SearchResult> searchResults = this.ldapContext.search(this.ldapConfiguration.getBaseSearch(), search,
@@ -67,7 +67,7 @@ public class LdapTemplate {
         }
     }
 
-    public List<SearchResult> findByName(String name) {
+    public List<SearchResult> findUserByName(String name) {
         try {
             String search = this.ldapConfiguration.getUsernameSearchFilter().replaceAll("\\{username\\}", name);
             NamingEnumeration<SearchResult> searchResults = this.ldapContext.search(this.ldapConfiguration.getBaseSearch(), search,
@@ -80,6 +80,16 @@ public class LdapTemplate {
         } catch (NamingException e) {
             throw new ActivitiException("unable to query LDAP server", e);
         }
+    }
+
+    public List<SearchResult> findGroupByUserId(String userId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public List<SearchResult> findGroupByName(String replaceAll) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     public Boolean tryBind(String username, String password) {
@@ -103,4 +113,5 @@ public class LdapTemplate {
             }
         }
     }
+
 }

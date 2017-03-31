@@ -96,7 +96,7 @@ public class LdapUserManagerService extends AbstractManager implements UserIdent
      */
     @Override
     public User findUserById(String userId) {
-        SearchResult searchResult = ldapTemplate.findById(userId);
+        SearchResult searchResult = ldapTemplate.findUserById(userId);
         return userTranslator.translate(searchResult);
     }
 
@@ -125,7 +125,7 @@ public class LdapUserManagerService extends AbstractManager implements UserIdent
         if (null != id) {
             return Arrays.asList(findUserById(id));
         } else if (null != fullNameLike) {
-            List<SearchResult> searchResults = ldapTemplate.findByName(fullNameLike.replaceAll("%", ""));
+            List<SearchResult> searchResults = ldapTemplate.findUserByName(fullNameLike.replaceAll("%", ""));
             return userTranslator.translate(searchResults);
         } else {
             throw OperationNotSupportedExcepion.newInstance("only id and full name like are supported");
@@ -198,7 +198,7 @@ public class LdapUserManagerService extends AbstractManager implements UserIdent
         if (StringUtils.isBlank(password)) {
             return false;
         }
-        SearchResult searchResult = ldapTemplate.findById(userId);
+        SearchResult searchResult = ldapTemplate.findUserById(userId);
         return ldapTemplate.tryBind(searchResult.getNameInNamespace(), password);
     }
 
