@@ -15,28 +15,30 @@
 <link rel="stylesheet" href="css/diagram-js.css"></link>
 <link rel="stylesheet" href="css/bpmn-embedded.css"></link>
 <link rel="stylesheet" href="css/bpmn-js-properties.css"></link>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"></link>
+<link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'></link>
 
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 </head>
 
-<body ng-app="actio-modeler">
-	<nav class="navbar navbar-default">
-	<div class="container-fluid">
-		<div class="navbar-header">
-			<a class="navbar-brand" href="#"> 
-				Actio
-				<!-- <img alt="Actio" src="images/actio.png" /> -->
-			</a>
+<body ng-app="actio-modeler" ng-cloak="">
+	<nav class="navbar navbar-default" ng-controller="RouteCotroller" ng-if="showNavBar">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#"> 
+					Actio
+					<!-- <img alt="Actio" src="images/actio.png" /> -->
+				</a>
+			</div>
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+	        		<li><a href="#!/models">Models</a></li>
+	        	</ul>
+				<ul class="nav navbar-nav">
+	        		<li><a href="#!/editor">Editor</a></li>
+	        	</ul>
+			</div>
 		</div>
-		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-			<ul class="nav navbar-nav">
-        		<li><a href="#!/models">Models</a></li>
-        	</ul>
-			<ul class="nav navbar-nav">
-        		<li><a href="#!/editor">Editor</a></li>
-        	</ul>
-		</div>
-	</div>
 	</nav>
 	
 	<div id="view-container" ng-view=""></div>
@@ -58,6 +60,7 @@
 	<script type="text/javascript" src="js/core/widgets/module.js"></script>
 	<script type="text/javascript" src="js/core/widgets/directive.js"></script>
 	<script type="text/javascript" src="js/core/authentication/module.js"></script>
+	<script type="text/javascript" src="js/core/authentication/component.js"></script>
 	<script type="text/javascript" src="js/core/authentication/service.js"></script>
 	<script type="text/javascript" src="js/dashboard/module.js"></script>
 	<script type="text/javascript" src="js/dashboard/component.js"></script>

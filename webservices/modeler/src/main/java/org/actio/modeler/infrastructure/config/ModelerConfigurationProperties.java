@@ -26,48 +26,48 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "actio.modeler")
 public class ModelerConfigurationProperties {
 
-	private String language;
-	private Engine engine = new Engine();
+    private String language;
+    private Engine engine = new Engine();
 
-	public String getLanguage() {
-		return language;
-	}
+    public String getLanguage() {
+        return language;
+    }
 
-	public void setLanguage(String language) {
-		this.language = language;
-	}
+    public void setLanguage(String language) {
+        this.language = language;
+    }
 
-	public Engine getEngine() {
-		return engine;
-	}
+    public Engine getEngine() {
+        return engine;
+    }
 
-	public static class Engine {
-		private String urlFormat;
-		private String username;
-		private String password;
-
-		public String getUrlFormat() {
-			return urlFormat;
-		}
-
-		public void setUrlFormat(String urlFormat) {
-			this.urlFormat = urlFormat;
-		}
-
-		public String getUsername() {
-			return username;
-		}
-
-		public void setUsername(String username) {
-			this.username = username;
-		}
-
-		public String getPassword() {
-			return password;
-		}
-
-		public void setPassword(String password) {
-			this.password = password;
-		}
-	}
+    public static class Engine {
+    	private String urlFormat;
+    	private String username;
+    	private String password;
+    
+    	public String getUrlFormat() {
+    		return urlFormat;
+    	}
+    
+    	public void setUrlFormat(String urlFormat) {
+    		this.urlFormat = urlFormat;
+    	}
+    
+    	public String getUsername() {
+    		return username;
+    	}
+    
+    	public void setUsername(String username) {
+    		this.username = username;
+    	}
+    
+    	public String getPassword() {
+    		return password;
+    	}
+    
+    	public void setPassword(String password) {
+    		this.password = password;
+    	}
+    }
 }

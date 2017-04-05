@@ -13,30 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.modeler.interfaces;
+package org.actio.engine.infrastructure.exception;
 
-import org.actio.commons.message.identity.AuthenticateRequestMessage;
-import org.actio.modeler.domain.repository.LoginRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author quirino.brizi
  *
  */
-@RestController
-public class Login {
+@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+public class UnauthorizedException extends RuntimeException {
 
-    @Autowired
-    private LoginRepository loginRepository;
+    private static final long serialVersionUID = -659832825564168757L;
 
-    @RequestMapping(value = "/authorize")
-    @ResponseStatus(code = HttpStatus.OK)
-    public String authorize(@RequestBody AuthenticateRequestMessage loginMessage) {
-        return loginRepository.authenticate(loginMessage.getUsername(), loginMessage.getPassword());
+    public static UnauthorizedException newInstance(String username) {
+        return new UnauthorizedException(username);
+    }
+
+    private UnauthorizedException(String username) {
+        super(String.format("%s cannot be authorized", username));
     }
 }

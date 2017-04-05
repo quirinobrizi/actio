@@ -13,33 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.commons.message.login;
-
-import org.actio.commons.message.Message;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-/**
- * @author quirino.brizi
- *
- */
-public class LoginMessage implements Message {
-
-    private static final long serialVersionUID = 5794425906883838763L;
-
-    @JsonProperty("username")
-    private String username;
-    @JsonProperty("password")
-    private String password;
-
-    @JsonIgnore
-    public String getUsername() {
-        return username;
-    }
-
-    @JsonIgnore
-    public String getPassword() {
-        return password;
-    }
-}
+angular
+  .module('core.authentication')
+  .component('authentication', {
+    templateUrl: 'js/core/authentication/template.html',
+    controller: ['Login', function DashboardController(Login) {
+    	var self = this;
+    	self.login = function(credential) {
+    		console.log('do login', credential);
+    		Login.save(null, credential, success, error);
+    	};
+    	var success = function(resp, headers, statusCode, statusText) {
+    		console.log('success', resp, headers, statusCode, statusText);
+		};
+		
+		var error = function(resp) {
+			console.log('error', resp);
+		};
+    }]});

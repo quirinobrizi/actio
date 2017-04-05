@@ -33,6 +33,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.client.RestTemplate;
@@ -48,29 +49,28 @@ import org.springframework.web.client.RestTemplate;
 @EnableEurekaClient
 @EnableAutoConfiguration
 @EnableConfigurationProperties(value = { ModelerConfigurationProperties.class })
-@ComponentScan({ "org.actio.modeler.interfaces", "org.actio.modeler.app",
-		"org.actio.modeler.infrastructure.repository" })
+@ComponentScan({ "org.actio.modeler.interfaces", "org.actio.modeler.app", "org.actio.modeler.infrastructure.repository" })
+@Import({ HttpSessionConfig.class, SecurityConfig.class })
 public class ModelerConfiguration {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ModelerConfiguration.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ModelerConfiguration.class, args);
+    }
 
-	@Bean
-	RestTemplate restTemplate(ModelerConfigurationProperties modelerConfiguration) {
-		HttpClient httpClient = createHttpClient(modelerConfiguration);
-		return new RestTemplate(new HttpComponentsClientHttpRequestFactory(httpClient));
-	}
+    @Bean
+    RestTemplate restTemplate(ModelerConfigurationProperties modelerConfiguration) {
+        HttpClient httpClient = createHttpClient(modelerConfiguration);
+        return new RestTemplate(new HttpComponentsClientHttpRequestFactory(httpClient));
+    }
 
-	private HttpClient createHttpClient(ModelerConfigurationProperties modelerConfiguration) {
-		Engine engine = modelerConfiguration.getEngine();
-		BasicCredentialsProvider basicProvider = new BasicCredentialsProvider();
-		basicProvider.setCredentials(
-				new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT, AuthScope.ANY_REALM, AuthSchemes.BASIC),
-				new UsernamePasswordCredentials(engine.getUsername(), engine.getPassword()));
-		Lookup<AuthSchemeProvider> authSchemeRegistry = RegistryBuilder.<AuthSchemeProvider>create()
-				.register(AuthSchemes.BASIC, new BasicSchemeFactory()).build();
-		return HttpClientBuilder.create().setDefaultAuthSchemeRegistry(authSchemeRegistry)
-				.setDefaultCredentialsProvider(basicProvider).build();
-	}
+    private HttpClient createHttpClient(ModelerConfigurationProperties modelerConfiguration) {
+        Engine engine = modelerConfiguration.getEngine();
+        BasicCredentialsProvider basicProvider = new BasicCredentialsProvider();
+        basicProvider.setCredentials(new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT, AuthScope.ANY_REALM, AuthSchemes.BASIC),
+                new UsernamePasswordCredentials(engine.getUsername(), engine.getPassword()));
+        Lookup<AuthSchemeProvider> authSchemeRegistry = RegistryBuilder.<AuthSchemeProvider>create()
+                .register(AuthSchemes.BASIC, new BasicSchemeFactory()).build();
+        return HttpClientBuilder.create().setDefaultAuthSchemeRegistry(authSchemeRegistry).setDefaultCredentialsProvider(basicProvider)
+                .build();
+    }
 }

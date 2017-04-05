@@ -15,18 +15,28 @@
  *******************************************************************************/
 angular
   .module('core.authentication')
-  .factory('AuthenticationInterceptor', [function() {
+  .factory('AuthenticationInterceptor', ['$location', function($location) {
 	  return {
 		request: function(config) {
 			console.log('AuthenticationInterceptor - intercepted request');
 			config.headers['Authentication'] = 'Basic abcd';
 			return config;
 		},
-		requestError: function(response) {
-			if (response.status === 401) {
+		responseError: function(response) {
+			if (response.status === 401 || response.status === 403) {
 	            console.log('unauthorized');
+	            $location.path('/login');
+	            return false;
+	        } else if(response.status >= 400) {
+	        	console.log('generic error');
+	        	$location.path('/error');
 	        }
 			return response;
 		}
 	  };
-  }]);
+  }])
+  .factory('Login', ['$resource',
+    function($resource) {
+      return $resource('/authorize');
+  	}
+  ]);

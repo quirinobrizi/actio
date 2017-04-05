@@ -13,15 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.modeler.interfaces;
+package org.actio.engine.interfaces;
 
+import org.actio.commons.message.Message;
 import org.actio.commons.message.identity.AuthenticateRequestMessage;
-import org.actio.modeler.domain.repository.LoginRepository;
+import org.actio.engine.app.AuthenticationService;
+import org.actio.engine.domain.model.authentication.User;
+import org.actio.engine.interfaces.translator.UserTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -29,14 +31,16 @@ import org.springframework.web.bind.annotation.RestController;
  *
  */
 @RestController
-public class Login {
+public class AuthentictionInterface {
 
     @Autowired
-    private LoginRepository loginRepository;
+    private AuthenticationService authenticationService;
+    @Autowired
+    private UserTranslator userTranslator;
 
-    @RequestMapping(value = "/authorize")
-    @ResponseStatus(code = HttpStatus.OK)
-    public String authorize(@RequestBody AuthenticateRequestMessage loginMessage) {
-        return loginRepository.authenticate(loginMessage.getUsername(), loginMessage.getPassword());
+    @RequestMapping(path = "/authenticate", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Message authenticate(@RequestBody AuthenticateRequestMessage message) {
+        User user = authenticationService.authenticate(message.getUsername(), message.getPassword());
+        return userTranslator.translate(user);
     }
 }

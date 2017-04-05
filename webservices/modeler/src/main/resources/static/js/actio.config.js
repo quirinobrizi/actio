@@ -5,7 +5,7 @@ angular.module('actio-modeler')
       $locationProvider.hashPrefix('!');
       $routeProvider.
       	when('/login', {
-      	  templateUrl: 'js/core/authentication/template.html'
+      	  template: '<authentication></authentication>'
         }).
         when('/dashboard', {
           template: '<dashboard></dashboard>'
@@ -24,4 +24,7 @@ angular.module('actio-modeler')
   ])
   .config(['$httpProvider', function($httpProvider) {  
     $httpProvider.interceptors.push('AuthenticationInterceptor');
-}]);
+  }])
+  .controller('RouteController', ['$scope', '$location', function($scope, $location) {
+    $scope.showNavBar = $location.path() !== '/login';
+  }]);;

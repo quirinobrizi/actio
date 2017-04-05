@@ -13,30 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.modeler.interfaces;
+package org.actio.engine.app;
 
-import org.actio.commons.message.identity.AuthenticateRequestMessage;
-import org.actio.modeler.domain.repository.LoginRepository;
+import org.actio.engine.domain.model.authentication.User;
+import org.actio.engine.domain.repository.UserRepository;
+import org.actio.engine.infrastructure.exception.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
 /**
  * @author quirino.brizi
  *
  */
-@RestController
-public class Login {
+@Service
+public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Autowired
-    private LoginRepository loginRepository;
+    private UserRepository userRepository;
 
-    @RequestMapping(value = "/authorize")
-    @ResponseStatus(code = HttpStatus.OK)
-    public String authorize(@RequestBody AuthenticateRequestMessage loginMessage) {
-        return loginRepository.authenticate(loginMessage.getUsername(), loginMessage.getPassword());
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.actio.engine.app.AuthenticationService#authenticate(java.lang.String,
+     * java.lang.String)
+     */
+    @Override
+    public User authenticate(String username, String password) {
+        User user = userRepository.find(username, password);
+        if (null == user) {
+            throw UnauthorizedException.newInstance(username);
+        }
+        return user;
     }
+
 }
