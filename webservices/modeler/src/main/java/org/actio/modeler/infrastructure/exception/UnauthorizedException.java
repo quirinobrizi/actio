@@ -13,29 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.modeler.infrastructure.repository;
+package org.actio.modeler.infrastructure.exception;
 
-import org.actio.modeler.domain.repository.LoginRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * @author quirino.brizi
  *
  */
-@Repository
-public class LoginRepositoryImpl implements LoginRepository {
+@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+public class UnauthorizedException extends RuntimeException {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.actio.modeler.domain.repository.LoginRepository#authenticate(java.
-     * lang.String, java.lang.String)
-     */
-    @Override
-    public String authenticate(String username, String password) {
-        // TODO Auto-generated method stub
-        return null;
+    private static final long serialVersionUID = -4556321514777791812L;
+
+    public static UnauthorizedException newInstance() {
+        return new UnauthorizedException();
     }
 
+    private UnauthorizedException() {
+    }
 }

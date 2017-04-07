@@ -15,28 +15,30 @@
  *******************************************************************************/
 angular
   .module('core.authentication')
-  .factory('AuthenticationInterceptor', ['$location', function($location) {
-	  return {
-		request: function(config) {
-			console.log('AuthenticationInterceptor - intercepted request');
-			config.headers['Authentication'] = 'Basic abcd';
-			return config;
-		},
-		responseError: function(response) {
-			if (response.status === 401 || response.status === 403) {
-	            console.log('unauthorized');
-	            $location.path('/login');
-	            return false;
-	        } else if(response.status >= 400) {
-	        	console.log('generic error');
-	        	$location.path('/error');
-	        }
-			return response;
-		}
-	  };
-  }])
   .factory('Login', ['$resource',
     function($resource) {
       return $resource('/authorize');
   	}
-  ]);
+  ])
+  .service('Auth', ['Bus', 'localStorageService', function(Bus, localStorageService) {
+	  this.isAuthenticated = function() {
+		var user = localStorageService.get('authenticated.user');
+		return user != null && user != undefined;
+	  };
+	  
+	  this.clear = function() {
+		var user = localStorageService.remove('authenticated.user');
+		Bus.emit('actio.authenticated.user.cleared', user);
+	  };
+	  
+	  this.set = function(user) {
+		localStorageService.set('authenticated.user', user);
+		Bus.emit('actio.authenticated.user.recorded', user);
+	  };
+	  
+	  
+	  this.details = function() {
+		  return localStorageService.get('authenticated.user');
+	  };
+	  
+  }]);

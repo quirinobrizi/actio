@@ -11,6 +11,7 @@ import org.actio.commons.message.process.DeployProcessRequestMessage;
 import org.actio.commons.message.process.ProcessMessage;
 import org.actio.modeler.infrastructure.config.ModelerConfigurationProperties;
 import org.actio.modeler.infrastructure.config.ModelerConfigurationProperties.Engine;
+import org.actio.modeler.infrastructure.http.ClientFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -29,13 +30,15 @@ import org.springframework.web.client.RestTemplate;
 public class ModelRepositoryImplTest {
 
     @Mock
-    private RestTemplate restTemplate;
+    private ClientFactory clientFactory;
     @Mock
     private ModelerConfigurationProperties configuration;
 
     @InjectMocks
     private ModelRepositoryImpl testObj;
 
+    @Mock
+    private RestTemplate restTemplate;
     @Mock
     private ModelMessage message;
     @Mock
@@ -56,6 +59,7 @@ public class ModelRepositoryImplTest {
         when(configuration.getEngine()).thenReturn(engine);
         when(engine.getUrlFormat()).thenReturn("http://actio.org/{activiti}");
         when(message.getId()).thenReturn("myId");
+        when(clientFactory.newClient()).thenReturn(restTemplate);
         when(restTemplate.postForObject("http://actio.org/{activiti}", message, ModelMessage.class, "models")).thenReturn(message);
         when(restTemplate.postForObject(Mockito.eq("http://actio.org/{activiti}"), captor.capture(), Mockito.eq(ProcessMessage.class),
                 Mockito.eq("processes"))).thenReturn(processMesage);
@@ -69,6 +73,7 @@ public class ModelRepositoryImplTest {
     public void testGetAllModels() {
         when(configuration.getEngine()).thenReturn(engine);
         when(engine.getUrlFormat()).thenReturn("http://actio.org/{activiti}");
+        when(clientFactory.newClient()).thenReturn(restTemplate);
         ParameterizedTypeReference<List<ModelMessage>> responseType = new ParameterizedTypeReference<List<ModelMessage>>() {
         };
         when(restTemplate.exchange(requestEntityCaptor.capture(), Mockito.eq(responseType))).thenReturn(response);

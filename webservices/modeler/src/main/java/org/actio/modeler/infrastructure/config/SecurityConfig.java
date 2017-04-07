@@ -16,13 +16,14 @@
 package org.actio.modeler.infrastructure.config;
 
 import org.actio.modeler.infrastructure.security.ActioAuthenticationProvider;
-import org.actio.modeler.infrastructure.security.ActionFormLoginConfigurer;
+import org.actio.modeler.infrastructure.security.ActioFormLoginConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * @author quirino.brizi
@@ -33,16 +34,18 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
+    private RestTemplate restTemplate;
+    @Autowired
     private ModelerConfigurationProperties modelerConfiguration;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.apply(new ActionFormLoginConfigurer<>(modelerConfiguration)).and().csrf().disable().authorizeRequests()
-                .antMatchers("/", "/css/**", "/js/**").anonymous().anyRequest().authenticated();
+        http.apply(new ActioFormLoginConfigurer<>(modelerConfiguration)).and().csrf().disable().authorizeRequests()
+                .antMatchers("/", "/css/**", "/js/**").permitAll().anyRequest().authenticated();
     }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(new ActioAuthenticationProvider());
+        auth.authenticationProvider(new ActioAuthenticationProvider(restTemplate, modelerConfiguration));
     }
 }

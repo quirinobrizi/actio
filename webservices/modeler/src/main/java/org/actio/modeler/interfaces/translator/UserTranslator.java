@@ -13,15 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.engine.interfaces.translator;
-
-import java.util.List;
+package org.actio.modeler.interfaces.translator;
 
 import org.actio.commons.message.Message;
-import org.actio.commons.message.identity.GroupMessage;
 import org.actio.commons.message.identity.UserMessage;
-import org.actio.engine.domain.model.authentication.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.actio.modeler.infrastructure.security.model.User;
 import org.springframework.stereotype.Component;
 
 /**
@@ -31,13 +27,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserTranslator {
 
-    @Autowired
-    private GroupTranslator groupTranslator;
-
     public Message translate(User user) {
-        List<GroupMessage> groups = groupTranslator.translate(user.getGroups());
-        return new UserMessage(null, user.getUserId(), user.getUserName(), user.getFirstName(), user.getLastName(), user.getEmail(),
-                groups);
+        return new UserMessage(null, user.getUserId(), user.getUserName(), user.getFirstName(), user.getLastName(), user.getEmail(), null);
     }
 
 }

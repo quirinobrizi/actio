@@ -29,6 +29,7 @@ import org.actio.modeler.domain.model.Metrics;
 import org.actio.modeler.domain.model.ProcessMetrics;
 import org.actio.modeler.domain.repository.ProcessRepository;
 import org.actio.modeler.infrastructure.config.ModelerConfigurationProperties;
+import org.actio.modeler.infrastructure.http.ClientFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * @author quirino.brizi
@@ -52,7 +52,7 @@ public class ProcessRepositoryImpl implements ProcessRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProcessRepositoryImpl.class);
 
     @Autowired
-    private RestTemplate restTemplate;
+    private ClientFactory clientFactory;
     @Autowired
     private ModelerConfigurationProperties configuration;
 
@@ -63,7 +63,8 @@ public class ProcessRepositoryImpl implements ProcessRepository {
      */
     @Override
     public Metrics getProcessesMetrics() {
-        MetricsMessage metrics = restTemplate.getForObject(configuration.getEngine().getUrlFormat(), MetricsMessage.class, "activiti");
+        MetricsMessage metrics = clientFactory.newClient().getForObject(configuration.getEngine().getUrlFormat(), MetricsMessage.class,
+                "activiti");
         return new Metrics(metrics.getCompletedActivities(), metrics.getProcessDefinitionCount(), metrics.getCachedProcessDefinitionCount(),
                 extractProcessesMetrics(metrics));
     }
@@ -73,14 +74,14 @@ public class ProcessRepositoryImpl implements ProcessRepository {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         HttpEntity<UpdateProcessStateRequestMessage> entity = new HttpEntity<>(message, headers);
-        ResponseEntity<ProcessMessage> responseEntity = restTemplate.exchange(configuration.getEngine().getUrlFormat(), HttpMethod.PUT,
-                entity, ProcessMessage.class, PROCESSES);
+        ResponseEntity<ProcessMessage> responseEntity = clientFactory.newClient().exchange(configuration.getEngine().getUrlFormat(),
+                HttpMethod.PUT, entity, ProcessMessage.class, PROCESSES);
         return responseEntity.getBody();
     }
 
     @Override
     public void delete(String process) {
-        restTemplate.delete(configuration.getEngine().getUrlFormat(), String.format("%s/%s", PROCESSES, process));
+        clientFactory.newClient().delete(configuration.getEngine().getUrlFormat(), String.format("%s/%s", PROCESSES, process));
     }
 
     private Set<ProcessMetrics> extractProcessesMetrics(MetricsMessage metrics) {

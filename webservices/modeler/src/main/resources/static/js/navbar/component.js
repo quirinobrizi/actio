@@ -14,4 +14,23 @@
  * limitations under the License.
  *******************************************************************************/
 angular
-  .module('core.authentication', ['ngResource', 'core.bus']);
+  .module('navbar')
+  .component('navbar', {
+    templateUrl: 'js/navbar/template.html',
+    controller: ['Auth', 'Bus', function DashboardController(Auth, Bus) {
+    	var self = this;
+    	console.log(Auth.isAuthenticated());
+    	self.showNavBar = Auth.isAuthenticated();
+    	self.user = Auth.details();
+    	
+    	Bus.listen('actio.authenticated.user.recorded', function(event, data) {
+    		self.showNavBar = true;
+    		self.user = data;
+    	});
+    	
+    	Bus.listen('actio.authenticated.user.cleared', function(e, data) {
+    		self.showNavBar = false;
+    	});
+    	
+    	self.logout = function() { Auth.clear(); };
+    }]});

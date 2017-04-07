@@ -15,11 +15,14 @@
  *******************************************************************************/
 package org.actio.modeler.interfaces;
 
-import org.actio.commons.message.identity.AuthenticateRequestMessage;
-import org.actio.modeler.domain.repository.LoginRepository;
+import org.actio.commons.message.Message;
+import org.actio.modeler.infrastructure.exception.UnauthorizedException;
+import org.actio.modeler.infrastructure.security.model.User;
+import org.actio.modeler.interfaces.translator.UserTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,11 +35,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class Login {
 
     @Autowired
-    private LoginRepository loginRepository;
+    private UserTranslator userTranslator;
 
     @RequestMapping(value = "/authorize")
     @ResponseStatus(code = HttpStatus.OK)
-    public String authorize(@RequestBody AuthenticateRequestMessage loginMessage) {
-        return loginRepository.authenticate(loginMessage.getUsername(), loginMessage.getPassword());
+    public Message authorize() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+        if (User.class.isAssignableFrom(principal.getClass())) {
+            User user = (User) principal;
+            return userTranslator.translate(user);
+        }
+        throw UnauthorizedException.newInstance();
     }
 }

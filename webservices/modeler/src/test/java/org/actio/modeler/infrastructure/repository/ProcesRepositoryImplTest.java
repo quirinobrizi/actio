@@ -27,6 +27,7 @@ import org.actio.modeler.domain.model.ProcessMetrics;
 import org.actio.modeler.domain.model.VersionMetrics;
 import org.actio.modeler.infrastructure.config.ModelerConfigurationProperties;
 import org.actio.modeler.infrastructure.config.ModelerConfigurationProperties.Engine;
+import org.actio.modeler.infrastructure.http.ClientFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -42,7 +43,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ProcesRepositoryImplTest {
 
     @Mock
-    private RestTemplate restTemplate;
+    private ClientFactory clientFactory;
     @Mock
     private ModelerConfigurationProperties configuration;
 
@@ -51,11 +52,14 @@ public class ProcesRepositoryImplTest {
 
     @Mock
     private Engine engine;
+    @Mock
+    private RestTemplate restTemplate;
 
     @Test
     public void testGet() throws Exception {
         when(configuration.getEngine()).thenReturn(engine);
         when(engine.getUrlFormat()).thenReturn("http://actio.org/{activiti}");
+        when(clientFactory.newClient()).thenReturn(restTemplate);
         when(restTemplate.getForObject("http://actio.org/{activiti}", MetricsMessage.class, "activiti")).thenReturn(metrics());
         // act
         Metrics metrics = testObj.getProcessesMetrics();

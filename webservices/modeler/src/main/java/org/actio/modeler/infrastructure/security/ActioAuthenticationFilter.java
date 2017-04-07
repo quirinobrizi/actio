@@ -24,6 +24,7 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,6 +32,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.NullRememberMeServices;
 import org.springframework.security.web.authentication.RememberMeServices;
@@ -71,35 +73,48 @@ public class ActioAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        ServletInputStream inputStream = request.getInputStream();
-        if (null != inputStream && inputStream.available() > 0) {
-            Map<String, String> body = MAPPER.readValue(inputStream, new TypeReference<Map<String, String>>() {
-            });
-            if (null == body || bodyDoesNotContainAuthenticationDetails(body)) {
-                filterChain.doFilter(request, response);
-                return;
-            }
-            String username = body.get("username");
-            String password = body.get("password");
-            try {
-                if (authenticationIsRequired(username)) {
-                    UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
-                    if (null != authenticationDetailsSource) {
-                        authRequest.setDetails(this.authenticationDetailsSource.buildDetails(request));
-                    }
-                    Authentication authResult = this.authenticationManager.authenticate(authRequest);
-                    SecurityContextHolder.getContext().setAuthentication(authResult);
-                    this.rememberMeServices.loginSuccess(request, response, authResult);
-                    onSuccessfulAuthentication(request, response, authResult);
-                }
-            } catch (AuthenticationException e) {
+        String xActioUsername = request.getHeader("X-Actio-Username");
+        if (StringUtils.isNotBlank(xActioUsername)) {
+            if (authenticationIsRequired(xActioUsername)) {
                 SecurityContextHolder.clearContext();
                 this.rememberMeServices.loginFail(request, response);
-                onUnsuccessfulAuthentication(request, response, e);
-                this.authenticationEntryPoint.commence(request, response, e);
+                onUnsuccessfulAuthentication(request, response, new UsernameNotFoundException(xActioUsername));
+                this.authenticationEntryPoint.commence(request, response, new UsernameNotFoundException(xActioUsername));
             }
-        } else {
             filterChain.doFilter(request, response);
+            return;
+        } else {
+            ServletInputStream inputStream = request.getInputStream();
+            if (null != inputStream && inputStream.available() > 0) {
+                Map<String, String> body = MAPPER.readValue(inputStream, new TypeReference<Map<String, String>>() {
+                });
+                if (null == body || bodyDoesNotContainAuthenticationDetails(body)) {
+                    filterChain.doFilter(request, response);
+                    return;
+                }
+                String username = body.get("username");
+                String password = body.get("password");
+                try {
+                    if (authenticationIsRequired(username)) {
+                        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
+                        if (null != authenticationDetailsSource) {
+                            authRequest.setDetails(this.authenticationDetailsSource.buildDetails(request));
+                        }
+                        Authentication authResult = this.authenticationManager.authenticate(authRequest);
+                        SecurityContextHolder.getContext().setAuthentication(authResult);
+                        this.rememberMeServices.loginSuccess(request, response, authResult);
+                        onSuccessfulAuthentication(request, response, authResult);
+                    }
+                } catch (AuthenticationException e) {
+                    SecurityContextHolder.clearContext();
+                    this.rememberMeServices.loginFail(request, response);
+                    onUnsuccessfulAuthentication(request, response, e);
+                    this.authenticationEntryPoint.commence(request, response, e);
+                }
+                filterChain.doFilter(request, response);
+            } else {
+                filterChain.doFilter(request, response);
+            }
         }
     }
 

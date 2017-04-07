@@ -13,13 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.modeler.domain.repository;
+package org.actio.engine.interfaces.translator;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.actio.commons.message.identity.GroupMessage;
+import org.actio.engine.domain.model.authentication.Group;
+import org.springframework.stereotype.Component;
 
 /**
  * @author quirino.brizi
  *
  */
-public interface LoginRepository {
+@Component
+public class GroupTranslator {
 
-    String authenticate(String username, String password);
+    public List<GroupMessage> translate(List<Group> groups) {
+        List<GroupMessage> answer = new ArrayList<>();
+        for (Group group : groups) {
+            answer.add(new GroupMessage(group.getName(), group.getType()));
+        }
+        return answer;
+    }
+
 }

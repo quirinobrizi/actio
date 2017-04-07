@@ -42,32 +42,15 @@ public class ModelerConfigurationProperties {
     }
 
     public static class Engine {
-    	private String urlFormat;
-    	private String username;
-    	private String password;
-    
-    	public String getUrlFormat() {
-    		return urlFormat;
-    	}
-    
-    	public void setUrlFormat(String urlFormat) {
-    		this.urlFormat = urlFormat;
-    	}
-    
-    	public String getUsername() {
-    		return username;
-    	}
-    
-    	public void setUsername(String username) {
-    		this.username = username;
-    	}
-    
-    	public String getPassword() {
-    		return password;
-    	}
-    
-    	public void setPassword(String password) {
-    		this.password = password;
-    	}
+        private String urlFormat;
+
+        public String getUrlFormat() {
+            return urlFormat;
+        }
+
+        public void setUrlFormat(String urlFormat) {
+            this.urlFormat = urlFormat;
+        }
+
     }
 }

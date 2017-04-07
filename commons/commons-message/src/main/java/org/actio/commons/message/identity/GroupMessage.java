@@ -17,6 +17,10 @@ package org.actio.commons.message.identity;
 
 import org.actio.commons.message.Message;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * @author quirino.brizi
  *
@@ -24,5 +28,26 @@ import org.actio.commons.message.Message;
 public class GroupMessage implements Message {
 
     private static final long serialVersionUID = -8401100322332601825L;
+
+    @JsonProperty("name")
+    private String name;
+    @JsonProperty("type")
+    private String type;
+
+    @JsonCreator
+    public GroupMessage(@JsonProperty("name") String name, @JsonProperty("type") String type) {
+        this.name = name;
+        this.type = type;
+    }
+
+    @JsonIgnore
+    public String getName() {
+        return name;
+    }
+
+    @JsonIgnore
+    public String getType() {
+        return type;
+    }
 
 }

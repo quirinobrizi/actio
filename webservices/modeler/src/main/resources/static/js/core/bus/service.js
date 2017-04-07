@@ -14,4 +14,15 @@
  * limitations under the License.
  *******************************************************************************/
 angular
-  .module('core.authentication', ['ngResource', 'core.bus']);
+  .module('core.bus')
+  .service('Bus', ['$rootScope',
+    function($rootScope) {
+      this.emit = function(event, payload) {
+    	$rootScope.$emit(event, payload);  
+      };
+      
+      this.listen = function(event, callback) {
+      	$rootScope.$on(event, callback);  
+      };
+  }
+]);

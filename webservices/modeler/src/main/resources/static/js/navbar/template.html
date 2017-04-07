@@ -1,0 +1,26 @@
+<nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#!/dashboard"> 
+				Actio
+				<!-- <img alt="Actio" src="images/actio.png" /> -->
+			</a>
+		</div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" ng-if="$ctrl.showNavBar">
+			<ul class="nav navbar-nav">
+        		<li><a href="#!/models">Models</a></li>
+        	</ul>
+			<ul class="nav navbar-nav">
+        		<li><a href="#!/editor">Editor</a></li>
+        	</ul>
+        	<ul class="nav navbar-nav navbar-right">
+		        <li class="dropdown">
+		          <a class="dropdown-toggle" style="text-transform: capitalize;" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{$ctrl.user.userName}} <span class="caret"></span></a>
+		          <ul class="dropdown-menu">
+		            <li><a ng-click="$ctrl.logout()">Logout</a></li>
+		          </ul>
+		        </li>
+		    </ul>
+		</div>
+	</div>
+</nav>

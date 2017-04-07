@@ -1,12 +1,11 @@
 @CHARSET "UTF-8";
 * { box-sizing: border-box; }
 body, html {
-  font-family: "Varela Round, Helvetica Neue, Helvetica, Arial, sans-serif"; font-size: 12px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 12px;
   height: 100%;
   padding: 0; margin: 0;
   color: #666;
-  background: #efefef;
-  
+  background: #fffff;
 }
 
 a:link { text-decoration: none; }
@@ -39,6 +38,9 @@ a:link { text-decoration: none; }
 }
 .navbar-default .navbar-brand { color: #FFFFFF; }
 .navbar-default .navbar-nav > li > a { color: #FFFFFF; }
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:focus, .navbar-default .navbar-nav > .open > a:hover {
+	background-color: transparent;
+}
 
 #view-container {
 	padding: 0; margin: 0 auto;
@@ -137,6 +139,7 @@ a:link { text-decoration: none; }
   width: 100%;
   border-radius: 5px;
   display: inline-block;
+  border: 1px solid #8FC1FF;
 }
 .main-login-form {
   position: relative;
@@ -161,7 +164,7 @@ a:link { text-decoration: none; }
 }
 .login-form-1 .form-group {
   margin-bottom: 0;
-  border-bottom: 2px solid #efefef;
+  border-bottom: 2px solid #8FC1FF;
   padding-right: 20px;
   position: relative;
 }
@@ -188,7 +191,7 @@ a:link { text-decoration: none; }
   width: 50px;
   height: 50px;
   margin-top: -25px;
-  border: 5px solid #efefef;
+  border: 5px solid #8FC1FF;
   border-radius: 50%;
   transition: all ease-in-out 500ms;
 }

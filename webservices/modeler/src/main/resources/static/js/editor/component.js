@@ -46,7 +46,7 @@ angular.module('editor').component('editor', {
 							self.modelId = newModel.id;
 							alert("model " + newModel.key + " published");
 						}, function(error) {
-							alert("unable to publish model " + newModel.key);
+							alert("unable to publish model " + model.key + ", " + error);
 						});
 					});
 				}

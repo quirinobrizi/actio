@@ -22,12 +22,12 @@ import org.actio.commons.message.process.DeployProcessRequestMessage;
 import org.actio.commons.message.process.ProcessMessage;
 import org.actio.modeler.domain.repository.ModelRepository;
 import org.actio.modeler.infrastructure.config.ModelerConfigurationProperties;
+import org.actio.modeler.infrastructure.http.ClientFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 /**
@@ -40,7 +40,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class ModelRepositoryImpl implements ModelRepository {
 
     @Autowired
-    private RestTemplate restTemplate;
+    private ClientFactory clientFactory;
     @Autowired
     private ModelerConfigurationProperties configuration;
 
@@ -54,9 +54,9 @@ public class ModelRepositoryImpl implements ModelRepository {
     @Override
     public ModelMessage add(ModelMessage model) {
         String urlFormat = configuration.getEngine().getUrlFormat();
-        ModelMessage modelMessage = restTemplate.postForObject(urlFormat, model, ModelMessage.class, "models");
+        ModelMessage modelMessage = clientFactory.newClient().postForObject(urlFormat, model, ModelMessage.class, "models");
         DeployProcessRequestMessage request = new DeployProcessRequestMessage(modelMessage.getId());
-        restTemplate.postForObject(urlFormat, request, ProcessMessage.class, "processes");
+        clientFactory.newClient().postForObject(urlFormat, request, ProcessMessage.class, "processes");
         return modelMessage;
     }
 
@@ -67,12 +67,12 @@ public class ModelRepositoryImpl implements ModelRepository {
         };
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(urlFormat);
         RequestEntity<Void> requestEntity = new RequestEntity<>(HttpMethod.GET, builder.buildAndExpand("models").toUri());
-        return restTemplate.exchange(requestEntity, responseType).getBody();
+        return clientFactory.newClient().exchange(requestEntity, responseType).getBody();
     }
 
     @Override
     public ModelMessage getModel(String modelKey) {
         String urlFormat = configuration.getEngine().getUrlFormat();
-        return restTemplate.getForObject(urlFormat, ModelMessage.class, String.format("models/%s", modelKey));
+        return clientFactory.newClient().getForObject(urlFormat, ModelMessage.class, String.format("models/%s", modelKey));
     }
 }

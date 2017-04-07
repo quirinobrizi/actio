@@ -29,6 +29,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.HttpSecurityBuilder;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.DelegatingAuthenticationEntryPoint;
@@ -46,26 +47,28 @@ import org.springframework.web.accept.ContentNegotiationStrategy;
 import org.springframework.web.accept.HeaderContentNegotiationStrategy;
 
 /**
+ * Based on {@link HttpBasicConfigurer}
+ * 
  * @author quirino.brizi
  *
  */
-public class ActionFormLoginConfigurer<B extends HttpSecurityBuilder<B>> extends AbstractHttpConfigurer<ActionFormLoginConfigurer<B>, B> {
+public class ActioFormLoginConfigurer<B extends HttpSecurityBuilder<B>> extends AbstractHttpConfigurer<ActioFormLoginConfigurer<B>, B> {
 
     private static final RequestHeaderRequestMatcher X_REQUESTED_WITH = new RequestHeaderRequestMatcher("X-Requested-With",
             "XMLHttpRequest");
 
     private AuthenticationEntryPoint authenticationEntryPoint;
     private AuthenticationDetailsSource<HttpServletRequest, ?> authenticationDetailsSource;
-    private ActioAuthenticationEntrypoint actionAuthenticationEntrypoint = new ActioAuthenticationEntrypoint();
+    private ActioAuthenticationEntrypoint actioAuthenticationEntrypoint = new ActioAuthenticationEntrypoint();
 
     private ModelerConfigurationProperties modelerConfiguration;
 
-    public ActionFormLoginConfigurer(ModelerConfigurationProperties modelerConfiguration) {
+    public ActioFormLoginConfigurer(ModelerConfigurationProperties modelerConfiguration) {
         this.modelerConfiguration = modelerConfiguration;
         LinkedHashMap<RequestMatcher, AuthenticationEntryPoint> entryPoints = new LinkedHashMap<RequestMatcher, AuthenticationEntryPoint>();
         entryPoints.put(X_REQUESTED_WITH, new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
         DelegatingAuthenticationEntryPoint defaultEntryPoint = new DelegatingAuthenticationEntryPoint(entryPoints);
-        defaultEntryPoint.setDefaultEntryPoint(this.actionAuthenticationEntrypoint);
+        defaultEntryPoint.setDefaultEntryPoint(this.actioAuthenticationEntrypoint);
         this.authenticationEntryPoint = defaultEntryPoint;
     }
 

@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  */
 @RestController
-public class AuthentictionInterface {
+public class AuthenticationInterface {
 
     @Autowired
     private AuthenticationService authenticationService;

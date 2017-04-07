@@ -14,4 +14,4 @@
  * limitations under the License.
  *******************************************************************************/
 angular
-  .module('core.authentication', ['ngResource', 'core.bus']);
+  .module('core.bus', []);

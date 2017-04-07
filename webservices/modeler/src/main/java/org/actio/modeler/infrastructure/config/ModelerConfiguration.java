@@ -15,17 +15,6 @@
  *******************************************************************************/
 package org.actio.modeler.infrastructure.config;
 
-import org.actio.modeler.infrastructure.config.ModelerConfigurationProperties.Engine;
-import org.apache.http.auth.AuthSchemeProvider;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.AuthSchemes;
-import org.apache.http.config.Lookup;
-import org.apache.http.config.RegistryBuilder;
-import org.apache.http.impl.auth.BasicSchemeFactory;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -34,7 +23,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.client.RestTemplate;
 
@@ -49,7 +37,8 @@ import org.springframework.web.client.RestTemplate;
 @EnableEurekaClient
 @EnableAutoConfiguration
 @EnableConfigurationProperties(value = { ModelerConfigurationProperties.class })
-@ComponentScan({ "org.actio.modeler.interfaces", "org.actio.modeler.app", "org.actio.modeler.infrastructure.repository" })
+@ComponentScan({ "org.actio.modeler.interfaces", "org.actio.modeler.app", "org.actio.modeler.infrastructure.repository",
+        "org.actio.modeler.infrastructure.http" })
 @Import({ HttpSessionConfig.class, SecurityConfig.class })
 public class ModelerConfiguration {
 
@@ -59,18 +48,7 @@ public class ModelerConfiguration {
 
     @Bean
     RestTemplate restTemplate(ModelerConfigurationProperties modelerConfiguration) {
-        HttpClient httpClient = createHttpClient(modelerConfiguration);
-        return new RestTemplate(new HttpComponentsClientHttpRequestFactory(httpClient));
+        return new RestTemplate();
     }
 
-    private HttpClient createHttpClient(ModelerConfigurationProperties modelerConfiguration) {
-        Engine engine = modelerConfiguration.getEngine();
-        BasicCredentialsProvider basicProvider = new BasicCredentialsProvider();
-        basicProvider.setCredentials(new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT, AuthScope.ANY_REALM, AuthSchemes.BASIC),
-                new UsernamePasswordCredentials(engine.getUsername(), engine.getPassword()));
-        Lookup<AuthSchemeProvider> authSchemeRegistry = RegistryBuilder.<AuthSchemeProvider>create()
-                .register(AuthSchemes.BASIC, new BasicSchemeFactory()).build();
-        return HttpClientBuilder.create().setDefaultAuthSchemeRegistry(authSchemeRegistry).setDefaultCredentialsProvider(basicProvider)
-                .build();
-    }
 }

@@ -17,6 +17,7 @@ package org.actio.commons.message.identity;
 
 import org.actio.commons.message.Message;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -32,6 +33,12 @@ public class AuthenticateRequestMessage implements Message {
     private String username;
     @JsonProperty("password")
     private String password;
+
+    @JsonCreator
+    public AuthenticateRequestMessage(@JsonProperty("username") String username, @JsonProperty("password") String password) {
+        this.username = username;
+        this.password = password;
+    }
 
     @JsonIgnore
     public String getUsername() {

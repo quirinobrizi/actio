@@ -17,17 +17,16 @@ angular
   .module('core.authentication')
   .component('authentication', {
     templateUrl: 'js/core/authentication/template.html',
-    controller: ['Login', function DashboardController(Login) {
+    controller: ['$location', 'Login', 'Bus', 'Auth', function LoginController($location, Login, Bus, Auth) {
     	var self = this;
+    	Auth.clear();
     	self.login = function(credential) {
-    		console.log('do login', credential);
-    		Login.save(null, credential, success, error);
+    		Login.save(null, credential, success);
     	};
-    	var success = function(resp, headers, statusCode, statusText) {
-    		console.log('success', resp, headers, statusCode, statusText);
-		};
-		
-		var error = function(resp) {
-			console.log('error', resp);
+    	var success = function(resp, headers) {
+    		var user = resp.toJSON();
+    		Auth.set(user);
+    		Bus.emit('actio.login.successful', user);
+    		$location.path('/dashboard');
 		};
     }]});
