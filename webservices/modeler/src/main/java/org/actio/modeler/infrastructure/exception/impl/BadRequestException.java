@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.modeler.infrastructure.exception;
+package org.actio.modeler.infrastructure.exception.impl;
 
+import org.actio.modeler.infrastructure.exception.ActioException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -22,15 +23,20 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @author quirino.brizi
  *
  */
-@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
-public class UnauthorizedException extends RuntimeException {
+@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+public class BadRequestException extends ActioException {
 
-    private static final long serialVersionUID = -4556321514777791812L;
+    private static final long serialVersionUID = 4192704700616575895L;
 
-    public static UnauthorizedException newInstance() {
-        return new UnauthorizedException();
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.actio.modeler.infrastructure.exception.ActioException#statusCode()
+     */
+    @Override
+    public Integer statusCode() {
+        return HttpStatus.BAD_REQUEST.value();
     }
 
-    private UnauthorizedException() {
-    }
 }

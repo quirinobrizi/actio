@@ -13,23 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-angular
-  .module('navbar')
-  .component('navbar', {
-    templateUrl: 'js/navbar/template.html',
-    controller: ['Auth', 'Bus', function DashboardController(Auth, Bus) {
-    	var self = this;
-    	self.showNavBar = Auth.isAuthenticated();
-    	self.user = Auth.details();
-    	
-    	Bus.listen('actio.authenticated.user.recorded', function(event, data) {
-    		self.showNavBar = true;
-    		self.user = data;
-    	});
-    	
-    	Bus.listen('actio.authenticated.user.cleared', function(e, data) {
-    		self.showNavBar = false;
-    	});
-    	
-    	self.logout = function() { Auth.clear(); };
-    }]});
+package org.actio.commons.message;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+/**
+ * @author quirino.brizi
+ *
+ */
+public class ErrorMessage implements Message {
+
+    private static final long serialVersionUID = 4155963200493829994L;
+
+    @JsonProperty("code")
+    private int code;
+    @JsonProperty("message")
+    private String message;
+
+    @JsonCreator
+    public ErrorMessage(@JsonProperty("code") int code, @JsonProperty("message") String message) {
+        this.code = code;
+        this.message = message;
+    }
+
+}

@@ -6,52 +6,36 @@
 	<single-value class="col-md-4" ng-title="Cached Process Definition Count" ng-value="{{$ctrl.metrics.cachedProcessDefinitionCount}}"></single-value>
 </div>
 <div class="row">
-	<div class="col-md-12">
-		<table st-table="displayedCollection" st-safe-src="$ctrl.metrics.processesMetrics" class="table table-striped">
-			<thead>
-				<tr class="hidden">
-					<th st-sort="key">Process Key</th>
-					<th>Process Metrics</th>
-				</tr>
-				<tr>
-					<th>
-						<input st-search="key" placeholder="search process by key" class="input-sm form-control" type="search"/>
-					</th>
-					<th colspan="4">
-						<input st-search placeholder="global search" class="input-sm form-control" type="search"/>
-					</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="process in displayedCollection">
-					<td>{{process.key}}</td>
-					<td>
-						<table st-table="process.versions" class="table table-striped">
-							<thead>
-								<tr>
-									<td class="col-md-4">Version</td>
-									<td class="col-md-4">Running Processes</td>
-									<td class="col-md-4">Completed Processes</td>
-								</tr>
-							</thead>
-							<tbody>
-								<tr ng-repeat="version in process.versions">
-									<td>{{version.version}}</td>
-									<td>{{version.running}}</td>
-									<td>{{version.completed}}</td>
-								</tr>
-							</tbody>
-						</table>
-					</td>
-				</tr>
-			</tbody>
-			<tfoot>
-				<tr>
-					<td colspan="5" class="text-center">
-						<div st-pagination="" st-items-by-page="10" st-displayed-pages="7"></div>
-					</td>
-				</tr>
-			</tfoot>
-		</table>
-	</div>	
+		<div class="col-md-12">
+			<form class="form-inline">
+	      		<input ng-model="$ctrl.query" type="text" placeholder="Filter by" class="input-sm form-control" autofocus>
+	    	</form>
+    	</div>
+	</div>
+<div class="row">
+	<div class="col-md-4" ng-repeat="process in $ctrl.metrics.processesMetrics | filter: $ctrl.query">
+		<div class="tile">
+			<div class="info gradient">
+				<span>{{process.key}}</span><span ng-if="process.name">({{process.name}})</span>
+			</div>
+			<div class="table-area">
+				<table st-table="process.versions" class="table table-striped">
+					<thead>
+						<tr>
+							<td class="col-md-4 small-capitalized text-center">Version</td>
+							<td class="col-md-4 small-capitalized text-center">Running Processes</td>
+							<td class="col-md-4 small-capitalized text-center">Completed Processes</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="version in process.versions">
+							<td class="text-center">{{version.version}}</td>
+							<td class="text-center">{{version.running}}</td>
+							<td class="text-center">{{version.completed}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 </div>

@@ -13,23 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-angular
-  .module('navbar')
-  .component('navbar', {
-    templateUrl: 'js/navbar/template.html',
-    controller: ['Auth', 'Bus', function DashboardController(Auth, Bus) {
-    	var self = this;
-    	self.showNavBar = Auth.isAuthenticated();
-    	self.user = Auth.details();
-    	
-    	Bus.listen('actio.authenticated.user.recorded', function(event, data) {
-    		self.showNavBar = true;
-    		self.user = data;
-    	});
-    	
-    	Bus.listen('actio.authenticated.user.cleared', function(e, data) {
-    		self.showNavBar = false;
-    	});
-    	
-    	self.logout = function() { Auth.clear(); };
-    }]});
+package org.actio.modeler.infrastructure.exception;
+
+/**
+ * Define the archetype exception handled by Actio.
+ * 
+ * @author quirino.brizi
+ *
+ */
+public abstract class ActioException extends RuntimeException {
+
+    private static final long serialVersionUID = 3738347445192034772L;
+
+    private String message;
+
+    public ActioException setMessage(String message) {
+        this.message = message;
+        return this;
+    }
+
+    @Override
+    public String getMessage() {
+        return this.message;
+    }
+
+    public abstract Integer statusCode();
+}

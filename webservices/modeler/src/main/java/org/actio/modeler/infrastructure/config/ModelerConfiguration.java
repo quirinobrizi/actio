@@ -38,8 +38,8 @@ import org.springframework.web.client.RestTemplate;
 @EnableAutoConfiguration
 @EnableConfigurationProperties(value = { ModelerConfigurationProperties.class })
 @ComponentScan({ "org.actio.modeler.interfaces", "org.actio.modeler.app", "org.actio.modeler.infrastructure.repository",
-        "org.actio.modeler.infrastructure.http" })
-@Import({ HttpSessionConfig.class, SecurityConfig.class })
+        "org.actio.modeler.infrastructure.http", "org.actio.modeler.infrastructure.exception" })
+@Import({ HttpSessionConfig.class, SecurityConfig.class, WebMvcConfiguration.class })
 public class ModelerConfiguration {
 
     public static void main(String[] args) {

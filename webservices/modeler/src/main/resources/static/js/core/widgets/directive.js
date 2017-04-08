@@ -54,7 +54,31 @@ angular
         content: '='
       },
       link: function($scope, $element) {
-        $element.replaceWith($compile('<svg class="svg-content" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet">' + $scope.content + '</svg>')($scope.$parent));
+    	  //$compile('<svg class="svg-content" viewBox="0 0 360 150" preserveAspectRatio="xMidYMid meet">' + $scope.content + '</svg>')
+        $element.replaceWith($compile($scope.content)($scope.$parent));
+        $element.addClass('svg-content')
       }
     };
+  }])
+  .directive('modal', [function() {
+	  return {
+	    restrict: 'E',
+	    scope: {
+	      show: '='
+	    },
+	    templateUrl: 'js/core/widgets/modal.template.html',
+	    replace: true, // Replace with the template below
+	    transclude: true, // we want to insert custom content inside the directive
+	    link: function(scope, element, attrs) {
+	      scope.dialogStyle = {};
+	      if (attrs.width)
+	        scope.dialogStyle.width = attrs.width;
+	      if (attrs.height)
+	        scope.dialogStyle.height = attrs.height;
+	      scope.hideModal = function() {
+	        scope.show = false;
+	      };
+	    },
+	    template: '...' // See below
+	};
   }]);

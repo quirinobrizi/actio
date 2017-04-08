@@ -1,62 +1,45 @@
 <div class="models">
-	<table st-table="displayedCollection" st-safe-src="$ctrl.models"
-		class="table table-striped">
-		<thead>
-			<tr class="hidden">
-				<th st-sort="key" style="width: 15%">Model Key</th>
-				<th style="width: 15%">Model Name</th>
-				<th style="width: 70%">Model</th>
-			</tr>
-			<tr>
-				<!-- <th>
-					<input st-search="key" placeholder="search model by key" class="input-sm form-control" type="search"/>
-				</th>
-				<th>
-					<input st-search="name" placeholder="search model by name" class="input-sm form-control" type="search"/>
-				</th> -->
-				<th colspan="1"><input st-search placeholder="global search"
-					class="input-sm form-control" type="search" /></th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr ng-repeat="model in displayedCollection">
-				<td>
-					<div class="info">
-						<span>{{model.key}}</span><span ng-if="model.name">
-							({{model.name}})</span> <span class="controls pull-right">
-							<ul class="io-control-list">
-								<li>
-									<button title="delete BPMN deployment and process" ng-click="$ctrl.editBpmn(model.id)">
-										<i class="material-icons">mode_edit</i>
-									</button>
-								</li>
-								<li class="vr" style="margin-left: 2px"></li>
-								<li>
-									<button title="launch BPMN process" ng-click="$ctrl.launchBpmn(model.key)">
-										<i class="material-icons">launch</i>
-									</button>
-								</li>
-								<li class="vr" style="margin-left: 2px"></li>
-								<li>
-									<button title="delete BPMN deployment and process" ng-click="$ctrl.deleteBpmn(model.key)">
-										<i class="material-icons">delete_forever</i>
-									</button>
-								</li>
-							</ul>
-						</span>
-					</div>
-					<div class="svg-area">
-						<ext-svg data-content="model.svg"></ext-svg>
-					</div>
-				</td>
-			</tr>
-		</tbody>
-		<tfoot>
-			<tr>
-				<td colspan="5" class="text-center">
-					<div st-pagination="" st-items-by-page="5" st-displayed-pages="7"></div>
-				</td>
-			</tr>
-		</tfoot>
-	</table>
+	<div class="row">
+		<div class="col-md-12">
+			<form class="form-inline">
+	      		<input ng-model="$ctrl.query" type="text" placeholder="Filter by" class="input-sm form-control" autofocus>
+	    	</form>
+    	</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4" ng-repeat="model in $ctrl.models | filter: $ctrl.query">
+			<div class="tile">
+				<div class="info gradient">
+					<span>{{model.key}}</span><span ng-if="model.name">
+						({{model.name}})</span> <span class="controls pull-right">
+						<ul class="io-control-list">
+							<li>
+								<button title="edit BPMN process"
+									ng-click="$ctrl.editBpmn(model.id)">
+									<i class="material-icons">mode_edit</i>
+								</button>
+							</li>
+							<li class="vr" style="margin-left: 2px"></li>
+							<li>
+								<button title="launch BPMN process"
+									ng-click="$ctrl.launchBpmn(model.key)">
+									<i class="material-icons">launch</i>
+								</button>
+							</li>
+							<li class="vr" style="margin-left: 2px"></li>
+							<li>
+								<button title="delete BPMN deployment and process"
+									ng-click="$ctrl.deleteBpmn(model.key)">
+									<i class="material-icons">delete_forever</i>
+								</button>
+							</li>
+						</ul>
+					</span>
+				</div>
+				<div class="svg-area">
+					<ext-svg data-content="model.svg"></ext-svg>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

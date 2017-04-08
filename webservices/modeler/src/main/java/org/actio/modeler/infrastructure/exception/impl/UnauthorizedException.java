@@ -13,23 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-angular
-  .module('navbar')
-  .component('navbar', {
-    templateUrl: 'js/navbar/template.html',
-    controller: ['Auth', 'Bus', function DashboardController(Auth, Bus) {
-    	var self = this;
-    	self.showNavBar = Auth.isAuthenticated();
-    	self.user = Auth.details();
-    	
-    	Bus.listen('actio.authenticated.user.recorded', function(event, data) {
-    		self.showNavBar = true;
-    		self.user = data;
-    	});
-    	
-    	Bus.listen('actio.authenticated.user.cleared', function(e, data) {
-    		self.showNavBar = false;
-    	});
-    	
-    	self.logout = function() { Auth.clear(); };
-    }]});
+package org.actio.modeler.infrastructure.exception.impl;
+
+import org.actio.modeler.infrastructure.exception.ActioException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+/**
+ * @author quirino.brizi
+ *
+ */
+@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+public class UnauthorizedException extends ActioException {
+
+    private static final long serialVersionUID = -4556321514777791812L;
+
+    public static UnauthorizedException newInstance() {
+        return new UnauthorizedException();
+    }
+
+    private UnauthorizedException() {
+    }
+
+    @Override
+    public Integer statusCode() {
+        return HttpStatus.UNAUTHORIZED.value();
+    }
+}

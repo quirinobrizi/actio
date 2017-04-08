@@ -16,7 +16,7 @@
 package org.actio.modeler.interfaces;
 
 import org.actio.commons.message.Message;
-import org.actio.modeler.infrastructure.exception.UnauthorizedException;
+import org.actio.modeler.infrastructure.exception.impl.UnauthorizedException;
 import org.actio.modeler.infrastructure.security.model.User;
 import org.actio.modeler.interfaces.translator.UserTranslator;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -22,7 +22,7 @@ angular.module('actio-modeler')
         otherwise('/login');
     }
   ])
-  .service('TransactionInterceptor', ['$q', '$location', 'Auth', function($q, $location, Auth) {
+  .service('TransactionInterceptor', ['$q', '$location', 'Auth', 'Bus', function($q, $location, Auth, Bus) {
 		this.request = function(config) {
 			console.log('AuthenticationInterceptor - intercepted request');
 			if(Auth.isAuthenticated()) {
@@ -32,13 +32,11 @@ angular.module('actio-modeler')
 		};
 		this.responseError = function(response) {
 			if (response.status === 401 || response.status === 403) {
-	            console.log('unauthorized');
 	            Auth.clear();
 	            $location.path('/login');
 	            return $q.reject(response);;
 	        } else if(response.status === 400 || response.status > 403) {
-	        	console.log('generic error');
-	        	$location.path('/error');
+	        	Bus.emit('actio.runtime.error', response);
 	        	return $q.reject(response);
 	        }
 			return $q.reject(response);
@@ -67,5 +65,10 @@ angular.module('actio-modeler')
 		  event.preventDefault();
 		  $location.path('/login');
 		  return;
+  	  });
+	  
+	  Bus.listen('actio.runtime.error', function(e,data) {
+		  console.log(data);
+		  alert("Error: [" + (data.data.code || 500) + "] " + (data.data.message || "Generic Error"));
   	  });
   }]);
