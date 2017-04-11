@@ -15,48 +15,25 @@
  *******************************************************************************/
 package org.actio.engine.domain.model.bpmn.process;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
- * E. A runnable instance of a BPMN.
+ * V.O. define the process identifier
  * 
  * @author quirino.brizi
  *
  */
-public class Process {
+public class InstanceId {
 
-    public static Process newInstance(ProcessId processId) {
-        return new Process(processId);
+    public static InstanceId newInstance(String identifier) {
+        return new InstanceId(identifier);
     }
 
-    /**
-     * Unique identifier for the process
-     */
-    private final ProcessId processId;
-    private final List<Instance> instances;
+    private String identifier;
 
-    private Process(ProcessId processId) {
-        Validate.notNull(processId, "process identifier must not be null");
-        this.processId = processId;
-        this.instances = new ArrayList<>();
-    }
-
-    public String getProcessId() {
-        return processId.toString();
-    }
-
-    public void addInstance(Instance instance) {
-        Validate.notNull(instance, "instance cannot be null");
-        this.instances.add(instance);
-    }
-
-    public List<Instance> getInstances() {
-        return Collections.unmodifiableList(instances);
+    private InstanceId(String identifier) {
+        Validate.notBlank(identifier, "process identifier must be provided");
+        this.identifier = identifier;
     }
 
     @Override
@@ -70,20 +47,17 @@ public class Process {
         if (!getClass().equals(obj.getClass())) {
             return false;
         }
-        Process other = (Process) obj;
-        return this.processId.equals(other.processId);
+        InstanceId other = (InstanceId) obj;
+        return this.identifier.equals(other.identifier);
     }
 
     @Override
     public int hashCode() {
-        return this.processId.hashCode();
+        return this.identifier.hashCode();
     }
 
     @Override
     public String toString() {
-        ToStringBuilder builder = new ToStringBuilder(this);
-        builder.append("processId", processId).append("instances", instances);
-        return builder.toString();
+        return this.identifier;
     }
-
 }

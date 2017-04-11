@@ -15,7 +15,7 @@
  *******************************************************************************/
 package org.actio.commons.message.bpmn;
 
-import java.util.Collection;
+import java.util.Map;
 
 import org.actio.commons.message.Message;
 
@@ -26,22 +26,30 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author quirino.brizi
  *
  */
-public class BpmnMessage implements Message {
+public class InstanceMessage implements Message {
 
-    private static final long serialVersionUID = 9077148071385731149L;
+    private static final long serialVersionUID = -7972822999099135146L;
 
-    @JsonProperty("bpmnId")
-    private String bpmnId;
-    @JsonProperty("name")
-    private String name;
-    @JsonProperty("versions")
-    private Collection<VersionMessage> versions;
+    @JsonProperty("instanceId")
+    private String instanceId;
+    @JsonProperty("variables")
+    private Map<String, Object> variables;
+    @JsonProperty("instanceState")
+    private String instanceState;
+    @JsonProperty("startDate")
+    private Long startDate;
+    @JsonProperty("endDate")
+    private Long endDate;
 
     @JsonCreator
-    public BpmnMessage(@JsonProperty("bpmnId") String bpmnId, @JsonProperty("name") String name,
-            @JsonProperty("versions") Collection<VersionMessage> versions) {
-        this.bpmnId = bpmnId;
-        this.name = name;
-        this.versions = versions;
+    public InstanceMessage(@JsonProperty("instanceId") String instanceId, @JsonProperty("variables") Map<String, Object> variables,
+            @JsonProperty("instanceState") String instanceState, @JsonProperty("startDate") Long startDate,
+            @JsonProperty("endDate") Long endDate) {
+        this.instanceId = instanceId;
+        this.variables = variables;
+        this.instanceState = instanceState;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
+
 }

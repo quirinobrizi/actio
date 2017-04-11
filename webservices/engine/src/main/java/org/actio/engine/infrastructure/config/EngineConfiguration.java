@@ -39,7 +39,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableAsync
 @Configuration
 @ComponentScan(basePackages = { "org.actio.engine.interfaces", "org.actio.engine.app", "org.actio.engine.infrastructure.config",
-        "org.actio.engine.infrastructure.bpmn", "org.actio.engine.infrastructure.repository" })
+        "org.actio.engine.infrastructure.bpmn", "org.actio.engine.infrastructure.repository", "org.actio.engine.interfaces.translator" })
 @EnableEurekaClient
 @EnableAutoConfiguration(exclude = { SecurityAutoConfiguration.class })
 public class EngineConfiguration {

@@ -15,14 +15,11 @@
  *******************************************************************************/
 package org.actio.engine.interfaces.translator;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
-import org.actio.commons.message.bpmn.BpmnMessage;
-import org.actio.commons.message.bpmn.VersionMessage;
-import org.actio.engine.domain.model.bpmn.Bpmn;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.actio.commons.message.bpmn.ModelMessage;
+import org.actio.engine.domain.model.bpmn.model.Model;
+import org.actio.engine.domain.model.bpmn.model.ResourceType;
 import org.springframework.stereotype.Component;
 
 /**
@@ -30,24 +27,30 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class BpmnTranslator implements Translator<BpmnMessage, Bpmn> {
+public class ModelTranslator implements Translator<ModelMessage, Model> {
 
-    @Autowired
-    private VersionTranslator versionTranslator;
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.actio.engine.interfaces.translator.Translator#translate(java.lang.
+     * Object)
+     */
     @Override
-    public Collection<BpmnMessage> translate(Collection<Bpmn> bpmns) {
-        List<BpmnMessage> answer = new ArrayList<>();
-        for (Bpmn bpmn : bpmns) {
-            answer.add(translate(bpmn));
-        }
-        return answer;
+    public ModelMessage translate(Model model) {
+        return new ModelMessage(model.getResource(ResourceType.XML).getDefinition(), model.getResource(ResourceType.SVG).getDefinition());
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.actio.engine.interfaces.translator.Translator#translate(java.util.
+     * Collection)
+     */
     @Override
-    public BpmnMessage translate(Bpmn bpmn) {
-        Collection<VersionMessage> versions = versionTranslator.translate(bpmn.getVersions());
-        return new BpmnMessage(bpmn.getId(), bpmn.getName(), versions);
+    public Collection<ModelMessage> translate(Collection<Model> input) {
+        return null;
     }
 
 }

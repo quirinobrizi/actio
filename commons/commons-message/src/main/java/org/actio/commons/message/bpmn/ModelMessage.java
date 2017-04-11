@@ -15,8 +15,6 @@
  *******************************************************************************/
 package org.actio.commons.message.bpmn;
 
-import java.util.Collection;
-
 import org.actio.commons.message.Message;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -26,22 +24,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author quirino.brizi
  *
  */
-public class BpmnMessage implements Message {
+public class ModelMessage implements Message {
 
-    private static final long serialVersionUID = 9077148071385731149L;
+    private static final long serialVersionUID = -818201487493720900L;
 
-    @JsonProperty("bpmnId")
-    private String bpmnId;
-    @JsonProperty("name")
-    private String name;
-    @JsonProperty("versions")
-    private Collection<VersionMessage> versions;
+    @JsonProperty("xml")
+    private String xml;
+    @JsonProperty("svg")
+    private String svg;
 
     @JsonCreator
-    public BpmnMessage(@JsonProperty("bpmnId") String bpmnId, @JsonProperty("name") String name,
-            @JsonProperty("versions") Collection<VersionMessage> versions) {
-        this.bpmnId = bpmnId;
-        this.name = name;
-        this.versions = versions;
+    public ModelMessage(@JsonProperty("xml") String xml, @JsonProperty("svg") String svg) {
+        this.xml = xml;
+        this.svg = svg;
     }
 }

@@ -42,6 +42,10 @@ public class Version {
         this.processes = new HashSet<>();
     }
 
+    public String getVersionId() {
+        return versionId.toString();
+    }
+
     public Model getModel() {
         return model;
     }

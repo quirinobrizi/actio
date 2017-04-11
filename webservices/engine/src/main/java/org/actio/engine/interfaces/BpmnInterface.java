@@ -15,6 +15,7 @@
  *******************************************************************************/
 package org.actio.engine.interfaces;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.actio.commons.message.bpmn.BpmnMessage;
@@ -41,7 +42,7 @@ public class BpmnInterface {
     private BpmnTranslator bpmnTranslator;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<BpmnMessage> getAllBpmns() {
+    public Collection<BpmnMessage> getAllBpmns() {
         List<Bpmn> bpmns = bpmnService.getAllBpmns();
         return bpmnTranslator.translate(bpmns);
     }

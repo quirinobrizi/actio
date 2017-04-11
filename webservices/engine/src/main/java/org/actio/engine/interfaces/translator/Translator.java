@@ -13,15 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.engine.domain.model.bpmn.process;
+package org.actio.engine.interfaces.translator;
+
+import java.util.Collection;
 
 /**
- * Define the state of a runnable process.
- * 
  * @author quirino.brizi
  *
  */
-public enum ProcessState {
+public interface Translator<O, I> {
 
-    ACTIVE, SUSPENDED, TERMINATED, ERROR;
+    /**
+     * Tranlate an input element
+     * 
+     * @param input
+     * @return
+     */
+    O translate(I input);
+
+    /**
+     * Translate a collection of input elements
+     * 
+     * @param input
+     * @return
+     */
+    Collection<O> translate(Collection<I> input);
 }

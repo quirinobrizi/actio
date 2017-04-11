@@ -15,13 +15,14 @@
  *******************************************************************************/
 package org.actio.engine.interfaces.translator;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.actio.commons.message.bpmn.BpmnMessage;
+import org.actio.commons.message.bpmn.ModelMessage;
+import org.actio.commons.message.bpmn.ProcessMessage;
 import org.actio.commons.message.bpmn.VersionMessage;
-import org.actio.engine.domain.model.bpmn.Bpmn;
+import org.actio.engine.domain.model.bpmn.Version;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,24 +31,27 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class BpmnTranslator implements Translator<BpmnMessage, Bpmn> {
+public class VersionTranslator implements Translator<VersionMessage, Version> {
 
     @Autowired
-    private VersionTranslator versionTranslator;
+    private ModelTranslator modelTranslator;
+    @Autowired
+    private ProcessTranslator processTranslator;
 
     @Override
-    public Collection<BpmnMessage> translate(Collection<Bpmn> bpmns) {
-        List<BpmnMessage> answer = new ArrayList<>();
-        for (Bpmn bpmn : bpmns) {
-            answer.add(translate(bpmn));
-        }
-        return answer;
+    public VersionMessage translate(Version version) {
+        ModelMessage model = modelTranslator.translate(version.getModel());
+        Collection<ProcessMessage> processes = processTranslator.translate(version.getProcesses());
+        return new VersionMessage(version.getVersionId(), model, processes);
     }
 
     @Override
-    public BpmnMessage translate(Bpmn bpmn) {
-        Collection<VersionMessage> versions = versionTranslator.translate(bpmn.getVersions());
-        return new BpmnMessage(bpmn.getId(), bpmn.getName(), versions);
+    public Collection<VersionMessage> translate(Collection<Version> versions) {
+        Set<VersionMessage> answer = new HashSet<>();
+        for (Version version : versions) {
+            answer.add(translate(version));
+        }
+        return answer;
     }
 
 }

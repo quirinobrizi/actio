@@ -26,22 +26,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author quirino.brizi
  *
  */
-public class BpmnMessage implements Message {
+public class ProcessMessage implements Message {
 
-    private static final long serialVersionUID = 9077148071385731149L;
+    private static final long serialVersionUID = 8179772402650488379L;
 
-    @JsonProperty("bpmnId")
-    private String bpmnId;
-    @JsonProperty("name")
-    private String name;
-    @JsonProperty("versions")
-    private Collection<VersionMessage> versions;
+    @JsonProperty("processId")
+    private String processId;
+    @JsonProperty("instances")
+    private Collection<InstanceMessage> instances;
 
     @JsonCreator
-    public BpmnMessage(@JsonProperty("bpmnId") String bpmnId, @JsonProperty("name") String name,
-            @JsonProperty("versions") Collection<VersionMessage> versions) {
-        this.bpmnId = bpmnId;
-        this.name = name;
-        this.versions = versions;
+    public ProcessMessage(@JsonProperty("processId") String processId, @JsonProperty("instances") Collection<InstanceMessage> instances) {
+        this.processId = processId;
+        this.instances = instances;
     }
 }

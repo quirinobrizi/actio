@@ -13,35 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.commons.message.bpmn;
-
-import java.util.Collection;
-
-import org.actio.commons.message.Message;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+package org.actio.engine.domain.model.bpmn.process;
 
 /**
+ * Define the state of a runnable process.
+ * 
  * @author quirino.brizi
  *
  */
-public class BpmnMessage implements Message {
+public enum InstanceState {
 
-    private static final long serialVersionUID = 9077148071385731149L;
-
-    @JsonProperty("bpmnId")
-    private String bpmnId;
-    @JsonProperty("name")
-    private String name;
-    @JsonProperty("versions")
-    private Collection<VersionMessage> versions;
-
-    @JsonCreator
-    public BpmnMessage(@JsonProperty("bpmnId") String bpmnId, @JsonProperty("name") String name,
-            @JsonProperty("versions") Collection<VersionMessage> versions) {
-        this.bpmnId = bpmnId;
-        this.name = name;
-        this.versions = versions;
-    }
+    ACTIVE, SUSPENDED, TERMINATED, ERROR;
 }

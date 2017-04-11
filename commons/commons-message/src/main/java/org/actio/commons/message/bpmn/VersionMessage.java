@@ -19,29 +19,27 @@ import java.util.Collection;
 
 import org.actio.commons.message.Message;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author quirino.brizi
  *
  */
-public class BpmnMessage implements Message {
+public class VersionMessage implements Message {
 
-    private static final long serialVersionUID = 9077148071385731149L;
+    private static final long serialVersionUID = -8373356750153900980L;
 
-    @JsonProperty("bpmnId")
-    private String bpmnId;
-    @JsonProperty("name")
-    private String name;
-    @JsonProperty("versions")
-    private Collection<VersionMessage> versions;
+    @JsonProperty("versionId")
+    private String versionId;
+    @JsonProperty("model")
+    private ModelMessage model;
+    @JsonProperty("processes")
+    private Collection<ProcessMessage> processes;
 
-    @JsonCreator
-    public BpmnMessage(@JsonProperty("bpmnId") String bpmnId, @JsonProperty("name") String name,
-            @JsonProperty("versions") Collection<VersionMessage> versions) {
-        this.bpmnId = bpmnId;
-        this.name = name;
-        this.versions = versions;
+    public VersionMessage(@JsonProperty("versionId") String versionId, @JsonProperty("model") ModelMessage model,
+            @JsonProperty("processes") Collection<ProcessMessage> processes) {
+        this.versionId = versionId;
+        this.model = model;
+        this.processes = processes;
     }
 }

@@ -21,11 +21,13 @@ import org.actio.engine.domain.model.bpmn.Inputs;
 import org.actio.engine.domain.model.bpmn.process.ProcessId;
 import org.activiti.engine.RuntimeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author quirino.brizi
  *
  */
+@Service
 public class ProcessServiceImpl implements ProcessService {
 
     @Autowired
