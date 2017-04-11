@@ -13,5 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-angular
-  .module('core', ['core.configuration', 'core.bpmns', 'core.processes', 'core.models', 'core.widgets', 'core.modeler', 'core.authentication', 'core.bus']);
+package org.actio.modeler.domain.repository;
+
+import java.util.Collection;
+
+import org.actio.commons.message.bpmn.BpmnMessage;
+
+/**
+ * @author quirino.brizi
+ *
+ */
+public interface BpmnRepository {
+
+    Collection<BpmnMessage> findAll();
+
+}

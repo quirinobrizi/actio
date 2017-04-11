@@ -13,5 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-angular
-  .module('core', ['core.configuration', 'core.bpmns', 'core.processes', 'core.models', 'core.widgets', 'core.modeler', 'core.authentication', 'core.bus']);
+package org.actio.modeler.app;
+
+import java.util.Collection;
+
+import org.actio.commons.message.bpmn.BpmnMessage;
+import org.actio.modeler.domain.repository.BpmnRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+/**
+ * @author quirino.brizi
+ *
+ */
+@Service
+public class BpmnService {
+
+    @Autowired
+    private BpmnRepository bpmnRepository;
+
+    public Collection<BpmnMessage> getAllBpmn() {
+        return bpmnRepository.findAll();
+    }
+
+}

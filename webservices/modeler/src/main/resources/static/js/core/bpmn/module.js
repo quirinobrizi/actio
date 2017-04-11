@@ -14,4 +14,4 @@
  * limitations under the License.
  *******************************************************************************/
 angular
-  .module('core', ['core.configuration', 'core.bpmns', 'core.processes', 'core.models', 'core.widgets', 'core.modeler', 'core.authentication', 'core.bus']);
+  .module('core.bpmns', ['ngResource']);

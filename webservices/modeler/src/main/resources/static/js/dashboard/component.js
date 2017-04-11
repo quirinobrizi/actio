@@ -17,7 +17,55 @@ angular
   .module('dashboard')
   .component('dashboard', {
     templateUrl: 'js/dashboard/template.html',
-    controller: ['Processes', function DashboardController(Processes) {
+    controller: ['Bpmns',  function DashboardController(Bpmns) {
     	var self = this;
-    	self.metrics = Processes.metrics();
+    	Bpmns.query(function(bpmns) {
+    		self.statistics = calculateStatistics(bpmns);
+    	});
+    	
+    	var calculateStatistics = function(bpmns) {
+    		return {
+    			bpmns: bpmns.length,
+    			processes: countProcesses(bpmns),
+    			instances: countInstances(bpmns),
+    			terminatedInstances: countInstances(bpmns, 'TERMINATED'),
+    			activeInstances: countInstances(bpmns, 'ACTIVE'),
+    			suspendedInstances: countInstances(bpmns, 'SUSPENDED')
+    		};
+    	};
+    	
+    	var countProcesses = function(bpmns) {
+    		var answer = 0;
+    		for(var b in bpmns) {
+    			var bpmn = bpmns[b];
+	    		for(var key in bpmn.versions) {
+	    			var version = bpmn.versions[key];
+	    			answer += version.processes.length;
+	    		}
+    		}
+    		return answer;
+    	};
+    	
+    	var countInstances = function(bpmns, instanceState) {
+    		var answer = 0;
+    		for(var b in bpmns) {
+    			var bpmn = bpmns[b];
+	    		for(var v in bpmn.versions) {
+	    			var version = bpmn.versions[v];
+	    			for(var p in version.processes) {
+	    				if(!instanceState) {
+	    					answer += version.processes[p].instances.length;
+	    				} else {
+	    					for(var i in version.processes[p].instances) {
+	    						var instance = version.processes[p].instances[i];
+	    						if(instance.instanceState === instanceState) {
+	    							answer += 1;
+	    						}
+	    					}
+	    				}
+	    			}
+	    		}
+    		}
+    		return answer;
+    	};
     }]});
