@@ -68,6 +68,7 @@ public class ProcessDefinitionTranslatorTest {
         when(repositoryService.createModelQuery()).thenReturn(modelQuery);
         when(modelQuery.modelKey(anyString())).thenReturn(modelQuery);
         when(modelQuery.singleResult()).thenReturn(model);
+        when(model.getId()).thenReturn("123");
         when(model.hasEditorSource()).thenReturn(true);
         when(repositoryService.getModelEditorSource(anyString())).thenReturn(new byte[] {});
         when(model.hasEditorSourceExtra()).thenReturn(true);
