@@ -36,4 +36,9 @@ public class BpmnService {
         return bpmnRepository.findAll();
     }
 
+    public Collection<BpmnMessage> deleteBpmn(String bpmnId) {
+        bpmnRepository.remove(bpmnId);
+        return bpmnRepository.findAll();
+    }
+
 }

@@ -18,6 +18,7 @@ package org.actio.engine.app;
 import java.util.List;
 
 import org.actio.engine.domain.model.bpmn.Bpmn;
+import org.actio.engine.domain.model.bpmn.BpmnId;
 
 /**
  * @author quirino.brizi
@@ -26,5 +27,7 @@ import org.actio.engine.domain.model.bpmn.Bpmn;
 public interface BpmnService {
 
     List<Bpmn> getAllBpmns();
+
+    void deleteBpmn(BpmnId newInstance);
 
 }

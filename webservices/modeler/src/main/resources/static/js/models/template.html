@@ -7,29 +7,29 @@
     	</div>
 	</div>
 	<div class="row">
-		<div class="col-md-4" ng-repeat="model in $ctrl.models | filter: $ctrl.query">
+		<div class="col-md-4" ng-repeat="bpmn in $ctrl.bpmns | filter: $ctrl.query" ng-init="model=$ctrl.latestModel(bpmn)">
 			<div class="tile">
 				<div class="info gradient">
-					<span>{{model.key}}</span><span ng-if="model.name">
-						({{model.name}})</span> <span class="controls pull-right">
+					<span>{{bpmn.bpmnId}}</span><span ng-if="bpmn.name">
+						({{bpmn.name}})</span> <span class="controls pull-right">
 						<ul class="io-control-list">
 							<li>
 								<button title="edit BPMN process"
-									ng-click="$ctrl.editBpmn(model.id)">
+									ng-click="$ctrl.editBpmn(model.modelId)">
 									<i class="material-icons">mode_edit</i>
 								</button>
 							</li>
 							<li class="vr" style="margin-left: 2px"></li>
 							<li>
 								<button title="launch BPMN process"
-									ng-click="$ctrl.launchBpmn(model.key)">
+									ng-click="$ctrl.launchBpmn(bpmn.bpmnId)">
 									<i class="material-icons">launch</i>
 								</button>
 							</li>
 							<li class="vr" style="margin-left: 2px"></li>
 							<li>
 								<button title="delete BPMN deployment and process"
-									ng-click="$ctrl.deleteBpmn(model.key)">
+									ng-click="$ctrl.deleteBpmn(bpmn.bpmnId)">
 									<i class="material-icons">delete_forever</i>
 								</button>
 							</li>

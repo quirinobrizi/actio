@@ -30,10 +30,17 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class Model {
 
+    private final ModelId modelId;
     private final Map<ResourceType, Resource> resources;
 
-    public Model() {
+    public Model(ModelId modelId) {
+        Validate.notNull(modelId, "model identifier must be provided");
+        this.modelId = modelId;
         this.resources = new HashMap<>();
+    }
+
+    public String getModelId() {
+        return modelId.toString();
     }
 
     public Resource getResource(ResourceType resourceType) {

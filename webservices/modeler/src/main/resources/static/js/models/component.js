@@ -17,15 +17,26 @@ angular
   .module('models')
   .component('models', {
     templateUrl: 'js/models/template.html',
-    controller: ['Models', 'Processes', '$location', function DashboardController(Models, Processes, $location) {
+    controller: ['Bpmns', 'Processes', '$location', 'growl', function DashboardController(Bpmns, Processes, $location, growl) {
     	var self = this;
-    	self.models = Models.query();
+    	self.bpmns = Bpmns.query();
     	
     	self.launchBpmn = function(key) {
-    		Processes.start({processId: key, action: "start"}).$promise.then(function(resp){ alert("process " + key + " started"); });
+    		Processes.start({processId: key, action: "start"}).$promise.then(function(resp){ growl.info("process " + key + " started"); });
     	};
     	self.deleteBpmn = function(key) {
-    		Processes.remove({key: key}).$promise.then(function(resp){ self.models = Models.query(); alert("process " + key + " deleted"); });
+    		Bpmns.remove({key: key}).$promise.then(function(resp){ self.bpmns = resp; growl.info("process " + key + " deleted"); });
     	};
     	self.editBpmn = function(key) { $location.url('/editor/' + key); };
+    	
+    	self.latestModel = function(bpmn) {
+    		var latestVersion = {versionId: -1};
+    		for(v in bpmn.versions) {
+    			var version = bpmn.versions[v];
+    			if(version.versionId > latestVersion.versionId) {
+    				latestVersion = version;
+    			}
+    		}
+    		return latestVersion.model;
+    	};
     }]});

@@ -27,4 +27,6 @@ public interface BpmnRepository {
 
     Collection<BpmnMessage> findAll();
 
+    void remove(String bpmnId);
+
 }

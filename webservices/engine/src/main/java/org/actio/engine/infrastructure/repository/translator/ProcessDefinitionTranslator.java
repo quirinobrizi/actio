@@ -25,6 +25,7 @@ import org.actio.engine.domain.model.bpmn.BpmnId;
 import org.actio.engine.domain.model.bpmn.Version;
 import org.actio.engine.domain.model.bpmn.VersionId;
 import org.actio.engine.domain.model.bpmn.model.Model;
+import org.actio.engine.domain.model.bpmn.model.ModelId;
 import org.actio.engine.domain.model.bpmn.model.Resource;
 import org.actio.engine.domain.model.bpmn.model.ResourceType;
 import org.actio.engine.domain.model.bpmn.process.Instance;
@@ -79,17 +80,7 @@ public class ProcessDefinitionTranslator {
             version = bpmn.getVersion(versionId);
         } else {
             version = new Version(versionId);
-            Model model = new Model();
-            org.activiti.engine.repository.Model storedModel = repositoryService.createModelQuery().modelKey(bpmnId.toString())
-                    .singleResult();
-            if (storedModel.hasEditorSource()) {
-                model.addResource(ResourceType.XML,
-                        Resource.newInstance(new String(repositoryService.getModelEditorSource(storedModel.getId()))));
-            }
-            if (storedModel.hasEditorSourceExtra()) {
-                model.addResource(ResourceType.SVG,
-                        Resource.newInstance(new String(repositoryService.getModelEditorSourceExtra(storedModel.getId()))));
-            }
+            Model model = extractModel(bpmnId);
             version.setModel(model);
         }
         String processDefinitionId = processDefinition.getId();
@@ -124,5 +115,22 @@ public class ProcessDefinitionTranslator {
         }
         version.addProcess(process);
         return version;
+    }
+
+    private Model extractModel(BpmnId bpmnId) {
+        org.activiti.engine.repository.Model storedModel = repositoryService.createModelQuery().modelKey(bpmnId.toString()).singleResult();
+        if (null != storedModel) {
+            Model model = new Model(ModelId.newInstance(storedModel.getId()));
+            if (storedModel.hasEditorSource()) {
+                model.addResource(ResourceType.XML,
+                        Resource.newInstance(new String(repositoryService.getModelEditorSource(storedModel.getId()))));
+            }
+            if (storedModel.hasEditorSourceExtra()) {
+                model.addResource(ResourceType.SVG,
+                        Resource.newInstance(new String(repositoryService.getModelEditorSourceExtra(storedModel.getId()))));
+            }
+            return model;
+        }
+        return null;
     }
 }

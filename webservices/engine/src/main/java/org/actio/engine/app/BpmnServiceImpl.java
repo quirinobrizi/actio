@@ -18,6 +18,7 @@ package org.actio.engine.app;
 import java.util.List;
 
 import org.actio.engine.domain.model.bpmn.Bpmn;
+import org.actio.engine.domain.model.bpmn.BpmnId;
 import org.actio.engine.domain.repository.BpmnRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,11 @@ public class BpmnServiceImpl implements BpmnService {
     @Override
     public List<Bpmn> getAllBpmns() {
         return bpmnRepository.getAll();
+    }
+
+    @Override
+    public void deleteBpmn(BpmnId bpmnId) {
+        bpmnRepository.remove(bpmnId);
     }
 
 }

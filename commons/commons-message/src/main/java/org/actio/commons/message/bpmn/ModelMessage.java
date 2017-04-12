@@ -28,13 +28,16 @@ public class ModelMessage implements Message {
 
     private static final long serialVersionUID = -818201487493720900L;
 
+    @JsonProperty("modelId")
+    private String modelId;
     @JsonProperty("xml")
     private String xml;
     @JsonProperty("svg")
     private String svg;
 
     @JsonCreator
-    public ModelMessage(@JsonProperty("xml") String xml, @JsonProperty("svg") String svg) {
+    public ModelMessage(@JsonProperty("modelId") String modelId, @JsonProperty("xml") String xml, @JsonProperty("svg") String svg) {
+        this.modelId = modelId;
         this.xml = xml;
         this.svg = svg;
     }

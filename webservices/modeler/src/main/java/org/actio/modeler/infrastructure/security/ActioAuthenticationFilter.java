@@ -105,13 +105,13 @@ public class ActioAuthenticationFilter extends OncePerRequestFilter {
                         this.rememberMeServices.loginSuccess(request, response, authResult);
                         onSuccessfulAuthentication(request, response, authResult);
                     }
+                    filterChain.doFilter(request, response);
                 } catch (AuthenticationException e) {
                     SecurityContextHolder.clearContext();
                     this.rememberMeServices.loginFail(request, response);
                     onUnsuccessfulAuthentication(request, response, e);
                     this.authenticationEntryPoint.commence(request, response, e);
                 }
-                filterChain.doFilter(request, response);
             } else {
                 filterChain.doFilter(request, response);
             }

@@ -18,9 +18,12 @@ package org.actio.engine.infrastructure.repository;
 import java.util.List;
 
 import org.actio.engine.domain.model.bpmn.Bpmn;
+import org.actio.engine.domain.model.bpmn.BpmnId;
 import org.actio.engine.domain.repository.BpmnRepository;
 import org.actio.engine.infrastructure.repository.translator.ProcessDefinitionTranslator;
 import org.activiti.engine.RepositoryService;
+import org.activiti.engine.repository.Deployment;
+import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -47,6 +50,22 @@ public class BpmnRepositoryImpl implements BpmnRepository {
         List<ProcessDefinition> processDefinitions = repositoryService.createProcessDefinitionQuery().orderByProcessDefinitionKey().asc()
                 .list();
         return processDefinitionTranslator.translate(processDefinitions);
+    }
+
+    @Override
+    public void remove(BpmnId bpmnId) {
+        List<Deployment> deployments = repositoryService.createDeploymentQuery().processDefinitionKey(bpmnId.toString()).list();
+        if (null != deployments) {
+            for (Deployment deployment : deployments) {
+                repositoryService.deleteDeployment(deployment.getId(), true);
+            }
+        }
+        List<Model> models = repositoryService.createModelQuery().modelKey(bpmnId.toString()).list();
+        if (null != models) {
+            for (Model model : models) {
+                repositoryService.deleteModel(model.getId());
+            }
+        }
     }
 
 }

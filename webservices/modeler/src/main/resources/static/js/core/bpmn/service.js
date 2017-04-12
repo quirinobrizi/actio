@@ -17,6 +17,11 @@ angular
   .module('core.bpmns')
   .factory('Bpmns', ['$resource',
     function($resource) {
-      return $resource('/bpmns/:key');
+      return $resource('/bpmns/:key', {}, {
+		  'remove':{
+			  method: 'DELETE',
+			  isArray: true
+		  }
+      });
   }
 ]);

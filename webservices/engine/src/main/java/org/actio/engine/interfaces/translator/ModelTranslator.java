@@ -38,7 +38,8 @@ public class ModelTranslator implements Translator<ModelMessage, Model> {
      */
     @Override
     public ModelMessage translate(Model model) {
-        return new ModelMessage(model.getResource(ResourceType.XML).getDefinition(), model.getResource(ResourceType.SVG).getDefinition());
+        return new ModelMessage(model.getModelId(), model.getResource(ResourceType.XML).getDefinition(),
+                model.getResource(ResourceType.SVG).getDefinition());
     }
 
     /*

@@ -56,4 +56,13 @@ public class BpmnRepositoryImpl implements BpmnRepository {
         return clientFactory.newClient().exchange(requestEntity, responseType).getBody();
     }
 
+    @Override
+    public void remove(String bpmnId) {
+        String urlFormat = configuration.getEngine().getUrlFormat();
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(urlFormat);
+        RequestEntity<Void> requestEntity = new RequestEntity<>(HttpMethod.DELETE,
+                builder.pathSegment(bpmnId).buildAndExpand("bpmns").toUri());
+        clientFactory.newClient().exchange(requestEntity, Void.class).getBody();
+    }
+
 }
