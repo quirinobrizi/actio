@@ -19,14 +19,12 @@
 									<i class="material-icons">mode_edit</i>
 								</button>
 							</li>
-							<li class="vr" style="margin-left: 2px"></li>
 							<li>
 								<button title="launch BPMN process"
 									ng-click="$ctrl.launchBpmn(bpmn.bpmnId)">
 									<i class="material-icons">launch</i>
 								</button>
 							</li>
-							<li class="vr" style="margin-left: 2px"></li>
 							<li>
 								<button title="delete BPMN deployment and process"
 									ng-click="$ctrl.deleteBpmn(bpmn.bpmnId)">
@@ -36,8 +34,45 @@
 						</ul>
 					</span>
 				</div>
-				<div class="svg-area">
-					<ext-svg data-content="model.svg"></ext-svg>
+				<div class="table-area">
+					<table st-table="versions" st-safe-src="bpmn.versions" class="table table-striped">
+						<thead>
+							<tr>
+								<td class="col-md-4 small-capitalized text-center" style="font-weight: bold;" st-sort="versionId" st-sort-default="true">Version</td>
+								<td class="col-md-4 small-capitalized text-center">Active</td>
+								<td class="col-md-4 small-capitalized text-center">Terminated</td>
+								<td class="col-md-4 small-capitalized text-center">Suspended</td>
+								<td class="col-md-4 small-capitalized text-center">Error</td>
+								<td class="col-md-4 small-capitalized text-center"></td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="version in versions">
+								<td class="text-center" style="font-weight: bold;">{{version.versionId}}</td>
+								<td class="text-center">{{$ctrl.countInstancesState(version.processes, "ACTIVE")}}</td>
+								<td class="text-center">{{$ctrl.countInstancesState(version.processes, "TERMINATED")}}</td>
+								<td class="text-center">{{$ctrl.countInstancesState(version.processes, "SUSPENDED")}}</td>
+								<td class="text-center">{{$ctrl.countInstancesState(version.processes, "ERROR")}}</td>
+								<td class="text-center">
+									<ul class="io-control-list">
+										<li>
+											<button title="BPMN version information"
+												ng-click="$ctrl.info(bpmn)">
+												<i class="material-icons">info_outline</i>
+											</button>
+										</li>
+									</ul>
+								</td>
+							</tr>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td colspan="6" class="text-center">
+									<div st-pagination="" st-items-by-page="3" st-displayed-pages="5"></div>
+								</td>
+							</tr>
+						</tfoot>
+					</table>
 				</div>
 			</div>
 		</div>

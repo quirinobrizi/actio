@@ -18,7 +18,7 @@ angular
   .factory('Bpmns', ['$resource',
     function($resource) {
       return $resource('/bpmns/:key', {}, {
-		  'remove':{
+		  'remove': {
 			  method: 'DELETE',
 			  isArray: true
 		  }

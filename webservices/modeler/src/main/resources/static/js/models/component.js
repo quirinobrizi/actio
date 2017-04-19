@@ -19,24 +19,48 @@ angular
     templateUrl: 'js/models/template.html',
     controller: ['Bpmns', 'Processes', '$location', 'growl', function DashboardController(Bpmns, Processes, $location, growl) {
     	var self = this;
+    	self.infoModalShown = false;
     	self.bpmns = Bpmns.query();
     	
     	self.launchBpmn = function(key) {
-    		Processes.start({processId: key, action: "start"}).$promise.then(function(resp){ growl.info("process " + key + " started"); });
+    		Processes.start({processId: key, action: "start"}).$promise.then(function(resp){ 
+    			growl.info("process " + key + " started"); 
+    		});
     	};
     	self.deleteBpmn = function(key) {
-    		Bpmns.remove({key: key}).$promise.then(function(resp){ self.bpmns = resp; growl.info("process " + key + " deleted"); });
+    		Bpmns.remove({key: key}).$promise.then(function(resp){ 
+    			self.bpmns = resp; 
+    			growl.info("process " + key + " deleted"); 
+    		});
     	};
     	self.editBpmn = function(key) { $location.url('/editor/' + key); };
     	
+    	self.info = function(bpmn) {
+    		$location.path('/info');
+    	};
+    	
     	self.latestModel = function(bpmn) {
     		var latestVersion = {versionId: -1};
-    		for(v in bpmn.versions) {
+    		for(var v in bpmn.versions) {
     			var version = bpmn.versions[v];
     			if(version.versionId > latestVersion.versionId) {
     				latestVersion = version;
     			}
     		}
     		return latestVersion.model;
+    	};
+    	
+    	self.countInstancesState = function(processes, state) {
+    		var count = 0;
+    		for(var p in processes) {
+    			var proc = processes[p];
+	    		for(var i in proc.instances) {
+	    			var inst = proc.instances[i];
+	    			if(state === inst.instanceState) {
+	    				count++;
+	    			}
+    			}
+    		}
+    		return count;
     	};
     }]});
