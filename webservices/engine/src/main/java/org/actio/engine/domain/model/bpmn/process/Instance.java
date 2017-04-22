@@ -15,6 +15,7 @@
  *******************************************************************************/
 package org.actio.engine.domain.model.bpmn.process;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -36,6 +37,8 @@ public class Instance {
     private InstanceState processState;
     private Date startDate;
     private Date endDate;
+    private Collection<Job> jobs;
+    private Collection<Task> tasks;
 
     public Instance(InstanceId instanceId) {
         this.instanceId = instanceId;
@@ -90,6 +93,24 @@ public class Instance {
         this.endDate = endDate;
     }
 
+    public Collection<Job> getJobs() {
+        return Collections.unmodifiableCollection(jobs);
+    }
+
+    public void setJobs(Collection<Job> jobs) {
+        this.jobs.clear();
+        this.jobs.addAll(jobs);
+    }
+
+    public Collection<Task> getTasks() {
+        return Collections.unmodifiableCollection(tasks);
+    }
+
+    public void setTasks(Collection<Task> tasks) {
+        this.tasks.clear();
+        this.tasks.addAll(tasks);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (null == obj) {
@@ -116,5 +137,4 @@ public class Instance {
         builder.append("instanceId", instanceId).append("variables", variables).append("processState", processState);
         return builder.toString();
     }
-
 }

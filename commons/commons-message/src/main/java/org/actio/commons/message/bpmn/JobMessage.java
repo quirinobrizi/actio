@@ -13,29 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.engine.interfaces.translator;
+package org.actio.commons.message.bpmn;
 
-import java.util.Collection;
+import java.util.Date;
+
+import org.actio.commons.message.Message;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author quirino.brizi
  *
  */
-public interface Translator<O, I> {
+public class JobMessage implements Message {
 
-    /**
-     * Tranlate an input element
-     * 
-     * @param input
-     * @return
-     */
-    O translate(I input);
+    private static final long serialVersionUID = -7557517181827746346L;
 
-    /**
-     * Translate a collection of input elements
-     * 
-     * @param input
-     * @return
-     */
-    Collection<O> translate(Collection<I> input);
+    @JsonProperty("jobId")
+    private String id;
+    @JsonProperty("jobType")
+    private String jobType;
+    @JsonProperty("dueDate")
+    private Date dueDate;
+
+    @JsonCreator
+    public JobMessage(@JsonProperty("jobId") String id, @JsonProperty("jobType") String jobType, @JsonProperty("dueDate") Date dueDate) {
+        this.id = id;
+        this.jobType = jobType;
+        this.dueDate = dueDate;
+    }
 }

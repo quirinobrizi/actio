@@ -23,6 +23,7 @@ import org.actio.commons.message.bpmn.ModelMessage;
 import org.actio.commons.message.bpmn.ProcessMessage;
 import org.actio.commons.message.bpmn.VersionMessage;
 import org.actio.engine.domain.model.bpmn.Version;
+import org.actio.engine.infrastructure.Translator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

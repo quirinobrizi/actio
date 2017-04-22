@@ -16,6 +16,7 @@
 package org.actio.engine.infrastructure.repository.translator;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,7 @@ import org.actio.engine.domain.model.bpmn.process.InstanceId;
 import org.actio.engine.domain.model.bpmn.process.InstanceState;
 import org.actio.engine.domain.model.bpmn.process.Process;
 import org.actio.engine.domain.model.bpmn.process.ProcessId;
+import org.actio.engine.infrastructure.Translator;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
@@ -48,7 +50,7 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class ProcessDefinitionTranslator {
+public class ProcessDefinitionTranslator implements Translator<Bpmn, ProcessDefinition> {
 
     @Autowired
     private RuntimeService runtimeService;
@@ -57,7 +59,13 @@ public class ProcessDefinitionTranslator {
     @Autowired
     private HistoryService historyService;
 
-    public List<Bpmn> translate(List<ProcessDefinition> processDefinitions) {
+    @Autowired
+    private JobEntityTranslator jobEntityTranslator;
+    @Autowired
+    private TaskEntityTranslator taskEntityTranslator;
+
+    @Override
+    public List<Bpmn> translate(Collection<ProcessDefinition> processDefinitions) {
         Map<BpmnId, Bpmn> bpmns = new HashMap<>();
         for (ProcessDefinition processDefinition : processDefinitions) {
             BpmnId bpmnId = BpmnId.newInstance(processDefinition.getKey());
@@ -101,6 +109,8 @@ public class ProcessDefinitionTranslator {
             }
             instance.setInstanceState(instanceState);
             instance.setStartDate(entity.getLockTime());
+            instance.setJobs(jobEntityTranslator.translate(entity.getJobs()));
+            instance.setTasks(taskEntityTranslator.translate(entity.getTasks()));
             process.addInstance(instance);
         }
         List<HistoricProcessInstance> historicProcessInstances = historyService.createHistoricProcessInstanceQuery()
@@ -131,6 +141,11 @@ public class ProcessDefinitionTranslator {
             }
             return model;
         }
+        return null;
+    }
+
+    @Override
+    public Bpmn translate(ProcessDefinition input) {
         return null;
     }
 }

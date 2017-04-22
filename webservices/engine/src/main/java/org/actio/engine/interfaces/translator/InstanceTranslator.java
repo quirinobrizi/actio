@@ -20,7 +20,11 @@ import java.util.Collection;
 import java.util.List;
 
 import org.actio.commons.message.bpmn.InstanceMessage;
+import org.actio.commons.message.bpmn.JobMessage;
+import org.actio.commons.message.bpmn.TaskMessage;
 import org.actio.engine.domain.model.bpmn.process.Instance;
+import org.actio.engine.infrastructure.Translator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -29,6 +33,11 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class InstanceTranslator implements Translator<InstanceMessage, Instance> {
+
+    @Autowired
+    private JobTranslator jobTranslator;
+    @Autowired
+    private TaskTranslator taskTranslator;
 
     /*
      * (non-Javadoc)
@@ -41,8 +50,10 @@ public class InstanceTranslator implements Translator<InstanceMessage, Instance>
     public InstanceMessage translate(Instance instance) {
         Long startDate = null != instance.getStartDate() ? instance.getStartDate().getTime() : null;
         Long endDate = null != instance.getEndDate() ? instance.getEndDate().getTime() : null;
-        return new InstanceMessage(instance.getInstanceId(), instance.getVariables(), instance.getProcessState().name(), startDate,
-                endDate);
+        Collection<JobMessage> jobs = jobTranslator.translate(instance.getJobs());
+        Collection<TaskMessage> tasks = taskTranslator.translate(instance.getTasks());
+        return new InstanceMessage(instance.getInstanceId(), instance.getVariables(), instance.getProcessState().name(), startDate, endDate,
+                jobs, tasks);
     }
 
     /*

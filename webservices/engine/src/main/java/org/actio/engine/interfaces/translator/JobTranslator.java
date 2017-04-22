@@ -15,15 +15,12 @@
  *******************************************************************************/
 package org.actio.engine.interfaces.translator;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
 
-import org.actio.commons.message.bpmn.BpmnMessage;
-import org.actio.commons.message.bpmn.VersionMessage;
-import org.actio.engine.domain.model.bpmn.Bpmn;
+import org.actio.commons.message.bpmn.JobMessage;
+import org.actio.engine.domain.model.bpmn.process.Job;
 import org.actio.engine.infrastructure.Translator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -31,24 +28,20 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class BpmnTranslator implements Translator<BpmnMessage, Bpmn> {
-
-    @Autowired
-    private VersionTranslator versionTranslator;
+public class JobTranslator implements Translator<JobMessage, Job> {
 
     @Override
-    public Collection<BpmnMessage> translate(Collection<Bpmn> bpmns) {
-        List<BpmnMessage> answer = new ArrayList<>();
-        for (Bpmn bpmn : bpmns) {
-            answer.add(translate(bpmn));
-        }
-        return answer;
+    public JobMessage translate(Job job) {
+        return new JobMessage(job.getId(), job.getJobType().name(), job.getDueDate());
     }
 
     @Override
-    public BpmnMessage translate(Bpmn bpmn) {
-        Collection<VersionMessage> versions = versionTranslator.translate(bpmn.getVersions());
-        return new BpmnMessage(bpmn.getId(), bpmn.getName(), versions);
+    public Collection<JobMessage> translate(Collection<Job> jobs) {
+        Collection<JobMessage> answer = new HashSet<>();
+        for (Job job : jobs) {
+            answer.add(translate(job));
+        }
+        return answer;
     }
 
 }

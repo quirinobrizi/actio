@@ -13,17 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.engine.interfaces.translator;
+package org.actio.engine.infrastructure.repository.translator;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
 
-import org.actio.commons.message.bpmn.BpmnMessage;
-import org.actio.commons.message.bpmn.VersionMessage;
-import org.actio.engine.domain.model.bpmn.Bpmn;
+import org.actio.engine.domain.model.bpmn.process.Task;
 import org.actio.engine.infrastructure.Translator;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.activiti.engine.impl.persistence.entity.TaskEntity;
 import org.springframework.stereotype.Component;
 
 /**
@@ -31,24 +28,20 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class BpmnTranslator implements Translator<BpmnMessage, Bpmn> {
-
-    @Autowired
-    private VersionTranslator versionTranslator;
+public class TaskEntityTranslator implements Translator<Task, TaskEntity> {
 
     @Override
-    public Collection<BpmnMessage> translate(Collection<Bpmn> bpmns) {
-        List<BpmnMessage> answer = new ArrayList<>();
-        for (Bpmn bpmn : bpmns) {
-            answer.add(translate(bpmn));
-        }
-        return answer;
+    public Task translate(TaskEntity entity) {
+        return new Task(entity.getId(), entity.getAssignee(), entity.getDueDate());
     }
 
     @Override
-    public BpmnMessage translate(Bpmn bpmn) {
-        Collection<VersionMessage> versions = versionTranslator.translate(bpmn.getVersions());
-        return new BpmnMessage(bpmn.getId(), bpmn.getName(), versions);
+    public Collection<Task> translate(Collection<TaskEntity> tasks) {
+        Collection<Task> answer = new HashSet<>();
+        for (TaskEntity entity : tasks) {
+            answer.add(translate(entity));
+        }
+        return answer;
     }
 
 }

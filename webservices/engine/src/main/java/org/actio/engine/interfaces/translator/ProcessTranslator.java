@@ -22,6 +22,7 @@ import java.util.Set;
 import org.actio.commons.message.bpmn.InstanceMessage;
 import org.actio.commons.message.bpmn.ProcessMessage;
 import org.actio.engine.domain.model.bpmn.process.Process;
+import org.actio.engine.infrastructure.Translator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

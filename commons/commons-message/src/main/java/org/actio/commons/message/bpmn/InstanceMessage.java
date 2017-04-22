@@ -15,6 +15,7 @@
  *******************************************************************************/
 package org.actio.commons.message.bpmn;
 
+import java.util.Collection;
 import java.util.Map;
 
 import org.actio.commons.message.Message;
@@ -40,16 +41,23 @@ public class InstanceMessage implements Message {
     private Long startDate;
     @JsonProperty("endDate")
     private Long endDate;
+    @JsonProperty("jobs")
+    private Collection<JobMessage> jobs;
+    @JsonProperty("tasks")
+    private Collection<TaskMessage> tasks;
 
     @JsonCreator
     public InstanceMessage(@JsonProperty("instanceId") String instanceId, @JsonProperty("variables") Map<String, Object> variables,
             @JsonProperty("instanceState") String instanceState, @JsonProperty("startDate") Long startDate,
-            @JsonProperty("endDate") Long endDate) {
+            @JsonProperty("endDate") Long endDate, @JsonProperty("jobs") Collection<JobMessage> jobs,
+            @JsonProperty("tasks") Collection<TaskMessage> tasks) {
         this.instanceId = instanceId;
         this.variables = variables;
         this.instanceState = instanceState;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.jobs = jobs;
+        this.tasks = tasks;
     }
 
 }

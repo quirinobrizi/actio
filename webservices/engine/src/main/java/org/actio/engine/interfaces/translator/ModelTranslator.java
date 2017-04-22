@@ -20,6 +20,7 @@ import java.util.Collection;
 import org.actio.commons.message.bpmn.ModelMessage;
 import org.actio.engine.domain.model.bpmn.model.Model;
 import org.actio.engine.domain.model.bpmn.model.ResourceType;
+import org.actio.engine.infrastructure.Translator;
 import org.springframework.stereotype.Component;
 
 /**
