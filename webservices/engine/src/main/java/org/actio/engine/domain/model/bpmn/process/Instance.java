@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.apache.commons.lang3.Validate;
@@ -43,6 +44,8 @@ public class Instance {
     public Instance(InstanceId instanceId) {
         this.instanceId = instanceId;
         this.variables = new HashMap<>();
+        this.jobs = new HashSet<>();
+        this.tasks = new HashSet<>();
     }
 
     public String getInstanceId() {

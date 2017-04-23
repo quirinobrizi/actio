@@ -1,11 +1,13 @@
 package org.actio.engine.infrastructure.repository.translator;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyCollectionOf;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import org.actio.engine.domain.model.bpmn.Bpmn;
@@ -15,6 +17,8 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
+import org.activiti.engine.impl.persistence.entity.JobEntity;
+import org.activiti.engine.impl.persistence.entity.TaskEntity;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ModelQuery;
 import org.activiti.engine.repository.ProcessDefinition;
@@ -35,6 +39,10 @@ public class ProcessDefinitionTranslatorTest {
     private RepositoryService repositoryService;
     @Mock
     private HistoryService historyService;
+    @Mock
+    private JobEntityTranslator jobEntityTranslator;
+    @Mock
+    private TaskEntityTranslator taskEntityTranslator;
 
     @InjectMocks
     private ProcessDefinitionTranslator testObj;
@@ -106,6 +114,9 @@ public class ProcessDefinitionTranslatorTest {
         when(processDefinition3.getKey()).thenReturn(key2);
         when(processDefinition3.getName()).thenReturn("name");
         when(processDefinition3.getVersion()).thenReturn(1);
+
+        when(jobEntityTranslator.translate(anyCollectionOf(JobEntity.class))).thenReturn(new HashSet<>());
+        when(taskEntityTranslator.translate(anyCollectionOf(TaskEntity.class))).thenReturn(new HashSet<>());
 
         // act
         List<Bpmn> actual = testObj.translate(processDefinitions);
