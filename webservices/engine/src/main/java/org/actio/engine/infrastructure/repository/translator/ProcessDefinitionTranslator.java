@@ -128,8 +128,10 @@ public class ProcessDefinitionTranslator implements Translator<Bpmn, ProcessDefi
     }
 
     private Model extractModel(BpmnId bpmnId) {
-        org.activiti.engine.repository.Model storedModel = repositoryService.createModelQuery().modelKey(bpmnId.toString()).singleResult();
-        if (null != storedModel) {
+        List<org.activiti.engine.repository.Model> storedModels = repositoryService.createModelQuery().modelKey(bpmnId.toString())
+                .orderByModelVersion().desc().list();
+        if (null != storedModels && !storedModels.isEmpty()) {
+            org.activiti.engine.repository.Model storedModel = storedModels.get(0);
             Model model = new Model(ModelId.newInstance(storedModel.getId()));
             if (storedModel.hasEditorSource()) {
                 model.addResource(ResourceType.XML,

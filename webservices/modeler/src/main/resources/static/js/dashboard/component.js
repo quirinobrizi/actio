@@ -26,11 +26,13 @@ angular
     	var calculateStatistics = function(bpmns) {
     		return {
     			bpmns: bpmns.length,
-    			processes: countProcesses(bpmns),
+    			//processes: countProcesses(bpmns),
     			instances: countInstances(bpmns),
     			terminatedInstances: countInstances(bpmns, 'TERMINATED'),
     			activeInstances: countInstances(bpmns, 'ACTIVE'),
-    			suspendedInstances: countInstances(bpmns, 'SUSPENDED')
+    			suspendedInstances: countInstances(bpmns, 'SUSPENDED'),
+    			jobs: countJobs(bpmns),
+    			tasks: countTasks(bpmns)
     		};
     	};
     	
@@ -47,22 +49,50 @@ angular
     	};
     	
     	var countInstances = function(bpmns, instanceState) {
-    		var answer = 0;
+    		var answer = 0,
+    			instances = getIntances(bpmns);
+    		if(!instanceState) {
+    			return instances.length;
+    		}
+			for(var i in instances) {
+				var instance = instances[i];
+				if(instance.instanceState === instanceState) {
+					answer += 1;
+				}
+			}
+    		return answer;
+    	};
+    	
+    	var countJobs = function(bpmns) {
+    		var answer = 0,
+				instances = getIntances(bpmns);
+    		for(var i in instances) {
+				var instance = instances[i];
+				answer += instances[i].jobs ? instances[i].jobs.length : 0;
+    		}
+    		return answer;
+    	};
+    	
+    	var countTasks = function(bpmns) {
+    		var answer = 0,
+				instances = getIntances(bpmns);
+    		for(var i in instances) {
+				var instance = instances[i];
+				answer += instances[i].tags ? instances[i].tags.length : 0;
+    		}
+    		return answer;
+    	};
+    	
+    	var getIntances = function(bpmns) {
+    		var answer = [];
     		for(var b in bpmns) {
     			var bpmn = bpmns[b];
 	    		for(var v in bpmn.versions) {
 	    			var version = bpmn.versions[v];
 	    			for(var p in version.processes) {
-	    				if(!instanceState) {
-	    					answer += version.processes[p].instances.length;
-	    				} else {
-	    					for(var i in version.processes[p].instances) {
-	    						var instance = version.processes[p].instances[i];
-	    						if(instance.instanceState === instanceState) {
-	    							answer += 1;
-	    						}
-	    					}
-	    				}
+    					for(var i in version.processes[p].instances) {
+    						answer.push(version.processes[p].instances[i]);
+    					}
 	    			}
 	    		}
     		}
