@@ -29,7 +29,7 @@ public class SendTask extends org.activiti.bpmn.model.SendTask {
     protected String implementation;
     protected String resultVariableName;
     protected String extensionId;
-    protected List<CustomProperty> customProperties = new ArrayList<CustomProperty>();
+    protected List<CustomProperty> customProperties = new ArrayList<>();
     protected String skipExpression;
 
     public String getImplementation() {

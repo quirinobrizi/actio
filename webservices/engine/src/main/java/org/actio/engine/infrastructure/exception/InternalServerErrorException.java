@@ -13,20 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.engine.interfaces.converter;
+package org.actio.engine.infrastructure.exception;
 
-import org.activiti.bpmn.converter.BpmnXMLConverter;
-import org.springframework.stereotype.Component;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * @author quirino.brizi
  *
  */
-@Component
-public class DefaultBpmnXMLConverter extends BpmnXMLConverter {
+@ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
+public class InternalServerErrorException extends RuntimeException {
 
-    public DefaultBpmnXMLConverter() {
-        addConverter(new SendTaskXmlConverter());
-        addConverter(new ScriptTaskXmlConverter());
+    private static final long serialVersionUID = 1389533386340613908L;
+
+    public static InternalServerErrorException newInstance(String message, Object... args) {
+        return new InternalServerErrorException(message, args);
+    }
+
+    private InternalServerErrorException(String message, Object... args) {
+        super(String.format(message, args));
     }
 }
