@@ -48,19 +48,23 @@ public class DbAuthenticationConfigurer implements AuthenticationConfigurer {
     public void configure(IdentityService identityService, AuthenticationProperties authenticationProperties) {
         UsersAndGroups usersAndGroups = getUsersAndGroups(authenticationProperties.getIdentity().getSource());
         for (Group group : usersAndGroups.getGroups()) {
-            org.activiti.engine.identity.Group newGroup = identityService.newGroup(group.getId());
-            newGroup.setName(group.getName());
-            newGroup.setType(group.getRole());
-            identityService.saveGroup(newGroup);
+            if (identityService.createGroupQuery().groupId(group.getId()).count() == 0) {
+                org.activiti.engine.identity.Group newGroup = identityService.newGroup(group.getId());
+                newGroup.setName(group.getName());
+                newGroup.setType(group.getRole());
+                identityService.saveGroup(newGroup);
+            }
         }
 
         for (User user : usersAndGroups.getUsers()) {
-            org.activiti.engine.identity.User newUser = identityService.newUser(user.getName());
-            newUser.setPassword(user.getPassword());
-            identityService.saveUser(newUser);
+            if (identityService.createUserQuery().userId(user.getName()).count() == 0) {
+                org.activiti.engine.identity.User newUser = identityService.newUser(user.getName());
+                newUser.setPassword(user.getPassword());
+                identityService.saveUser(newUser);
 
-            for (String group : user.getGroups()) {
-                identityService.createMembership(newUser.getId(), group);
+                for (String group : user.getGroups()) {
+                    identityService.createMembership(newUser.getId(), group);
+                }
             }
         }
     }
