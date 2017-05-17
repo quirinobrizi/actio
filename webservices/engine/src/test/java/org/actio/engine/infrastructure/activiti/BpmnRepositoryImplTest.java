@@ -11,7 +11,6 @@ import java.util.List;
 
 import org.actio.engine.domain.model.bpmn.Bpmn;
 import org.actio.engine.domain.model.bpmn.BpmnId;
-import org.actio.engine.infrastructure.activiti.BpmnRepositoryImpl;
 import org.actio.engine.infrastructure.activiti.translator.ProcessDefinitionTranslator;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.ProcessDefinition;
@@ -48,6 +47,7 @@ public class BpmnRepositoryImplTest {
     public void testGet() {
         when(repositoryService.createProcessDefinitionQuery()).thenReturn(processDefinitionQuery);
         when(processDefinitionQuery.processDefinitionKey(anyString())).thenReturn(processDefinitionQuery);
+        when(processDefinitionQuery.latestVersion()).thenReturn(processDefinitionQuery);
         when(processDefinitionQuery.singleResult()).thenReturn(processDefinition1);
         when(processDefinitionTranslator.translate(processDefinition1)).thenReturn(bpmn);
         // act
