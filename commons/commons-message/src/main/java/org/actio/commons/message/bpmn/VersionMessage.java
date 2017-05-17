@@ -15,8 +15,6 @@
  *******************************************************************************/
 package org.actio.commons.message.bpmn;
 
-import java.util.Collection;
-
 import org.actio.commons.message.Message;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -33,13 +31,13 @@ public class VersionMessage implements Message {
     private String versionId;
     @JsonProperty("model")
     private ModelMessage model;
-    @JsonProperty("processes")
-    private Collection<ProcessMessage> processes;
+    @JsonProperty("process")
+    private ProcessMessage process;
 
     public VersionMessage(@JsonProperty("versionId") String versionId, @JsonProperty("model") ModelMessage model,
-            @JsonProperty("processes") Collection<ProcessMessage> processes) {
+            @JsonProperty("process") ProcessMessage process) {
         this.versionId = versionId;
         this.model = model;
-        this.processes = processes;
+        this.process = process;
     }
 }

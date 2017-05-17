@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.engine.infrastructure.repository;
+package org.actio.engine.infrastructure.activiti;
 
 import java.util.List;
 
+import org.actio.commons.message.NotFoundException;
 import org.actio.engine.domain.model.bpmn.Bpmn;
 import org.actio.engine.domain.model.bpmn.BpmnId;
 import org.actio.engine.domain.repository.BpmnRepository;
-import org.actio.engine.infrastructure.repository.translator.ProcessDefinitionTranslator;
+import org.actio.engine.infrastructure.activiti.translator.ProcessDefinitionTranslator;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
@@ -37,8 +38,26 @@ public class BpmnRepositoryImpl implements BpmnRepository {
 
     @Autowired
     private RepositoryService repositoryService;
+
     @Autowired
     private ProcessDefinitionTranslator processDefinitionTranslator;
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.actio.engine.domain.repository.BpmnRepository#get(org.actio.engine.
+     * domain.model.bpmn.BpmnId)
+     */
+    @Override
+    public Bpmn get(BpmnId bpmnId) {
+        ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().processDefinitionKey(bpmnId.toString())
+                .latestVersion().singleResult();
+        if (null == processDefinition) {
+            throw NotFoundException.newInstance("unable to find BPMN identified by %s", bpmnId);
+        }
+        return processDefinitionTranslator.translate(processDefinition);
+    }
 
     /*
      * (non-Javadoc)

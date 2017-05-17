@@ -19,13 +19,16 @@ import java.util.Collection;
 import java.util.List;
 
 import org.actio.commons.message.bpmn.BpmnMessage;
+import org.actio.commons.message.bpmn.InputMessage;
 import org.actio.engine.app.BpmnService;
 import org.actio.engine.domain.model.bpmn.Bpmn;
 import org.actio.engine.domain.model.bpmn.BpmnId;
+import org.actio.engine.domain.model.bpmn.Inputs;
 import org.actio.engine.interfaces.translator.BpmnTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,5 +55,11 @@ public class BpmnInterface {
     @RequestMapping(path = "/{bpmnId}", method = RequestMethod.DELETE)
     public void deleteBpmn(@PathVariable(name = "bpmnId") String bpmnId) {
         bpmnService.deleteBpmn(BpmnId.newInstance(bpmnId));
+    }
+
+    @RequestMapping(path = "/{bpmnId}/start", method = RequestMethod.POST)
+    public BpmnMessage updateBpmnState(@PathVariable(name = "bpmnId") String bpmnId, @RequestBody InputMessage inputMessage) {
+        Bpmn bpmn = bpmnService.startNewProcessInstance(BpmnId.newInstance(bpmnId), new Inputs(inputMessage));
+        return bpmnTranslator.translate(bpmn);
     }
 }

@@ -52,7 +52,7 @@ public class InstanceTranslator implements Translator<InstanceMessage, Instance>
         Long endDate = null != instance.getEndDate() ? instance.getEndDate().getTime() : null;
         Collection<JobMessage> jobs = jobTranslator.translate(instance.getJobs());
         Collection<TaskMessage> tasks = taskTranslator.translate(instance.getTasks());
-        return new InstanceMessage(instance.getInstanceId(), instance.getVariables(), instance.getProcessState().name(), startDate, endDate,
+        return new InstanceMessage(instance.getInstanceId(), instance.getVariables(), instance.getInstanceState().name(), startDate, endDate,
                 jobs, tasks);
     }
 

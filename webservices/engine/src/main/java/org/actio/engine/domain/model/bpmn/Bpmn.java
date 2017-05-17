@@ -19,6 +19,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.actio.engine.domain.model.bpmn.process.Instance;
+import org.actio.engine.domain.service.CommandExecutorService;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -75,6 +77,11 @@ public class Bpmn {
         return Collections.unmodifiableSet(versions);
     }
 
+    public void startNewProcessInstance(CommandExecutorService commandExecutorService, Inputs inputs) {
+        Instance instance = commandExecutorService.startNewBpmnProcessInstance(bpmnId, inputs);
+        getLatestVersion().addProcessInstance(instance); // NOSONAR
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (null == obj) {
@@ -102,4 +109,18 @@ public class Bpmn {
         return builder.toString();
     }
 
+    private Version getLatestVersion() {
+        Version answer = null;
+        for (Version version : this.versions) {
+            if (null == answer) {
+                answer = version;
+                continue;
+            } else {
+                if (version.getVersionId().compareTo(answer.getVersionId()) > 0) {
+                    answer = version;
+                }
+            }
+        }
+        return answer;
+    }
 }

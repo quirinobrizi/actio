@@ -18,6 +18,7 @@ package org.actio.modeler.app;
 import java.util.Collection;
 
 import org.actio.commons.message.bpmn.BpmnMessage;
+import org.actio.commons.message.bpmn.InputMessage;
 import org.actio.modeler.domain.repository.BpmnRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,11 @@ public class BpmnService {
 
     public Collection<BpmnMessage> deleteBpmn(String bpmnId) {
         bpmnRepository.remove(bpmnId);
+        return bpmnRepository.findAll();
+    }
+
+    public Collection<BpmnMessage> startBpmnInstance(String bpmnId, InputMessage inputMessage) {
+        bpmnRepository.startBpmnInstance(bpmnId, inputMessage);
         return bpmnRepository.findAll();
     }
 

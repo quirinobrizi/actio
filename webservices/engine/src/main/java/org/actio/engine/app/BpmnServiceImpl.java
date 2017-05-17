@@ -19,7 +19,9 @@ import java.util.List;
 
 import org.actio.engine.domain.model.bpmn.Bpmn;
 import org.actio.engine.domain.model.bpmn.BpmnId;
+import org.actio.engine.domain.model.bpmn.Inputs;
 import org.actio.engine.domain.repository.BpmnRepository;
+import org.actio.engine.domain.service.CommandExecutorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +34,8 @@ public class BpmnServiceImpl implements BpmnService {
 
     @Autowired
     private BpmnRepository bpmnRepository;
+    @Autowired
+    private CommandExecutorService commandExecutorService;
 
     /*
      * (non-Javadoc)
@@ -46,6 +50,13 @@ public class BpmnServiceImpl implements BpmnService {
     @Override
     public void deleteBpmn(BpmnId bpmnId) {
         bpmnRepository.remove(bpmnId);
+    }
+
+    @Override
+    public Bpmn startNewProcessInstance(BpmnId bpmnId, Inputs inputs) {
+        Bpmn bpmn = bpmnRepository.get(bpmnId);
+        bpmn.startNewProcessInstance(commandExecutorService, inputs);
+        return bpmn;
     }
 
 }

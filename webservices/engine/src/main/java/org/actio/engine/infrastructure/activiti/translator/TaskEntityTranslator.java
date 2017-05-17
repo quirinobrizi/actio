@@ -13,15 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.engine.infrastructure.repository.translator;
+package org.actio.engine.infrastructure.activiti.translator;
 
 import java.util.Collection;
 import java.util.HashSet;
 
-import org.actio.engine.domain.model.bpmn.process.Job;
-import org.actio.engine.domain.model.bpmn.process.JobType;
+import org.actio.engine.domain.model.bpmn.process.Task;
 import org.actio.engine.infrastructure.Translator;
-import org.activiti.engine.impl.persistence.entity.JobEntity;
+import org.activiti.engine.impl.persistence.entity.TaskEntity;
 import org.springframework.stereotype.Component;
 
 /**
@@ -29,17 +28,17 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class JobEntityTranslator implements Translator<Job, JobEntity> {
+public class TaskEntityTranslator implements Translator<Task, TaskEntity> {
 
     @Override
-    public Job translate(JobEntity entity) {
-        return new Job(entity.getId(), JobType.from(entity.getJobType()), entity.getDuedate());
+    public Task translate(TaskEntity entity) {
+        return new Task(entity.getId(), entity.getAssignee(), entity.getDueDate());
     }
 
     @Override
-    public Collection<Job> translate(Collection<JobEntity> jobs) {
-        Collection<Job> answer = new HashSet<>();
-        for (JobEntity entity : jobs) {
+    public Collection<Task> translate(Collection<TaskEntity> tasks) {
+        Collection<Task> answer = new HashSet<>();
+        for (TaskEntity entity : tasks) {
             answer.add(translate(entity));
         }
         return answer;

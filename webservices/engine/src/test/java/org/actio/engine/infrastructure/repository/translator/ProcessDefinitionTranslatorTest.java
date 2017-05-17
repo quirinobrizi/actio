@@ -1,24 +1,25 @@
 package org.actio.engine.infrastructure.repository.translator;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyCollectionOf;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 import org.actio.engine.domain.model.bpmn.Bpmn;
+import org.actio.engine.domain.model.bpmn.process.Instance;
+import org.actio.engine.infrastructure.activiti.translator.ExecutionEntityTranslator;
+import org.actio.engine.infrastructure.activiti.translator.JobEntityTranslator;
+import org.actio.engine.infrastructure.activiti.translator.ProcessDefinitionTranslator;
+import org.actio.engine.infrastructure.activiti.translator.TaskEntityTranslator;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricProcessInstanceQuery;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
-import org.activiti.engine.impl.persistence.entity.JobEntity;
-import org.activiti.engine.impl.persistence.entity.TaskEntity;
 import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ModelQuery;
 import org.activiti.engine.repository.ProcessDefinition;
@@ -64,10 +65,15 @@ public class ProcessDefinitionTranslatorTest {
     @Mock
     private ExecutionEntity processInstance;
     @Mock
+    private ExecutionEntityTranslator executionEntityTranslator;
+    @Mock
     private HistoricProcessInstance historicProcessInstance;
 
     private String key1 = "key1";
     private String key2 = "key2";
+
+    @Mock
+    private Instance instance;
 
     @Test
     public void testGetAll() {
@@ -117,8 +123,7 @@ public class ProcessDefinitionTranslatorTest {
         when(processDefinition3.getName()).thenReturn("name");
         when(processDefinition3.getVersion()).thenReturn(1);
 
-        when(jobEntityTranslator.translate(anyCollectionOf(JobEntity.class))).thenReturn(new HashSet<>());
-        when(taskEntityTranslator.translate(anyCollectionOf(TaskEntity.class))).thenReturn(new HashSet<>());
+        when(executionEntityTranslator.translate(processInstance)).thenReturn(instance);
 
         // act
         List<Bpmn> actual = testObj.translate(processDefinitions);

@@ -18,11 +18,13 @@ package org.actio.modeler.interfaces;
 import java.util.Collection;
 
 import org.actio.commons.message.bpmn.BpmnMessage;
+import org.actio.commons.message.bpmn.InputMessage;
 import org.actio.modeler.app.BpmnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -50,5 +52,10 @@ public class Bpmns {
     @RequestMapping(path = "/{bpmnId}", method = RequestMethod.DELETE)
     public Collection<BpmnMessage> deleteBpmn(@PathVariable(name = "bpmnId") String bpmnId) {
         return bpmnService.deleteBpmn(bpmnId);
+    }
+
+    @RequestMapping(path = "/{bpmnId}/start", method = RequestMethod.POST)
+    public Collection<BpmnMessage> startBpmnInstance(@PathVariable(name = "bpmnId") String bpmnId, @RequestBody InputMessage inputMessage) {
+        return bpmnService.startBpmnInstance(bpmnId, inputMessage);
     }
 }

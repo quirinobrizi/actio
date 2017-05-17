@@ -17,14 +17,15 @@ angular
   .module('models')
   .component('models', {
     templateUrl: 'js/models/template.html',
-    controller: ['Bpmns', 'Processes', '$location', 'growl', function DashboardController(Bpmns, Processes, $location, growl) {
+    controller: ['Bpmns', '$location', 'growl', function DashboardController(Bpmns, $location, growl) {
     	var self = this;
     	self.infoModalShown = false;
     	self.bpmns = Bpmns.query();
     	
     	self.launchBpmn = function(key) {
-    		Processes.start({processId: key, action: "start"}).$promise.then(function(resp){ 
+    		Bpmns.startBpmnProcessInstance({key: key}).$promise.then(function(bpmns){ 
     			growl.info("process " + key + " started"); 
+    			self.bpmns = bpmns;
     		});
     	};
     	self.deleteBpmn = function(key) {
@@ -50,17 +51,14 @@ angular
     		return latestVersion.model;
     	};
     	
-    	self.countInstancesState = function(processes, state) {
+    	self.countInstancesState = function(process, state) {
     		var count = 0;
-    		for(var p in processes) {
-    			var proc = processes[p];
-	    		for(var i in proc.instances) {
-	    			var inst = proc.instances[i];
-	    			if(state === inst.instanceState) {
-	    				count++;
-	    			}
+    		for(var i in process.instances) {
+    			var inst = process.instances[i];
+    			if(state === inst.instanceState) {
+    				count++;
     			}
-    		}
+			}
     		return count;
     	};
     }]});

@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 
 import org.actio.commons.message.metrics.MetricsMessage;
 import org.actio.commons.message.process.ProcessMessage;
-import org.actio.commons.message.process.UpdateProcessStateRequestMessage;
+import org.actio.commons.message.process.UpdateBpmnStateRequestMessage;
 import org.actio.modeler.domain.model.Metrics;
 import org.actio.modeler.domain.model.ProcessMetrics;
 import org.actio.modeler.domain.repository.ProcessRepository;
@@ -70,10 +70,10 @@ public class ProcessRepositoryImpl implements ProcessRepository {
     }
 
     @Override
-    public ProcessMessage update(UpdateProcessStateRequestMessage message) {
+    public ProcessMessage update(UpdateBpmnStateRequestMessage message) {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        HttpEntity<UpdateProcessStateRequestMessage> entity = new HttpEntity<>(message, headers);
+        HttpEntity<UpdateBpmnStateRequestMessage> entity = new HttpEntity<>(message, headers);
         ResponseEntity<ProcessMessage> responseEntity = clientFactory.newClient().exchange(configuration.getEngine().getUrlFormat(),
                 HttpMethod.PUT, entity, ProcessMessage.class, PROCESSES);
         return responseEntity.getBody();

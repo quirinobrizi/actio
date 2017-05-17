@@ -49,10 +49,10 @@
 						<tbody>
 							<tr ng-repeat="version in versions">
 								<td class="text-center" style="font-weight: bold;">{{version.versionId}}</td>
-								<td class="text-center">{{$ctrl.countInstancesState(version.processes, "ACTIVE")}}</td>
-								<td class="text-center">{{$ctrl.countInstancesState(version.processes, "TERMINATED")}}</td>
-								<td class="text-center">{{$ctrl.countInstancesState(version.processes, "SUSPENDED")}}</td>
-								<td class="text-center">{{$ctrl.countInstancesState(version.processes, "ERROR")}}</td>
+								<td class="text-center">{{$ctrl.countInstancesState(version.process, "ACTIVE")}}</td>
+								<td class="text-center">{{$ctrl.countInstancesState(version.process, "TERMINATED")}}</td>
+								<td class="text-center">{{$ctrl.countInstancesState(version.process, "SUSPENDED")}}</td>
+								<td class="text-center">{{$ctrl.countInstancesState(version.process, "ERROR")}}</td>
 								<td class="text-center">
 									<ul class="io-control-list">
 										<li>

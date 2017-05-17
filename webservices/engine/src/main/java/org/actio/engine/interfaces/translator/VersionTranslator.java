@@ -42,8 +42,8 @@ public class VersionTranslator implements Translator<VersionMessage, Version> {
     @Override
     public VersionMessage translate(Version version) {
         ModelMessage model = modelTranslator.translate(version.getModel());
-        Collection<ProcessMessage> processes = processTranslator.translate(version.getProcesses());
-        return new VersionMessage(version.getVersionId(), model, processes);
+        ProcessMessage process = processTranslator.translate(version.getProcess());
+        return new VersionMessage(version.getVersionId().toString(), model, process);
     }
 
     @Override

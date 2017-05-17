@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.engine.infrastructure.repository.translator;
+package org.actio.engine.infrastructure.activiti.translator;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -60,9 +60,7 @@ public class ProcessDefinitionTranslator implements Translator<Bpmn, ProcessDefi
     private HistoryService historyService;
 
     @Autowired
-    private JobEntityTranslator jobEntityTranslator;
-    @Autowired
-    private TaskEntityTranslator taskEntityTranslator;
+    private ExecutionEntityTranslator executionEntityTranslator;
 
     @Override
     public List<Bpmn> translate(Collection<ProcessDefinition> processDefinitions) {
@@ -81,49 +79,42 @@ public class ProcessDefinitionTranslator implements Translator<Bpmn, ProcessDefi
         return new ArrayList<>(bpmns.values());
     }
 
+    @Override
+    public Bpmn translate(ProcessDefinition processDefinition) {
+        BpmnId bpmnId = BpmnId.newInstance(processDefinition.getKey());
+        Bpmn bpmn = new Bpmn(bpmnId, processDefinition.getName());
+        bpmn.addVersion(extractVersion(processDefinition, bpmnId, bpmn));
+        return bpmn;
+    }
+
     private Version extractVersion(ProcessDefinition processDefinition, BpmnId bpmnId, Bpmn bpmn) {
         VersionId versionId = VersionId.newInstance(processDefinition.getVersion());
         Version version;
+        String processDefinitionId = processDefinition.getId();
         if (bpmn.hasVersion(versionId)) {
             version = bpmn.getVersion(versionId);
         } else {
-            version = new Version(versionId);
+            version = new Version(versionId, Process.newInstance(ProcessId.newInstance(processDefinitionId)));
             Model model = extractModel(bpmnId);
             version.setModel(model);
         }
-        String processDefinitionId = processDefinition.getId();
-        Process process = Process.newInstance(ProcessId.newInstance(processDefinitionId));
         List<ProcessInstance> processInstances = runtimeService.createProcessInstanceQuery().includeProcessVariables()
                 .processDefinitionId(processDefinitionId).list();
         for (ProcessInstance processInstance : processInstances) {
             ExecutionEntity entity = (ExecutionEntity) processInstance;
-            Instance instance = new Instance(InstanceId.newInstance(entity.getId()));
-            instance.setVariables(entity.getProcessVariables());
-            InstanceState instanceState;
-            if (entity.isEnded()) {
-                instanceState = InstanceState.TERMINATED;
-            } else if (entity.isSuspended()) {
-                instanceState = InstanceState.SUSPENDED;
-            } else {
-                instanceState = InstanceState.ACTIVE;
-            }
-            instance.setInstanceState(instanceState);
-            instance.setStartDate(entity.getLockTime());
-            instance.setJobs(jobEntityTranslator.translate(entity.getJobs()));
-            instance.setTasks(taskEntityTranslator.translate(entity.getTasks()));
-            process.addInstance(instance);
+            Instance instance = executionEntityTranslator.translate(entity);
+            version.addProcessInstance(instance);
         }
         List<HistoricProcessInstance> historicProcessInstances = historyService.createHistoricProcessInstanceQuery()
-                .includeProcessVariables().finished().processDefinitionId(processDefinition.getId()).list();
+                .includeProcessVariables().finished().processDefinitionId(processDefinitionId).list();
         for (HistoricProcessInstance processInstance : historicProcessInstances) {
             Instance instance = new Instance(InstanceId.newInstance(processInstance.getId()));
             instance.setVariables(processInstance.getProcessVariables());
             instance.setInstanceState(InstanceState.TERMINATED);
             instance.setStartDate(processInstance.getStartTime());
             instance.setEndDate(processInstance.getEndTime());
-            process.addInstance(instance);
+            version.addProcessInstance(instance);
         }
-        version.addProcess(process);
         return version;
     }
 
@@ -143,11 +134,6 @@ public class ProcessDefinitionTranslator implements Translator<Bpmn, ProcessDefi
             }
             return model;
         }
-        return null;
-    }
-
-    @Override
-    public Bpmn translate(ProcessDefinition input) {
         return null;
     }
 }

@@ -13,22 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.engine.domain.repository;
+package org.actio.engine.infrastructure.command;
 
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
-import org.actio.engine.domain.model.bpmn.Bpmn;
-import org.actio.engine.domain.model.bpmn.BpmnId;
+import org.actio.engine.infrastructure.command.Command.Type;
+import org.springframework.stereotype.Component;
 
 /**
  * @author quirino.brizi
  *
  */
-public interface BpmnRepository {
+@Component
+public class CommandFactory {
 
-    Bpmn get(BpmnId bpmnId);
+    private final Map<Command.Type, Command<?, ?>> commands;
 
-    List<Bpmn> getAll();
+    public CommandFactory(List<Command<?, ?>> commands) {
+        this.commands = new EnumMap<>(Command.Type.class);
+        for (Command<?, ?> command : commands) {
+            this.commands.put(command.type(), command);
+        }
+    }
 
-    void remove(BpmnId bpmnId);
+    public Command<?, ?> get(Type type) {
+        if (this.commands.containsKey(type)) {
+            return this.commands.get(type);
+        }
+        throw new IllegalArgumentException("unable to find requeted command");
+    }
 }

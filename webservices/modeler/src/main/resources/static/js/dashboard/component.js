@@ -19,34 +19,31 @@ angular
     templateUrl: 'js/dashboard/template.html',
     controller: ['Bpmns',  function DashboardController(Bpmns) {
     	var self = this;
-    	Bpmns.query(function(bpmns) {
-    		self.statistics = calculateStatistics(bpmns);
-    	});
     	
-    	var calculateStatistics = function(bpmns) {
-    		return {
-    			bpmns: bpmns.length,
-    			//processes: countProcesses(bpmns),
-    			instances: countInstances(bpmns),
-    			terminatedInstances: countInstances(bpmns, 'TERMINATED'),
-    			activeInstances: countInstances(bpmns, 'ACTIVE'),
-    			suspendedInstances: countInstances(bpmns, 'SUSPENDED'),
-    			jobs: countJobs(bpmns),
-    			tasks: countTasks(bpmns)
-    		};
-    	};
-    	
-    	var countProcesses = function(bpmns) {
-    		var answer = 0;
+    	var getIntances = function(bpmns) {
+    		var answer = [];
     		for(var b in bpmns) {
     			var bpmn = bpmns[b];
-	    		for(var key in bpmn.versions) {
-	    			var version = bpmn.versions[key];
-	    			answer += version.processes.length;
+	    		for(var v in bpmn.versions) {
+	    			var version = bpmn.versions[v];
+					for(var i in version.process.instances) {
+						answer.push(version.process.instances[i]);
+					}
 	    		}
     		}
     		return answer;
     	};
+//	    var	countProcesses = function(bpmns) {
+//    		var answer = 0;
+//    		for(var b in bpmns) {
+//    			var bpmn = bpmns[b];
+//	    		for(var key in bpmn.versions) {
+//	    			var version = bpmn.versions[key];
+//	    			answer += version.processes.length;
+//	    		}
+//    		}
+//    		return answer;
+//    	};
     	
     	var countInstances = function(bpmns, instanceState) {
     		var answer = 0,
@@ -67,7 +64,6 @@ angular
     		var answer = 0,
 				instances = getIntances(bpmns);
     		for(var i in instances) {
-				var instance = instances[i];
 				answer += instances[i].jobs ? instances[i].jobs.length : 0;
     		}
     		return answer;
@@ -77,25 +73,26 @@ angular
     		var answer = 0,
 				instances = getIntances(bpmns);
     		for(var i in instances) {
-				var instance = instances[i];
 				answer += instances[i].tags ? instances[i].tags.length : 0;
     		}
     		return answer;
     	};
     	
-    	var getIntances = function(bpmns) {
-    		var answer = [];
-    		for(var b in bpmns) {
-    			var bpmn = bpmns[b];
-	    		for(var v in bpmn.versions) {
-	    			var version = bpmn.versions[v];
-	    			for(var p in version.processes) {
-    					for(var i in version.processes[p].instances) {
-    						answer.push(version.processes[p].instances[i]);
-    					}
-	    			}
-	    		}
-    		}
-    		return answer;
+    	var calculateStatistics = function(bpmns) {
+    		return {
+    			bpmns: bpmns.length,
+    			//processes: countProcesses(bpmns),
+    			instances: countInstances(bpmns),
+    			terminatedInstances: countInstances(bpmns, 'TERMINATED'),
+    			activeInstances: countInstances(bpmns, 'ACTIVE'),
+    			suspendedInstances: countInstances(bpmns, 'SUSPENDED'),
+    			jobs: countJobs(bpmns),
+    			tasks: countTasks(bpmns)
+    		};
     	};
+    	
+    	Bpmns.query(function(bpmns) {
+    		self.statistics = calculateStatistics(bpmns);
+    	});
+    	
     }]});

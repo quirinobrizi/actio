@@ -16,7 +16,7 @@
 package org.actio.modeler.domain.repository;
 
 import org.actio.commons.message.process.ProcessMessage;
-import org.actio.commons.message.process.UpdateProcessStateRequestMessage;
+import org.actio.commons.message.process.UpdateBpmnStateRequestMessage;
 import org.actio.modeler.domain.model.Metrics;
 
 /**
@@ -27,7 +27,7 @@ public interface ProcessRepository {
 
     Metrics getProcessesMetrics();
 
-    ProcessMessage update(UpdateProcessStateRequestMessage message);
+    ProcessMessage update(UpdateBpmnStateRequestMessage message);
 
     void delete(String process);
 }

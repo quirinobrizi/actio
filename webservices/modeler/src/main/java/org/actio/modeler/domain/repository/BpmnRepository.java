@@ -18,6 +18,7 @@ package org.actio.modeler.domain.repository;
 import java.util.Collection;
 
 import org.actio.commons.message.bpmn.BpmnMessage;
+import org.actio.commons.message.bpmn.InputMessage;
 
 /**
  * @author quirino.brizi
@@ -28,5 +29,7 @@ public interface BpmnRepository {
     Collection<BpmnMessage> findAll();
 
     void remove(String bpmnId);
+
+    void startBpmnInstance(String bpmnId, InputMessage inputMessage);
 
 }

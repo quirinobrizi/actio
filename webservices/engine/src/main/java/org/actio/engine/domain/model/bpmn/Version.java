@@ -15,12 +15,12 @@
  *******************************************************************************/
 package org.actio.engine.domain.model.bpmn;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.UUID;
 
 import org.actio.engine.domain.model.bpmn.model.Model;
+import org.actio.engine.domain.model.bpmn.process.Instance;
 import org.actio.engine.domain.model.bpmn.process.Process;
+import org.actio.engine.domain.model.bpmn.process.ProcessId;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -34,16 +34,21 @@ public class Version {
 
     private final VersionId versionId;
     private Model model;
-    private final Set<Process> processes;
+    private final Process process;
 
     public Version(VersionId versionId) {
-        Validate.notNull(versionId, "version identifier must not be null");
-        this.versionId = versionId;
-        this.processes = new HashSet<>();
+        this(versionId, Process.newInstance(ProcessId.newInstance(UUID.randomUUID().toString())));
     }
 
-    public String getVersionId() {
-        return versionId.toString();
+    public Version(VersionId versionId, Process process) {
+        Validate.notNull(versionId, "version identifier must not be null");
+        Validate.notNull(process, "process must not be null");
+        this.versionId = versionId;
+        this.process = process;
+    }
+
+    public VersionId getVersionId() {
+        return versionId;
     }
 
     public Model getModel() {
@@ -54,13 +59,12 @@ public class Version {
         this.model = model;
     }
 
-    public void addProcess(Process process) {
-        Validate.notNull(process, "process must not be null");
-        this.processes.add(process);
+    public Process getProcess() {
+        return process;
     }
 
-    public Set<Process> getProcesses() {
-        return Collections.unmodifiableSet(processes);
+    public void addProcessInstance(Instance instance) {
+        this.process.addInstance(instance);
     }
 
     @Override
@@ -86,7 +90,7 @@ public class Version {
     @Override
     public String toString() {
         ToStringBuilder builder = new ToStringBuilder(this);
-        builder.append("versionId", versionId).append("model", model).append("processes", processes);
+        builder.append("versionId", versionId).append("model", model).append("process", process);
         return builder.toString();
     }
 

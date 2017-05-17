@@ -16,24 +16,15 @@
 package org.actio.engine.interfaces;
 
 import java.io.ByteArrayInputStream;
-import java.util.List;
-import java.util.Map;
 
 import org.actio.commons.message.NotFoundException;
 import org.actio.commons.message.process.DeployProcessRequestMessage;
 import org.actio.commons.message.process.ProcessMessage;
-import org.actio.commons.message.process.UpdateProcessStateRequestMessage;
-import org.actio.engine.app.ProcessService;
-import org.actio.engine.domain.model.bpmn.Action;
-import org.actio.engine.domain.model.bpmn.Bpmn;
-import org.actio.engine.domain.model.bpmn.Inputs;
-import org.actio.engine.domain.model.bpmn.process.ProcessId;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -51,9 +42,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProcessInterface {
 
     @Autowired
-    private ProcessService processService;
-
-    @Autowired
     private RepositoryService repositoryService;
 
     @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
@@ -68,31 +56,6 @@ public class ProcessInterface {
             return new ProcessMessage(deployment.getId(), deployment.getName(), null);
         }
         throw NotFoundException.newInstance("cannot deploy requested model");
-    }
-
-    @RequestMapping(consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.PUT)
-    public ProcessMessage updateState(@RequestBody UpdateProcessStateRequestMessage updateProcessStatusRequestMessage) {
-        String alias = updateProcessStatusRequestMessage.getAction();
-        String processId = updateProcessStatusRequestMessage.getProcessId();
-        Map<String, Object> inputs = updateProcessStatusRequestMessage.getInputs();
-        Bpmn process = processService.updateState(Action.get(alias), ProcessId.newInstance(processId), new Inputs(inputs));
-        return new ProcessMessage(process.getId(), process.getName(), null);
-    }
-
-    @RequestMapping(path = "/{processKey}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable(name = "processKey") String processKey) {
-        List<Deployment> deployments = repositoryService.createDeploymentQuery().processDefinitionKey(processKey).list();
-        if (null != deployments) {
-            for (Deployment deployment : deployments) {
-                List<Model> models = repositoryService.createModelQuery().modelKey(processKey).list();
-                if (null != models) {
-                    for (Model model : models) {
-                        repositoryService.deleteDeployment(deployment.getId(), true);
-                        repositoryService.deleteModel(model.getId());
-                    }
-                }
-            }
-        }
     }
 
 }

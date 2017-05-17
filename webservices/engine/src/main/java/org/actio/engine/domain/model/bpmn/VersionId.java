@@ -23,7 +23,7 @@ import org.apache.commons.lang3.Validate;
  * @author quirino.brizi
  *
  */
-public class VersionId {
+public class VersionId implements Comparable<VersionId> {
 
     public static VersionId newInstance(Integer identifier) {
         return new VersionId(identifier);
@@ -34,6 +34,10 @@ public class VersionId {
     private VersionId(Integer identifier) {
         Validate.notNull(identifier, "process identifier must be provided");
         this.identifier = identifier;
+    }
+
+    public Integer asInteger() {
+        return this.identifier;
     }
 
     @Override
@@ -60,4 +64,16 @@ public class VersionId {
     public String toString() {
         return String.valueOf(this.identifier);
     }
+
+    @Override
+    public int compareTo(VersionId other) {
+        if (this.identifier < other.identifier) {
+            return -1;
+        }
+        if (this.identifier.equals(other.identifier)) {
+            return 0;
+        }
+        return 1;
+    }
+
 }

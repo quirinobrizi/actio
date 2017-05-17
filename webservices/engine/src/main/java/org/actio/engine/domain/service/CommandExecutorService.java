@@ -13,23 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-angular
-  .module('core.bpmns')
-  .factory('Bpmns', ['$resource',
-    function($resource) {
-      return $resource('/bpmns/:key/:action', {}, {
-		  'remove': {
-			  method: 'DELETE',
-			  isArray: true
-		  }, 
-		  'startBpmnProcessInstance': {
-			  method: 'POST',
-			  isArray: true,
-			  params: {
-				  action: 'start',
-				  key: '@key'
-			  }
-		  }
-      });
-  }
-]);
+package org.actio.engine.domain.service;
+
+import org.actio.engine.domain.model.bpmn.BpmnId;
+import org.actio.engine.domain.model.bpmn.Inputs;
+import org.actio.engine.domain.model.bpmn.process.Instance;
+
+/**
+ * Execute commands relaed to BPMNs
+ * 
+ * @author quirino.brizi
+ *
+ */
+public interface CommandExecutorService {
+
+    Instance startNewBpmnProcessInstance(BpmnId bpmnId, Inputs inputs);
+}

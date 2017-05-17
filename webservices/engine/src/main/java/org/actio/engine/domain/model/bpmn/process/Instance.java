@@ -72,7 +72,7 @@ public class Instance {
         this.variables.putAll(variables);
     }
 
-    public InstanceState getProcessState() {
+    public InstanceState getInstanceState() {
         return processState;
     }
 

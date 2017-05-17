@@ -16,7 +16,7 @@
 package org.actio.modeler.app;
 
 import org.actio.commons.message.process.ProcessMessage;
-import org.actio.commons.message.process.UpdateProcessStateRequestMessage;
+import org.actio.commons.message.process.UpdateBpmnStateRequestMessage;
 import org.actio.modeler.domain.model.Metrics;
 import org.actio.modeler.domain.repository.ProcessRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class ProcessService {
         return processRepository.getProcessesMetrics();
     }
 
-    public ProcessMessage update(UpdateProcessStateRequestMessage message) {
+    public ProcessMessage update(UpdateBpmnStateRequestMessage message) {
         return processRepository.update(message);
     }
 

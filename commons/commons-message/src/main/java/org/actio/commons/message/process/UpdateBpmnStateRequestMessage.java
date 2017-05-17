@@ -29,37 +29,37 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author quirino.brizi
  *
  */
-public class UpdateProcessStateRequestMessage implements Message {
+public class UpdateBpmnStateRequestMessage implements Message {
 
-	private static final long serialVersionUID = -3835476952876798738L;
+    private static final long serialVersionUID = -3835476952876798738L;
 
-	@JsonProperty("action")
-	private String action;
-	@JsonProperty("processId")
-	private String processId;
-	@JsonProperty("inputs")
-	private Map<String, Object> inputs;
+    @JsonProperty("action")
+    private String action;
+    @JsonProperty("key")
+    private String key;
+    @JsonProperty("inputs")
+    private Map<String, Object> inputs;
 
-	@JsonCreator
-	public UpdateProcessStateRequestMessage(@JsonProperty("action") String action,
-			@JsonProperty("processId") String processId, @JsonProperty("inputs") Map<String, Object> inputs) {
-		this.action = action;
-		this.processId = processId;
-		this.inputs = inputs == null ? new HashMap<>() : inputs;
-	}
+    @JsonCreator
+    public UpdateBpmnStateRequestMessage(@JsonProperty("action") String action, @JsonProperty("key") String key,
+            @JsonProperty("inputs") Map<String, Object> inputs) {
+        this.action = action;
+        this.key = key;
+        this.inputs = inputs == null ? new HashMap<>() : inputs;
+    }
 
-	@JsonIgnore
-	public String getAction() {
-		return action;
-	}
+    @JsonIgnore
+    public String getAction() {
+        return action;
+    }
 
-	@JsonIgnore
-	public String getProcessId() {
-		return processId;
-	}
+    @JsonIgnore
+    public String getKey() {
+        return key;
+    }
 
-	@JsonIgnore
-	public Map<String, Object> getInputs() {
-		return Collections.unmodifiableMap(inputs);
-	}
+    @JsonIgnore
+    public Map<String, Object> getInputs() {
+        return Collections.unmodifiableMap(inputs);
+    }
 }

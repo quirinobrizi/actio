@@ -1,6 +1,8 @@
-package org.actio.engine.infrastructure.repository;
+package org.actio.engine.infrastructure.activiti;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -8,7 +10,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.actio.engine.domain.model.bpmn.Bpmn;
-import org.actio.engine.infrastructure.repository.translator.ProcessDefinitionTranslator;
+import org.actio.engine.domain.model.bpmn.BpmnId;
+import org.actio.engine.infrastructure.activiti.BpmnRepositoryImpl;
+import org.actio.engine.infrastructure.activiti.translator.ProcessDefinitionTranslator;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
@@ -37,6 +41,22 @@ public class BpmnRepositoryImplTest {
     private ProcessDefinition processDefinition2;
     @Mock
     private ProcessDefinition processDefinition3;
+    @Mock
+    private Bpmn bpmn;
+
+    @Test
+    public void testGet() {
+        when(repositoryService.createProcessDefinitionQuery()).thenReturn(processDefinitionQuery);
+        when(processDefinitionQuery.processDefinitionKey(anyString())).thenReturn(processDefinitionQuery);
+        when(processDefinitionQuery.singleResult()).thenReturn(processDefinition1);
+        when(processDefinitionTranslator.translate(processDefinition1)).thenReturn(bpmn);
+        // act
+        Bpmn actual = testObj.get(BpmnId.newInstance("bpmn-id"));
+        // verify
+        verify(processDefinitionQuery).processDefinitionKey("bpmn-id");
+        // assert
+        assertEquals(bpmn, actual);
+    }
 
     @Test
     public void testGetAll() {

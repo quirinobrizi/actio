@@ -13,33 +13,54 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.engine.app;
+package org.actio.engine.infrastructure.command;
 
-import java.util.List;
-
-import org.actio.engine.domain.model.bpmn.Bpmn;
-import org.actio.engine.domain.model.bpmn.BpmnId;
-import org.actio.engine.domain.model.bpmn.Inputs;
+import java.util.concurrent.ExecutorService;
 
 /**
  * @author quirino.brizi
  *
  */
-public interface BpmnService {
-
-    List<Bpmn> getAllBpmns();
-
-    void deleteBpmn(BpmnId newInstance);
+public interface Command<I, O> {
 
     /**
-     * Start a new BPMN processes instance.
+     * Execute the command
      * 
      * @param bpmnId
      *            the BPMN identifier
      * @param inputs
-     *            the BPMN process instance inputs
+     *            the command inputs
+     * @return the command execution result.
+     */
+    O execute(String bpmnId, I inputs);
+
+    /**
+     * Execute the command
+     * 
+     * @param bpmnId
+     *            the BPMN identifier
+     * @param inputs
+     *            the command inputs
+     * @param executor
+     *            the async executor
+     * @return the command execution result.
+     */
+    O execute(String bpmnId, I inputs, ExecutorService executor);
+
+    /**
+     * Define the type of this command
+     * 
      * @return
      */
-    Bpmn startNewProcessInstance(BpmnId bpmnId, Inputs inputs);
+    Type type();
 
+    /**
+     * Defines the available command types.
+     * 
+     * @author quirino.brizi
+     *
+     */
+    public enum Type {
+        START_PROCESS_INSTANCE;
+    }
 }

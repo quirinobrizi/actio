@@ -13,29 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.engine.app;
+package org.actio.commons.message.bpmn;
 
-import org.actio.engine.domain.model.bpmn.Action;
-import org.actio.engine.domain.model.bpmn.Bpmn;
-import org.actio.engine.domain.model.bpmn.Inputs;
-import org.actio.engine.domain.model.bpmn.process.ProcessId;
+import java.util.HashMap;
+
+import org.actio.commons.message.Message;
 
 /**
  * @author quirino.brizi
  *
  */
-public interface ProcessService {
+public class InputMessage extends HashMap<String, Object> implements Message {
 
-    /**
-     * Update the status of a service;
-     * 
-     * @param action
-     *            the action to take to perform the update
-     * @param processId
-     *            the process to update
-     * @param inputs
-     *            the inputs to provide to the process
-     * @return the process updated to its new status.
-     */
-    Bpmn updateState(Action action, ProcessId processId, Inputs inputs);
+    private static final long serialVersionUID = 4622426161103871547L;
+
 }

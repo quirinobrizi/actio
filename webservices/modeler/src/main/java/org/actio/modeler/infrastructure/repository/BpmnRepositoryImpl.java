@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.actio.commons.message.bpmn.BpmnMessage;
+import org.actio.commons.message.bpmn.InputMessage;
 import org.actio.modeler.domain.repository.BpmnRepository;
 import org.actio.modeler.infrastructure.config.ModelerConfigurationProperties;
 import org.actio.modeler.infrastructure.http.ClientFactory;
@@ -62,7 +63,16 @@ public class BpmnRepositoryImpl implements BpmnRepository {
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(urlFormat);
         RequestEntity<Void> requestEntity = new RequestEntity<>(HttpMethod.DELETE,
                 builder.pathSegment(bpmnId).buildAndExpand("bpmns").toUri());
-        clientFactory.newClient().exchange(requestEntity, Void.class).getBody();
+        clientFactory.newClient().exchange(requestEntity, Void.class);
+    }
+
+    @Override
+    public void startBpmnInstance(String bpmnId, InputMessage inputMessage) {
+        String urlFormat = configuration.getEngine().getUrlFormat();
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(urlFormat);
+        RequestEntity<InputMessage> requestEntity = new RequestEntity<>(inputMessage, HttpMethod.POST,
+                builder.pathSegment(bpmnId, "start").buildAndExpand("bpmns").toUri());
+        clientFactory.newClient().exchange(requestEntity, Void.class);
     }
 
 }

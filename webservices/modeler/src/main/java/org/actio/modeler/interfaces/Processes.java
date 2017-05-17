@@ -15,14 +15,11 @@
  *******************************************************************************/
 package org.actio.modeler.interfaces;
 
-import org.actio.commons.message.process.ProcessMessage;
-import org.actio.commons.message.process.UpdateProcessStateRequestMessage;
 import org.actio.modeler.app.ProcessService;
 import org.actio.modeler.domain.model.Metrics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,20 +33,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class Processes {
 
     @Autowired
-    private ProcessService metricsService;
+    private ProcessService processService;
 
     @RequestMapping(value = "/metrics", method = RequestMethod.GET)
     public Metrics getMetrics() {
-        return metricsService.getMetrics();
-    }
-
-    @RequestMapping(method = RequestMethod.PUT)
-    public ProcessMessage updateProcess(@RequestBody UpdateProcessStateRequestMessage message) {
-        return metricsService.update(message);
+        return processService.getMetrics();
     }
 
     @RequestMapping(path = "/{processId}", method = RequestMethod.DELETE)
     public void deleteProcess(@PathVariable(name = "processId") String process) {
-        metricsService.delete(process);
+        processService.delete(process);
     }
 }
