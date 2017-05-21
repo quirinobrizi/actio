@@ -17,6 +17,7 @@ package org.actio.engine.infrastructure.config;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,7 @@ import org.actio.commons.authentication.AuthenticationProvider;
 import org.actio.commons.authentication.AuthenticationProviderFactory;
 import org.actio.commons.authentication.db.DbAuthenticationProvider;
 import org.actio.commons.authentication.ldap.LdapAuthenticationProvider;
+import org.actio.engine.infrastructure.listener.ErrorEventListener;
 import org.actio.engine.interfaces.parser.DefaultBpmnParseFactory;
 import org.actio.engine.interfaces.parser.behavior.DefaultActivityBehaviorFactory;
 import org.actio.engine.interfaces.validator.ValidatorFactory;
@@ -83,7 +85,7 @@ import org.springframework.util.StringUtils;
 @Configuration
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
 @AutoConfigureBefore({ DataSourceProcessEngineAutoConfiguration.class, JpaConfiguration.class })
-public class DatasourceProcessEngineConfiguration {
+public class DatasourceProcessEngineConfiguration { // NOSONAR
 
     @Configuration
     @ConditionalOnClass(name = "javax.persistence.EntityManagerFactory")
@@ -101,6 +103,9 @@ public class DatasourceProcessEngineConfiguration {
 
         @Autowired(required = false)
         private ProcessEngineConfigurationConfigurer processEngineConfigurationConfigurer;
+
+        @Autowired
+        private ErrorEventListener errorEventListener;
 
         @Bean
         public SpringAsyncExecutor springAsyncExecutor(TaskExecutor taskExecutor) {
@@ -149,6 +154,7 @@ public class DatasourceProcessEngineConfiguration {
             engine.setDatabaseSchemaUpdate(defaultText(activitiProperties.getDatabaseSchemaUpdate(), engine.getDatabaseSchemaUpdate()));
             engine.setDbIdentityUsed(activitiProperties.isDbIdentityUsed());
             engine.setDbHistoryUsed(activitiProperties.isDbHistoryUsed());
+            // engine.setEnableDatabaseEventLogging(true);
 
             engine.setJobExecutorActivate(activitiProperties.isJobExecutorActivate());
             engine.setAsyncExecutorEnabled(activitiProperties.isAsyncExecutorEnabled());
@@ -188,6 +194,7 @@ public class DatasourceProcessEngineConfiguration {
             engine.setProcessValidator(createDefaultProcessValidator());
             engine.setActivityBehaviorFactory(new DefaultActivityBehaviorFactory());
             engine.setExpressionManager(new ExpressionManagerConfig(applicationContext, new SpringBeanFactoryProxyMap(applicationContext)));
+            engine.setEventListeners(Arrays.asList(errorEventListener));
 
             return engine;
         }
@@ -313,7 +320,7 @@ public class DatasourceProcessEngineConfiguration {
                 boolean checkPDs) throws IOException {
             if (checkPDs) {
 
-                List<Resource> result = new ArrayList<Resource>();
+                List<Resource> result = new ArrayList<>();
                 for (String suffix : suffixes) {
                     String path = prefix + suffix;
                     Resource[] resources = applicationContext.getResources(path);
@@ -325,12 +332,12 @@ public class DatasourceProcessEngineConfiguration {
                 }
 
                 if (result.isEmpty()) {
-                    logger.info(String.format("No process definitions were found for autodeployment"));
+                    logger.info("No process definitions were found for autodeployment");
                 }
 
                 return result;
             }
-            return new ArrayList<Resource>();
+            return new ArrayList<>();
         }
 
         private void configureAuthentication(ProcessEngineConfiguration engine, AuthenticationProvider authenticationProvider,

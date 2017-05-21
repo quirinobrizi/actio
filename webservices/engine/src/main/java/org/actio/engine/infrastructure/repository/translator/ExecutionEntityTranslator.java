@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.engine.infrastructure.activiti.translator;
+package org.actio.engine.infrastructure.repository.translator;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -58,8 +58,16 @@ public class ExecutionEntityTranslator implements Translator<Instance, Execution
         }
         instance.setInstanceState(instanceState);
         instance.setStartDate(entity.getLockTime());
-        instance.setJobs(jobEntityTranslator.translate(entity.getJobs()));
-        instance.setTasks(taskEntityTranslator.translate(entity.getTasks()));
+        try {
+            instance.setJobs(jobEntityTranslator.translate(entity.getJobs()));
+        } catch (Exception e) { // NOSONAR
+            // do nothing
+        }
+        try {
+            instance.setTasks(taskEntityTranslator.translate(entity.getTasks()));
+        } catch (Exception e) { // NOSONAR
+            // do nothing
+        }
         return instance;
     }
 

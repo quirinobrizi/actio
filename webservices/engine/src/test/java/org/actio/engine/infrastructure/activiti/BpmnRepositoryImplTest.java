@@ -7,11 +7,16 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import org.actio.engine.domain.model.bpmn.Bpmn;
 import org.actio.engine.domain.model.bpmn.BpmnId;
-import org.actio.engine.infrastructure.activiti.translator.ProcessDefinitionTranslator;
+import org.actio.engine.infrastructure.repository.BpmnRepositoryImpl;
+import org.actio.engine.infrastructure.repository.ErrorEventRepository;
+import org.actio.engine.infrastructure.repository.storable.ErrorEventStorable;
+import org.actio.engine.infrastructure.repository.translator.ErrorEventStorableTranslator;
+import org.actio.engine.infrastructure.repository.translator.ProcessDefinitionTranslator;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
@@ -28,6 +33,10 @@ public class BpmnRepositoryImplTest {
     private RepositoryService repositoryService;
     @Mock
     private ProcessDefinitionTranslator processDefinitionTranslator;
+    @Mock
+    private ErrorEventRepository errorEventRepository;
+    @Mock
+    private ErrorEventStorableTranslator errorEventStorableTranslator;
 
     @InjectMocks
     private BpmnRepositoryImpl testObj;
@@ -50,6 +59,9 @@ public class BpmnRepositoryImplTest {
         when(processDefinitionQuery.latestVersion()).thenReturn(processDefinitionQuery);
         when(processDefinitionQuery.singleResult()).thenReturn(processDefinition1);
         when(processDefinitionTranslator.translate(processDefinition1)).thenReturn(bpmn);
+        ArrayList<ErrorEventStorable> errors = new ArrayList<>();
+        when(errorEventRepository.findAllByProcessDefinitionKey(anyString())).thenReturn(errors);
+        when(errorEventStorableTranslator.translate(errors)).thenReturn(new HashSet<>());
         // act
         Bpmn actual = testObj.get(BpmnId.newInstance("bpmn-id"));
         // verify

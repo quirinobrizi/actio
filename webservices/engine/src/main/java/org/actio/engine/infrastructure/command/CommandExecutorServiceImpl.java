@@ -21,7 +21,7 @@ import org.actio.engine.domain.model.bpmn.BpmnId;
 import org.actio.engine.domain.model.bpmn.Inputs;
 import org.actio.engine.domain.model.bpmn.process.Instance;
 import org.actio.engine.domain.service.CommandExecutorService;
-import org.actio.engine.infrastructure.activiti.translator.ExecutionEntityTranslator;
+import org.actio.engine.infrastructure.repository.translator.ExecutionEntityTranslator;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

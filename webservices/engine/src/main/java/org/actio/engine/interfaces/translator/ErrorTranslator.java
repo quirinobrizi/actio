@@ -15,16 +15,13 @@
  *******************************************************************************/
 package org.actio.engine.interfaces.translator;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.actio.commons.message.bpmn.BpmnMessage;
 import org.actio.commons.message.bpmn.ErrorMessage;
-import org.actio.commons.message.bpmn.VersionMessage;
-import org.actio.engine.domain.model.bpmn.Bpmn;
+import org.actio.engine.domain.model.bpmn.Error;
 import org.actio.engine.infrastructure.Translator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -32,27 +29,20 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class BpmnTranslator implements Translator<BpmnMessage, Bpmn> {
-
-    @Autowired
-    private VersionTranslator versionTranslator;
-    @Autowired
-    private ErrorTranslator errorTranslator;
+public class ErrorTranslator implements Translator<ErrorMessage, Error> {
 
     @Override
-    public Collection<BpmnMessage> translate(Collection<Bpmn> bpmns) {
-        List<BpmnMessage> answer = new ArrayList<>();
-        for (Bpmn bpmn : bpmns) {
-            answer.add(translate(bpmn));
-        }
-        return answer;
+    public ErrorMessage translate(Error error) {
+        return new ErrorMessage(error.getErrorType(), error.getErrorMessage());
     }
 
     @Override
-    public BpmnMessage translate(Bpmn bpmn) {
-        Collection<VersionMessage> versions = versionTranslator.translate(bpmn.getVersions());
-        Collection<ErrorMessage> errors = errorTranslator.translate(bpmn.getErrors());
-        return new BpmnMessage(bpmn.getId(), bpmn.getName(), versions, errors);
+    public Collection<ErrorMessage> translate(Collection<Error> errors) {
+        Set<ErrorMessage> answer = new HashSet<>();
+        for (Error error : errors) {
+            answer.add(translate(error));
+        }
+        return answer;
     }
 
 }

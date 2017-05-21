@@ -14,9 +14,9 @@ import java.util.Map;
 
 import org.actio.engine.domain.model.bpmn.process.Instance;
 import org.actio.engine.domain.model.bpmn.process.InstanceState;
-import org.actio.engine.infrastructure.activiti.translator.ExecutionEntityTranslator;
-import org.actio.engine.infrastructure.activiti.translator.JobEntityTranslator;
-import org.actio.engine.infrastructure.activiti.translator.TaskEntityTranslator;
+import org.actio.engine.infrastructure.repository.translator.ExecutionEntityTranslator;
+import org.actio.engine.infrastructure.repository.translator.JobEntityTranslator;
+import org.actio.engine.infrastructure.repository.translator.TaskEntityTranslator;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.impl.persistence.entity.JobEntity;
 import org.activiti.engine.impl.persistence.entity.TaskEntity;

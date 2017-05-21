@@ -10,10 +10,10 @@ import java.util.List;
 
 import org.actio.engine.domain.model.bpmn.Bpmn;
 import org.actio.engine.domain.model.bpmn.process.Instance;
-import org.actio.engine.infrastructure.activiti.translator.ExecutionEntityTranslator;
-import org.actio.engine.infrastructure.activiti.translator.JobEntityTranslator;
-import org.actio.engine.infrastructure.activiti.translator.ProcessDefinitionTranslator;
-import org.actio.engine.infrastructure.activiti.translator.TaskEntityTranslator;
+import org.actio.engine.infrastructure.repository.translator.ExecutionEntityTranslator;
+import org.actio.engine.infrastructure.repository.translator.JobEntityTranslator;
+import org.actio.engine.infrastructure.repository.translator.ProcessDefinitionTranslator;
+import org.actio.engine.infrastructure.repository.translator.TaskEntityTranslator;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;

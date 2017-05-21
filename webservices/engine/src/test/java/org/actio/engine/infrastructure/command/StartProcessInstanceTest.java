@@ -8,8 +8,8 @@ import static org.mockito.Mockito.when;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.actio.engine.infrastructure.activiti.command.StartProcessInstanceCommand;
-import org.actio.engine.infrastructure.activiti.translator.ExecutionEntityTranslator;
+import org.actio.engine.infrastructure.repository.command.StartProcessInstanceCommand;
+import org.actio.engine.infrastructure.repository.translator.ExecutionEntityTranslator;
 import org.activiti.engine.impl.RuntimeServiceImpl;
 import org.activiti.engine.impl.interceptor.CommandExecutor;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;

@@ -13,15 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.engine.infrastructure.activiti.command;
+package org.actio.engine.infrastructure.repository.command;
 
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
+import org.actio.engine.infrastructure.repository.BpmnErrorEvent;
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.ActivitiIllegalArgumentException;
 import org.activiti.engine.ActivitiObjectNotFoundException;
 import org.activiti.engine.ProcessEngineConfiguration;
+import org.activiti.engine.delegate.event.ActivitiEventType;
 import org.activiti.engine.impl.cmd.StartProcessInstanceCmd;
 import org.activiti.engine.impl.interceptor.CommandContext;
 import org.activiti.engine.impl.persistence.deploy.DeploymentManager;
@@ -37,7 +39,8 @@ import org.activiti.engine.runtime.ProcessInstance;
 public class StartProcessInstanceCommand<T> extends StartProcessInstanceCmd<T> {
 
     private static final long serialVersionUID = 1037684037478981075L;
-    private ExecutorService executorService;
+
+    private transient ExecutorService executorService;
 
     public StartProcessInstanceCommand(String processDefinitionKey, Map<String, Object> variables, ExecutorService executorService) {
         super(processDefinitionKey, null, null, variables);
@@ -92,12 +95,30 @@ public class StartProcessInstanceCommand<T> extends StartProcessInstanceCmd<T> {
             commandContext.getHistoryManager().recordProcessInstanceNameChange(processInstance.getId(), processInstanceName);
         }
 
-        if (null != executorService) {
-            executorService.execute(processInstance::start);
-        } else {
-            processInstance.start();
-        }
+        doStartProcess(commandContext, processInstance);
 
         return processInstance;
+    }
+
+    private void doStartProcess(CommandContext commandContext, ExecutionEntity processInstance) {
+        try {
+            if (null != executorService) {
+                executorService.execute(processInstance::start);
+            } else {
+                processInstance.start();
+            }
+        } catch (Exception e) {
+            dispatchErrorEvent(commandContext, processInstance, e);
+            throw e;
+        }
+    }
+
+    private void dispatchErrorEvent(CommandContext commandContext, ExecutionEntity processInstance, Exception e) {
+        BpmnErrorEvent event = new BpmnErrorEvent(ActivitiEventType.UNCAUGHT_BPMN_ERROR);
+        event.setProcessDefinitionKey(processInstance.getProcessDefinitionKey());
+        event.setProcessInstanceId(processInstance.getId());
+        event.setErrorMessage(e.getMessage());
+        event.setErrorType(e.getClass().getName());
+        commandContext.getEventDispatcher().dispatchEvent(event);
     }
 }

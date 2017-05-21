@@ -18,7 +18,7 @@ package org.actio.engine.infrastructure.command;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
-import org.actio.engine.infrastructure.activiti.command.StartProcessInstanceCommand;
+import org.actio.engine.infrastructure.repository.command.StartProcessInstanceCommand;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.impl.RuntimeServiceImpl;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;

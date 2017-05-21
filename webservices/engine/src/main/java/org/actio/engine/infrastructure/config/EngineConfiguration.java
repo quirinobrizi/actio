@@ -15,15 +15,18 @@
  *******************************************************************************/
 package org.actio.engine.infrastructure.config;
 
+import org.actio.engine.infrastructure.listener.ErrorEventListener;
 import org.activiti.rest.security.BasicAuthenticationProvider;
 import org.activiti.spring.boot.SecurityAutoConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -38,15 +41,22 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  */
 @EnableAsync
 @Configuration
-@ComponentScan(basePackages = { "org.actio.engine.interfaces", "org.actio.engine.app", "org.actio.engine.infrastructure.config",
-        "org.actio.engine.infrastructure.bpmn", "org.actio.engine.infrastructure.activiti", "org.actio.engine.infrastructure.command",
-        "org.actio.engine.interfaces.translator" })
 @EnableEurekaClient
 @EnableAutoConfiguration(exclude = { SecurityAutoConfiguration.class })
-public class EngineConfiguration {
+@EntityScan(basePackages = { "org.actio.engine.infrastructure.repository.storable" })
+@EnableJpaRepositories(basePackages = { "org.actio.engine.infrastructure.repository" })
+@ComponentScan(basePackages = { "org.actio.engine.interfaces", "org.actio.engine.app", "org.actio.engine.infrastructure.config",
+        "org.actio.engine.infrastructure.bpmn", "org.actio.engine.infrastructure.repository", "org.actio.engine.infrastructure.command",
+        "org.actio.engine.interfaces.translator" })
+public class EngineConfiguration { // NOSONAR
 
     public static void main(String[] args) {
         SpringApplication.run(EngineConfiguration.class, args);
+    }
+
+    @Bean
+    ErrorEventListener errorEventListener() {
+        return new ErrorEventListener();
     }
 
     @Configuration

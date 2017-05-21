@@ -13,15 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.engine.infrastructure.activiti;
+package org.actio.engine.infrastructure.repository;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.actio.commons.message.NotFoundException;
 import org.actio.engine.domain.model.bpmn.Bpmn;
 import org.actio.engine.domain.model.bpmn.BpmnId;
+import org.actio.engine.domain.model.bpmn.Error;
 import org.actio.engine.domain.repository.BpmnRepository;
-import org.actio.engine.infrastructure.activiti.translator.ProcessDefinitionTranslator;
+import org.actio.engine.infrastructure.repository.storable.ErrorEventStorable;
+import org.actio.engine.infrastructure.repository.translator.ErrorEventStorableTranslator;
+import org.actio.engine.infrastructure.repository.translator.ProcessDefinitionTranslator;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
@@ -40,6 +44,11 @@ public class BpmnRepositoryImpl implements BpmnRepository {
     private RepositoryService repositoryService;
 
     @Autowired
+    private ErrorEventRepository errorEventRepository;
+    @Autowired
+    private ErrorEventStorableTranslator errorEventStorableTranslator;
+
+    @Autowired
     private ProcessDefinitionTranslator processDefinitionTranslator;
 
     /*
@@ -56,7 +65,9 @@ public class BpmnRepositoryImpl implements BpmnRepository {
         if (null == processDefinition) {
             throw NotFoundException.newInstance("unable to find BPMN identified by %s", bpmnId);
         }
-        return processDefinitionTranslator.translate(processDefinition);
+        Bpmn bpmn = processDefinitionTranslator.translate(processDefinition);
+        bpmn.setErrors(getErrors(bpmn.getId()));
+        return bpmn;
     }
 
     /*
@@ -68,7 +79,11 @@ public class BpmnRepositoryImpl implements BpmnRepository {
     public List<Bpmn> getAll() {
         List<ProcessDefinition> processDefinitions = repositoryService.createProcessDefinitionQuery().orderByProcessDefinitionKey().asc()
                 .list();
-        return processDefinitionTranslator.translate(processDefinitions);
+        List<Bpmn> bpmns = processDefinitionTranslator.translate(processDefinitions);
+        for (Bpmn bpmn : bpmns) {
+            bpmn.setErrors(getErrors(bpmn.getId()));
+        }
+        return bpmns;
     }
 
     @Override
@@ -87,4 +102,8 @@ public class BpmnRepositoryImpl implements BpmnRepository {
         }
     }
 
+    private Collection<Error> getErrors(String processDefinitionKey) {
+        List<ErrorEventStorable> storables = errorEventRepository.findAllByProcessDefinitionKey(processDefinitionKey);
+        return errorEventStorableTranslator.translate(storables);
+    }
 }

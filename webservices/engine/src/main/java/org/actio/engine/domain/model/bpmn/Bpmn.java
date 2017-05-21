@@ -15,6 +15,7 @@
  *******************************************************************************/
 package org.actio.engine.domain.model.bpmn;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -35,12 +36,14 @@ public class Bpmn {
     private final BpmnId bpmnId;
     private String name;
     private final Set<Version> versions;
+    private final Set<Error> errors;
 
     public Bpmn(BpmnId bpmnId, String name) {
         Validate.notNull(bpmnId, "bpmn identifier must not be null");
         this.bpmnId = bpmnId;
         this.name = name;
         this.versions = new HashSet<>();
+        this.errors = new HashSet<>();
     }
 
     public String getId() {
@@ -75,6 +78,17 @@ public class Bpmn {
 
     public Set<Version> getVersions() {
         return Collections.unmodifiableSet(versions);
+    }
+
+    public void setErrors(Collection<Error> errors) {
+        if (null != errors) {
+            this.errors.clear();
+            this.errors.addAll(errors);
+        }
+    }
+
+    public Set<Error> getErrors() {
+        return Collections.unmodifiableSet(errors);
     }
 
     public void startNewProcessInstance(CommandExecutorService commandExecutorService, Inputs inputs) {

@@ -36,12 +36,15 @@ public class BpmnMessage implements Message {
     private String name;
     @JsonProperty("versions")
     private Collection<VersionMessage> versions;
+    @JsonProperty("errors")
+    private Collection<ErrorMessage> errors;
 
     @JsonCreator
     public BpmnMessage(@JsonProperty("bpmnId") String bpmnId, @JsonProperty("name") String name,
-            @JsonProperty("versions") Collection<VersionMessage> versions) {
+            @JsonProperty("versions") Collection<VersionMessage> versions, @JsonProperty("errors") Collection<ErrorMessage> errors) {
         this.bpmnId = bpmnId;
         this.name = name;
         this.versions = versions;
+        this.errors = errors;
     }
 }

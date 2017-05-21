@@ -13,35 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.engine.infrastructure.activiti.translator;
+package org.actio.commons.message.bpmn;
 
-import java.util.Collection;
-import java.util.HashSet;
+import org.actio.commons.message.Message;
 
-import org.actio.engine.domain.model.bpmn.process.Task;
-import org.actio.engine.infrastructure.Translator;
-import org.activiti.engine.impl.persistence.entity.TaskEntity;
-import org.springframework.stereotype.Component;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author quirino.brizi
  *
  */
-@Component
-public class TaskEntityTranslator implements Translator<Task, TaskEntity> {
+public class ErrorMessage implements Message {
 
-    @Override
-    public Task translate(TaskEntity entity) {
-        return new Task(entity.getId(), entity.getAssignee(), entity.getDueDate());
+    private static final long serialVersionUID = -1742544603273325985L;
+
+    @JsonProperty("type")
+    private String type;
+    @JsonProperty("message")
+    private String message;
+
+    @JsonCreator
+    public ErrorMessage(@JsonProperty("type") String type, @JsonProperty("message") String message) {
+        this.type = type;
+        this.message = message;
     }
-
-    @Override
-    public Collection<Task> translate(Collection<TaskEntity> tasks) {
-        Collection<Task> answer = new HashSet<>();
-        for (TaskEntity entity : tasks) {
-            answer.add(translate(entity));
-        }
-        return answer;
-    }
-
 }
