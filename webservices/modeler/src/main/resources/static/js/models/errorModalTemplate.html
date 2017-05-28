@@ -1,0 +1,33 @@
+<div class="tile">
+	<div class="info gradient">
+		<span class="modal-title" id="modal-title">BPMN Errors</span>
+	</div>
+	<div class="modal-body" id="modal-body">
+		<table st-table="errors" st-safe-src="$ctrl.bpmn.errors" class="table table-striped">
+			<thead>
+				<tr>
+					<td class="col-md-2 small-capitalized" st-sort="timestamp" st-sort-default="true">Date</td>
+					<td class="col-md-5 small-capitalized">Message</td>
+					<td class="col-md-5 small-capitalized">Type</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="error in errors">
+					<td class="text-medium">{{error.timestamp | date:'yyyy-MM-dd HH:mm'}}</td>
+					<td class="text-medium">{{error.message}}</td>
+					<td class="text-medium">{{error.type}}</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="6" class="text-center">
+						<div st-pagination="" st-items-by-page="8" st-displayed-pages="5"></div>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+	<!-- <div class="modal-footer">
+		<button class="btn btn-primary" type="button" ng-click="$ctrl.close()">Close</button>
+	</div> -->
+</div>

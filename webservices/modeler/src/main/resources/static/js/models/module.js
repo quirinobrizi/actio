@@ -14,4 +14,4 @@
  * limitations under the License.
  *******************************************************************************/
 angular
-  .module('models', ['core', 'smart-table']);
+  .module('models', ['core', 'smart-table', 'ui.bootstrap']);

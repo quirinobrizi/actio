@@ -115,39 +115,13 @@ a:link { text-decoration: none; }
 .material-icons.mdl-badge.mdl-badge--overlap { margin-right: 0px; }
 /* General */
 .hidden { visibility: hidden; }
+.text-small {font-size: 0.5em;}
+.text-medium {font-size: 0.8em;}
 .small-capitalized {font-size: 0.5em; text-transform: uppercase;}
 
 /* Modal */
-.ng-modal-overlay {
-  /* A dark translucent div that covers the whole screen */
-  position: absolute;
-  width: 50%; /* Default */
-
-  /* Center the dialog */
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-
-  background-color: #fff;
-  box-shadow: 4px 4px 80px #000;
-}
-.ng-modal-dialog-content {
-  padding:10px;
-  text-align: left;
-}
-.ng-modal-close {
-  position: absolute;
-  top: 3px;
-  right: 5px;
-  padding: 5px;
-  cursor: pointer;
-  font-size: 120%;
-  display: inline-block;
-  font-weight: bold;
-  font-family: 'arial', 'sans-serif';
-}
+.modal-content { padding: 1em; }
+.modal-body { height: 400px; }
 
 /* Login Form */
 /*=== 3. Text Outside the Box ===*/

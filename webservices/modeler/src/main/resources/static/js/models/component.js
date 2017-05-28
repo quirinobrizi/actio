@@ -17,9 +17,8 @@ angular
   .module('models')
   .component('models', {
     templateUrl: 'js/models/template.html',
-    controller: ['Bpmns', '$location', 'growl', function DashboardController(Bpmns, $location, growl) {
+    controller: ['Bpmns', '$uibModal', '$location', 'growl', function DashboardController(Bpmns, $uibModal, $location, growl) {
     	var self = this;
-    	self.infoModalShown = false;
     	self.bpmns = Bpmns.query();
     	
     	self.launchBpmn = function(key) {
@@ -63,6 +62,27 @@ angular
     	};
     	
     	self.showErrors = function(bpmn) {
-			alert(bpmn.errors);
+			$uibModal.open({
+				animation: true,
+				ariaLabelledBy: 'modal-title',
+				ariaDescribedBy: 'modal-body',
+				templateUrl: 'js/models/errorModalTemplate.html',
+				controller: function ($uibModalInstance, bpmn) {
+				    var $ctrl = this;
+				    $ctrl.bpmn = bpmn;
+
+				    $ctrl.close = function () {
+				      $uibModalInstance.close();
+				    };
+				},
+				controllerAs: '$ctrl',
+				size: 'lg',
+				appendTo: null,
+				resolve: {
+					bpmn: function () {
+						return bpmn;
+					}
+				}
+			});
 		}
-    }]});
+  }]});
