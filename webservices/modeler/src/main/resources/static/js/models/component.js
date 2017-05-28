@@ -61,4 +61,8 @@ angular
 			}
     		return count;
     	};
+    	
+    	self.showErrors = function(bpmn) {
+			alert(bpmn.errors);
+		}
     }]});

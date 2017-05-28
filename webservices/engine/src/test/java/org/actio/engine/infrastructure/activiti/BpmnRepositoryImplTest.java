@@ -13,7 +13,7 @@ import java.util.List;
 import org.actio.engine.domain.model.bpmn.Bpmn;
 import org.actio.engine.domain.model.bpmn.BpmnId;
 import org.actio.engine.infrastructure.repository.BpmnRepositoryImpl;
-import org.actio.engine.infrastructure.repository.ErrorEventRepository;
+import org.actio.engine.infrastructure.repository.jpa.ErrorEventRepository;
 import org.actio.engine.infrastructure.repository.storable.ErrorEventStorable;
 import org.actio.engine.infrastructure.repository.translator.ErrorEventStorableTranslator;
 import org.actio.engine.infrastructure.repository.translator.ProcessDefinitionTranslator;

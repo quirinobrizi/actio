@@ -7,29 +7,40 @@
     	</div>
 	</div>
 	<div class="row">
-		<div class="col-md-4" ng-repeat="bpmn in $ctrl.bpmns | filter: $ctrl.query" ng-init="model=$ctrl.latestModel(bpmn)">
+		<div class="col-md-4" ng-repeat="bpmn in $ctrl.bpmns | filter: $ctrl.query" ng-init="model=$ctrl.latestModel(bpmn);">
 			<div class="tile">
 				<div class="info gradient">
-					<span>{{bpmn.bpmnId}}</span><span ng-if="bpmn.name">
-						({{bpmn.name}})</span> <span class="controls pull-right">
+					<span>{{bpmn.name || bpmn.bpmnId}}</span>
+					<span class="controls pull-right">
 						<ul class="io-control-list">
 							<li>
-								<button title="edit BPMN process"
+								<span title="List errors"
+									class="material-icons-background material-icons mdl-badge mdl-badge--overlap"
+									ng-click="$ctrl.showErrors(bpmn)"
+									data-badge="{{bpmn.errors.length}}">
+									error
+								</span>
+							</li>
+							<li>
+								<a title="edit BPMN process"
+									class="material-icons-background material-icons"
 									ng-click="$ctrl.editBpmn(model.modelId)">
-									<i class="material-icons">mode_edit</i>
-								</button>
+									mode_edit
+								</a>
 							</li>
 							<li>
-								<button title="launch BPMN process"
+								<a title="launch BPMN process"
+									class="material-icons-background material-icons"
 									ng-click="$ctrl.launchBpmn(bpmn.bpmnId)">
-									<i class="material-icons">launch</i>
-								</button>
+									launch
+								</a>
 							</li>
 							<li>
-								<button title="delete BPMN deployment and process"
+								<a title="delete BPMN deployment and process"
+									class="material-icons-background material-icons"
 									ng-click="$ctrl.deleteBpmn(bpmn.bpmnId)">
-									<i class="material-icons">delete_forever</i>
-								</button>
+									delete_forever
+								</a>
 							</li>
 						</ul>
 					</span>
@@ -42,7 +53,6 @@
 								<td class="col-md-4 small-capitalized text-center">Active</td>
 								<td class="col-md-4 small-capitalized text-center">Terminated</td>
 								<td class="col-md-4 small-capitalized text-center">Suspended</td>
-								<td class="col-md-4 small-capitalized text-center">Error</td>
 								<td class="col-md-4 small-capitalized text-center"></td>
 							</tr>
 						</thead>
@@ -52,14 +62,14 @@
 								<td class="text-center">{{$ctrl.countInstancesState(version.process, "ACTIVE")}}</td>
 								<td class="text-center">{{$ctrl.countInstancesState(version.process, "TERMINATED")}}</td>
 								<td class="text-center">{{$ctrl.countInstancesState(version.process, "SUSPENDED")}}</td>
-								<td class="text-center">{{$ctrl.countInstancesState(version.process, "ERROR")}}</td>
 								<td class="text-center">
 									<ul class="io-control-list">
 										<li>
-											<button title="BPMN version information"
+											<span title="BPMN version information"
+												class="material-icons-background material-icons"
 												ng-click="$ctrl.info(bpmn)">
-												<i class="material-icons">info_outline</i>
-											</button>
+												info_outline
+											</span>
 										</li>
 									</ul>
 								</td>

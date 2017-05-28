@@ -29,11 +29,11 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class ErrorTranslator implements Translator<ErrorMessage, Error> {
+public class ErrorMessageTranslator implements Translator<ErrorMessage, Error> {
 
     @Override
     public ErrorMessage translate(Error error) {
-        return new ErrorMessage(error.getErrorType(), error.getErrorMessage());
+        return new ErrorMessage(error.getErrorType(), error.getErrorMessage(), error.getTimestamp());
     }
 
     @Override

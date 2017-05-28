@@ -30,11 +30,13 @@ public class Error {
 
     private final String errorType;
     private final String errorMessage;
+    private final Long timestamp;
 
-    public Error(String errorType, String errorMessage) {
+    public Error(String errorType, String errorMessage, Long timestamp) {
         Validate.notBlank(errorType, "Error type must be provided");
         this.errorType = errorType;
         this.errorMessage = errorMessage;
+        this.timestamp = null == timestamp ? System.currentTimeMillis() : timestamp;
     }
 
     public String getErrorType() {
@@ -43,6 +45,10 @@ public class Error {
 
     public String getErrorMessage() {
         return errorMessage;
+    }
+
+    public Long getTimestamp() {
+        return timestamp;
     }
 
     @Override
@@ -57,18 +63,19 @@ public class Error {
             return false;
         }
         Error other = (Error) obj;
-        return new EqualsBuilder().append(this.errorType, other.errorType).append(this.errorMessage, other.errorMessage).isEquals();
+        return new EqualsBuilder().append(this.errorType, other.errorType).append(this.errorMessage, other.errorMessage)
+                .append(this.timestamp, other.timestamp).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(this.errorType).append(this.errorMessage).toHashCode();
+        return new HashCodeBuilder().append(this.errorType).append(this.errorMessage).append(this.timestamp).toHashCode();
     }
 
     @Override
     public String toString() {
         ToStringBuilder builder = new ToStringBuilder(this);
-        builder.append("errorType", errorType).append("errorMessage", errorMessage);
+        builder.append("errorType", errorType).append("errorMessage", errorMessage).append("timestamp", timestamp);
         return builder.toString();
     }
 

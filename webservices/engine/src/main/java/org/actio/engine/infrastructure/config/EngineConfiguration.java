@@ -44,7 +44,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableEurekaClient
 @EnableAutoConfiguration(exclude = { SecurityAutoConfiguration.class })
 @EntityScan(basePackages = { "org.actio.engine.infrastructure.repository.storable" })
-@EnableJpaRepositories(basePackages = { "org.actio.engine.infrastructure.repository" })
+@EnableJpaRepositories(basePackages = { "org.actio.engine.infrastructure.repository.jpa" })
 @ComponentScan(basePackages = { "org.actio.engine.interfaces", "org.actio.engine.app", "org.actio.engine.infrastructure.config",
         "org.actio.engine.infrastructure.bpmn", "org.actio.engine.infrastructure.repository", "org.actio.engine.infrastructure.command",
         "org.actio.engine.interfaces.translator" })

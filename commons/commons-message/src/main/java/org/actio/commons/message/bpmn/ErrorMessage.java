@@ -32,10 +32,14 @@ public class ErrorMessage implements Message {
     private String type;
     @JsonProperty("message")
     private String message;
+    @JsonProperty("timestamp")
+    private Long timestamp;
 
     @JsonCreator
-    public ErrorMessage(@JsonProperty("type") String type, @JsonProperty("message") String message) {
+    public ErrorMessage(@JsonProperty("type") String type, @JsonProperty("message") String message,
+            @JsonProperty("timestamp") Long timestamp) {
         this.type = type;
         this.message = message;
+        this.timestamp = timestamp;
     }
 }

@@ -16,12 +16,14 @@
 package org.actio.engine.infrastructure.listener;
 
 import org.actio.engine.infrastructure.repository.BpmnErrorEvent;
-import org.actio.engine.infrastructure.repository.ErrorEventRepository;
+import org.actio.engine.infrastructure.repository.jpa.ErrorEventRepository;
+import org.actio.engine.infrastructure.repository.storable.ErrorEventStorable;
 import org.actio.engine.infrastructure.repository.translator.ErrorEventStorableTranslator;
 import org.activiti.engine.delegate.event.ActivitiEvent;
 import org.activiti.engine.delegate.event.ActivitiEventListener;
 import org.activiti.engine.delegate.event.ActivitiEventType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -45,10 +47,15 @@ public class ErrorEventListener implements ActivitiEventListener {
      * activiti.engine.delegate.event.ActivitiEvent)
      */
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void onEvent(ActivitiEvent event) {
+        persistEventIfNeeded(event);
+    }
+
+    private void persistEventIfNeeded(ActivitiEvent event) {
         if (ActivitiEventType.UNCAUGHT_BPMN_ERROR.equals(event.getType())) {
-            errorEventRepository.save(errorEventStorableTranslator.translate((BpmnErrorEvent) event));
+            ErrorEventStorable storable = errorEventStorableTranslator.translate((BpmnErrorEvent) event);
+            errorEventRepository.saveAndFlush(storable);
         }
     }
 

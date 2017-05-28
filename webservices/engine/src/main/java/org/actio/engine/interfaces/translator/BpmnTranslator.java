@@ -37,7 +37,7 @@ public class BpmnTranslator implements Translator<BpmnMessage, Bpmn> {
     @Autowired
     private VersionTranslator versionTranslator;
     @Autowired
-    private ErrorTranslator errorTranslator;
+    private ErrorMessageTranslator errorTranslator;
 
     @Override
     public Collection<BpmnMessage> translate(Collection<Bpmn> bpmns) {

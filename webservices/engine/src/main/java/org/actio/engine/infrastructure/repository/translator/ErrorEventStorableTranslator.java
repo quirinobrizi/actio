@@ -51,7 +51,7 @@ public class ErrorEventStorableTranslator {
     }
 
     public Error translate(ErrorEventStorable storable) {
-        return new Error(storable.getErrorType(), storable.getErrorMessage());
+        return new Error(storable.getErrorType(), storable.getErrorMessage(), storable.getTimestamp());
     }
 
 }
