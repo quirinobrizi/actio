@@ -1,0 +1,37 @@
+<div class="tile">
+	<div class="info gradient">
+		<span class="modal-title" id="modal-title">BPMN Info</span>
+	</div>
+	<div class="modal-body" id="modal-body">
+		<table st-table="instances" st-safe-src="$ctrl.version.process.instances" class="table table-striped">
+			<thead>
+				<tr>
+					<td class="col-md-1 small-capitalized" st-sort="instanceId" st-sort-default="true">Instance</td>
+					<td class="col-md-2 small-capitalized">State</td>
+					<td class="col-md-2 small-capitalized">Start</td>
+					<td class="col-md-2 small-capitalized">End</td>
+					<td class="col-md-5 small-capitalized">Variables</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="instance in instances">
+					<td class="text-medium">{{instance.instanceId}}</td>
+					<td class="text-medium">{{instance.instanceState}}</td>
+					<td class="text-medium">{{instance.startDate | date:'yyyy-MM-dd HH:mm'}}</td>
+					<td class="text-medium">{{instance.endDate | date:'yyyy-MM-dd HH:mm'}}</td>
+					<td class="text-medium"><pre>{{instance.variables | json}}</pre></td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="6" class="text-center">
+						<div st-pagination="" st-items-by-page="3" st-displayed-pages="5"></div>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+	<!-- <div class="modal-footer">
+		<button class="btn btn-primary" type="button" ng-click="$ctrl.close()">Close</button>
+	</div> -->
+</div>

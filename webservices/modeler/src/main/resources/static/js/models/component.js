@@ -35,8 +35,29 @@ angular
     	};
     	self.editBpmn = function(key) { $location.url('/editor/' + key); };
     	
-    	self.info = function(bpmn) {
-    		$location.path('/info');
+    	self.info = function(version) {
+    		$uibModal.open({
+				animation: true,
+				ariaLabelledBy: 'modal-title',
+				ariaDescribedBy: 'modal-body',
+				templateUrl: 'js/models/infoModalTemplate.html',
+				controller: function ($uibModalInstance, version) {
+				    var $ctrl = this;
+				    $ctrl.version = version;
+
+				    $ctrl.close = function () {
+				      $uibModalInstance.close();
+				    };
+				},
+				controllerAs: '$ctrl',
+				size: 'lg',
+				appendTo: null,
+				resolve: {
+					version: function () {
+						return version;
+					}
+				}
+			});
     	};
     	
     	self.latestModel = function(bpmn) {
@@ -84,5 +105,5 @@ angular
 					}
 				}
 			});
-		}
+		};
   }]});
