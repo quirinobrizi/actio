@@ -17,16 +17,13 @@ angular
   .module('core.authentication')
   .component('authentication', {
     templateUrl: 'js/core/authentication/template.html',
-    controller: ['$location', 'Login', 'Bus', 'Auth', function LoginController($location, Login, Bus, Auth) {
+    controller: ['$timeout', '$location', 'Login', 'Bus', 'Auth', function LoginController($timeout, $location, Login, Bus, Auth) {
     	var self = this;
     	Auth.clear();
     	self.login = function(credential) {
-    		Login.save(null, credential, success);
+    		Login.save(null, credential, function(resp, headers) {
+        		Auth.set(resp.toJSON());
+        		$location.path('/dashboard'); 
+    		});
     	};
-    	var success = function(resp, headers) {
-    		var user = resp.toJSON();
-    		Auth.set(user);
-    		Bus.emit('actio.login.successful', user);
-    		$location.path('/dashboard');
-		};
     }]});

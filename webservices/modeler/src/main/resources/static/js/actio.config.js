@@ -24,9 +24,8 @@ angular.module('actio-modeler')
   ])
   .service('TransactionInterceptor', ['$q', '$location', 'Auth', 'Bus', function($q, $location, Auth, Bus) {
 		this.request = function(config) {
-			console.log('AuthenticationInterceptor - intercepted request');
 			if(Auth.isAuthenticated()) {
-				config.headers['X-Actio-Username'] = Auth.details().userName;
+				config.headers['X-Actio-Username'] = Auth.details().user.userName;
 			}
 			return config;
 		};
@@ -50,18 +49,13 @@ angular.module('actio-modeler')
 	$httpProvider.interceptors.push('TransactionInterceptor');
   }])
   .run(['$location', 'Bus', 'Auth', function($location, Bus, Auth){
-	  Bus.listen('$locationChangeStart', function(event, next, current) {
-		  if($location.path() !== '/login') {
-			  if(!Auth.isAuthenticated()) {
-				  event.preventDefault();
-				  $location.path('/login');
-				  return;
-			  }
+	  Bus.listen('$routeChangeStart', function(event, next, current) {
+		  if($location.path() !== '/login' && !Auth.isAuthenticated()) {
+			  Auth.clear();
 		  }
-		  Bus.emit('actio.login.successful', Auth.details());
 	  });
 	  
-	  Bus.listen('actio.authenticated.user.cleared', function(e, data) {
+	  Bus.listen('actio.authentication.cleared', function(e, data) {
 		  event.preventDefault();
 		  $location.path('/login');
 		  return;

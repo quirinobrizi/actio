@@ -52,8 +52,6 @@ public class ActioAuthenticationFilter extends OncePerRequestFilter {
     private AuthenticationManager authenticationManager;
     private AuthenticationEntryPoint authenticationEntryPoint;
     private RememberMeServices rememberMeServices = new NullRememberMeServices();
-    private boolean ignoreFailure = false;
-    private String credentialsCharset = "UTF-8";
     private AuthenticationDetailsSource<HttpServletRequest, ?> authenticationDetailsSource;
 
     public ActioAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationEntryPoint authenticationEntryPoint) {
@@ -94,27 +92,32 @@ public class ActioAuthenticationFilter extends OncePerRequestFilter {
                 }
                 String username = body.get("username");
                 String password = body.get("password");
-                try {
-                    if (authenticationIsRequired(username)) {
-                        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
-                        if (null != authenticationDetailsSource) {
-                            authRequest.setDetails(this.authenticationDetailsSource.buildDetails(request));
-                        }
-                        Authentication authResult = this.authenticationManager.authenticate(authRequest);
-                        SecurityContextHolder.getContext().setAuthentication(authResult);
-                        this.rememberMeServices.loginSuccess(request, response, authResult);
-                        onSuccessfulAuthentication(request, response, authResult);
-                    }
-                    filterChain.doFilter(request, response);
-                } catch (AuthenticationException e) {
-                    SecurityContextHolder.clearContext();
-                    this.rememberMeServices.loginFail(request, response);
-                    onUnsuccessfulAuthentication(request, response, e);
-                    this.authenticationEntryPoint.commence(request, response, e);
-                }
+                doTryAuthenticate(request, response, filterChain, username, password);
             } else {
                 filterChain.doFilter(request, response);
             }
+        }
+    }
+
+    private void doTryAuthenticate(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain, String username,
+            String password) throws IOException, ServletException {
+        try {
+            if (authenticationIsRequired(username)) {
+                UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
+                if (null != authenticationDetailsSource) {
+                    authRequest.setDetails(this.authenticationDetailsSource.buildDetails(request));
+                }
+                Authentication authResult = this.authenticationManager.authenticate(authRequest);
+                SecurityContextHolder.getContext().setAuthentication(authResult);
+                this.rememberMeServices.loginSuccess(request, response, authResult);
+                onSuccessfulAuthentication(request, response, authResult);
+            }
+            filterChain.doFilter(request, response);
+        } catch (AuthenticationException e) {
+            SecurityContextHolder.clearContext();
+            this.rememberMeServices.loginFail(request, response);
+            onUnsuccessfulAuthentication(request, response, e);
+            this.authenticationEntryPoint.commence(request, response, e);
         }
     }
 
@@ -171,11 +174,7 @@ public class ActioAuthenticationFilter extends OncePerRequestFilter {
         // detected (and
         // in doing so replace
         // any existing AnonymousAuthenticationToken). See SEC-610.
-        if (existingAuth instanceof AnonymousAuthenticationToken) {
-            return true;
-        }
-
-        return false;
+        return existingAuth instanceof AnonymousAuthenticationToken;
     }
 
     private boolean bodyDoesNotContainAuthenticationDetails(Map<String, String> body) {

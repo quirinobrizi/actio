@@ -16,10 +16,12 @@
 package org.actio.modeler.interfaces;
 
 import org.actio.commons.message.Message;
+import org.actio.commons.message.identity.AuthenticateResponseMessage;
 import org.actio.modeler.infrastructure.exception.impl.UnauthorizedException;
 import org.actio.modeler.infrastructure.security.model.User;
 import org.actio.modeler.interfaces.translator.UserTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,14 +39,17 @@ public class Login {
     @Autowired
     private UserTranslator userTranslator;
 
+    @Value("${spring.session.timeout}")
+    private Long sessionTimeout;
+
     @RequestMapping(value = "/authorize")
     @ResponseStatus(code = HttpStatus.OK)
     public Message authorize() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
-        if (User.class.isAssignableFrom(principal.getClass())) {
+        if (null != principal && User.class.isAssignableFrom(principal.getClass())) {
             User user = (User) principal;
-            return userTranslator.translate(user);
+            return new AuthenticateResponseMessage(System.currentTimeMillis() + sessionTimeout * 1000, userTranslator.translate(user));
         }
         throw UnauthorizedException.newInstance();
     }

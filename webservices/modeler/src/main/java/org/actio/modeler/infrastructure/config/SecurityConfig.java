@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.apply(new ActioFormLoginConfigurer<>(modelerConfiguration)).and().csrf().disable().authorizeRequests()
-                .antMatchers("/", "/css/**", "/js/**").permitAll().anyRequest().authenticated();
+                .antMatchers("/", "/css/**", "/js/**", "/images/**", "/**/template.html").permitAll().anyRequest().authenticated();
     }
 
     @Autowired

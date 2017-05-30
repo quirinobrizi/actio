@@ -15,7 +15,6 @@
  *******************************************************************************/
 package org.actio.modeler.interfaces.translator;
 
-import org.actio.commons.message.Message;
 import org.actio.commons.message.identity.UserMessage;
 import org.actio.modeler.infrastructure.security.model.User;
 import org.springframework.stereotype.Component;
@@ -27,7 +26,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserTranslator {
 
-    public Message translate(User user) {
+    public UserMessage translate(User user) {
         return new UserMessage(null, user.getUserId(), user.getUserName(), user.getFirstName(), user.getLastName(), user.getEmail(), null);
     }
 

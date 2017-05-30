@@ -22,23 +22,32 @@ angular
   ])
   .service('Auth', ['Bus', 'localStorageService', function(Bus, localStorageService) {
 	  this.isAuthenticated = function() {
-		var user = localStorageService.get('authenticated.user');
-		return user != null && user != undefined;
+		var authentication = getItem('authentication');
+		return authentication != null && authentication != undefined;
 	  };
 	  
 	  this.clear = function() {
-		var user = localStorageService.remove('authenticated.user');
-		Bus.emit('actio.authenticated.user.cleared', user);
+		var authentication = localStorageService.remove('authentication');
+		Bus.emit('actio.authentication.cleared', authentication);
 	  };
 	  
-	  this.set = function(user) {
-		localStorageService.set('authenticated.user', user);
-		Bus.emit('actio.authenticated.user.recorded', user);
+	  this.set = function(authentication) {
+		localStorageService.set('authentication', authentication);
+		Bus.emit('actio.authentication.recorded', authentication);
 	  };
 	  
 	  
 	  this.details = function() {
-		  return localStorageService.get('authenticated.user');
+		  return getItem('authentication');
+	  };
+	  
+	  var getItem = function(key) {
+		  var authentication = localStorageService.get('authentication');
+		  if(null == authentication) {
+			  return null;
+		  }
+		  console.log(authentication.expiryTime - new Date().getTime());
+		  return authentication != null && authentication.expiryTime > new Date().getTime() ? authentication : null;
 	  };
 	  
   }]);

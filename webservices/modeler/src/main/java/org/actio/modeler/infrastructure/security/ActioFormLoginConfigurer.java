@@ -65,7 +65,7 @@ public class ActioFormLoginConfigurer<B extends HttpSecurityBuilder<B>> extends 
 
     public ActioFormLoginConfigurer(ModelerConfigurationProperties modelerConfiguration) {
         this.modelerConfiguration = modelerConfiguration;
-        LinkedHashMap<RequestMatcher, AuthenticationEntryPoint> entryPoints = new LinkedHashMap<RequestMatcher, AuthenticationEntryPoint>();
+        LinkedHashMap<RequestMatcher, AuthenticationEntryPoint> entryPoints = new LinkedHashMap<>();
         entryPoints.put(X_REQUESTED_WITH, new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
         DelegatingAuthenticationEntryPoint defaultEntryPoint = new DelegatingAuthenticationEntryPoint(entryPoints);
         defaultEntryPoint.setDefaultEntryPoint(this.actioAuthenticationEntrypoint);

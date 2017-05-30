@@ -13,24 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-angular
-  .module('navbar')
-  .component('navbar', {
-    templateUrl: 'js/navbar/template.html',
-    controller: ['Auth', 'Bus', function DashboardController(Auth, Bus) {
-    	var self = this,
-    		authentication = Auth.details();
-    	self.user = authentication ? authentication.user : null;
-    	self.showNavBar = Auth.isAuthenticated();
-    	
-    	Bus.listen('actio.authentication.recorded', function(event, data) {
-    		self.showNavBar = true;
-    		self.user = data.user;
-    	});
-    	
-    	Bus.listen('actio.authentication.cleared', function(e, data) {
-    		self.showNavBar = false;
-    	});
-    	
-    	self.logout = function() { Auth.clear(); };
-    }]});
+package org.actio.commons.message.identity;
+
+import org.actio.commons.message.Message;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+/**
+ * @author quirino.brizi
+ *
+ */
+public class AuthenticateResponseMessage implements Message {
+
+    private static final long serialVersionUID = 8170238734220872030L;
+
+    @JsonProperty("expiryTime")
+    private long expiryTime;
+    @JsonProperty("user")
+    private UserMessage user;
+
+    @JsonCreator
+    public AuthenticateResponseMessage(@JsonProperty("expiryTime") long expiryTime, @JsonProperty("user") UserMessage user) {
+        this.expiryTime = expiryTime;
+        this.user = user;
+    }
+}
