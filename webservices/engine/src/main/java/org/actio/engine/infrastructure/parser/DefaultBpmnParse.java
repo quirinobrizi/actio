@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.engine.interfaces.parser;
+package org.actio.engine.infrastructure.parser;
 
 import java.util.List;
 

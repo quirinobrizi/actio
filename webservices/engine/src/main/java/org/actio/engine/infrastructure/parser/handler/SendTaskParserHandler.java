@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.actio.engine.interfaces.parser.handler;
+package org.actio.engine.infrastructure.parser.handler;
 
 import org.actio.engine.domain.model.activities.SendTask;
-import org.actio.engine.interfaces.parser.behavior.DefaultActivityBehaviorFactory;
+import org.actio.engine.infrastructure.parser.behavior.DefaultActivityBehaviorFactory;
 import org.activiti.bpmn.constants.BpmnXMLConstants;
 import org.activiti.bpmn.model.BaseElement;
 import org.activiti.bpmn.model.DataAssociation;
@@ -58,16 +58,16 @@ public class SendTaskParserHandler extends AbstractExternalInvocationBpmnParseHa
         DefaultActivityBehaviorFactory activityBehaviorFactory = (DefaultActivityBehaviorFactory) bpmnParse.getActivityBehaviorFactory();
         if (StringUtils.isNotEmpty(sendTask.getType())) {
 
-            if (sendTask.getType().equalsIgnoreCase("mail")) {
+            if ("mail".equalsIgnoreCase(sendTask.getType())) {
                 activity.setActivityBehavior(activityBehaviorFactory.createMailActivityBehavior(sendTask));
 
-            } else if (sendTask.getType().equalsIgnoreCase("mule")) {
+            } else if ("mule".equalsIgnoreCase(sendTask.getType())) {
                 activity.setActivityBehavior(activityBehaviorFactory.createMuleActivityBehavior(sendTask, bpmnParse.getBpmnModel()));
 
-            } else if (sendTask.getType().equalsIgnoreCase("camel")) {
+            } else if ("camel".equalsIgnoreCase(sendTask.getType())) {
                 activity.setActivityBehavior(activityBehaviorFactory.createCamelActivityBehavior(sendTask, bpmnParse.getBpmnModel()));
 
-            } else if (sendTask.getType().equalsIgnoreCase("shell")) {
+            } else if ("shell".equalsIgnoreCase(sendTask.getType())) {
                 activity.setActivityBehavior(activityBehaviorFactory.createShellActivityBehavior(sendTask));
 
             } else {

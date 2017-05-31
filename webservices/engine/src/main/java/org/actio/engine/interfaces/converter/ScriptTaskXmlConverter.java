@@ -17,7 +17,7 @@ package org.actio.engine.interfaces.converter;
 
 import javax.xml.stream.XMLStreamReader;
 
-import org.actio.engine.interfaces.parser.ScriptResourceParser;
+import org.actio.engine.infrastructure.parser.ScriptResourceParser;
 import org.activiti.bpmn.converter.ScriptTaskXMLConverter;
 import org.activiti.bpmn.converter.util.BpmnXMLUtil;
 import org.activiti.bpmn.model.BaseElement;

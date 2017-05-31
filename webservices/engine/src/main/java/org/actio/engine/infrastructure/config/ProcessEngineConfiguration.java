@@ -17,7 +17,7 @@ package org.actio.engine.infrastructure.config;
 
 import java.util.List;
 
-import org.actio.engine.interfaces.parser.handler.SendTaskParserHandler;
+import org.actio.engine.infrastructure.parser.handler.SendTaskParserHandler;
 import org.activiti.engine.parse.BpmnParseHandler;
 import org.activiti.spring.SpringProcessEngineConfiguration;
 
