@@ -5550,6 +5550,39 @@ module.exports = function(element, bpmnFactory, options) {
     }
   });
 
+  var asyncEntry = entryFactory.checkbox({
+    id: idPrefix + 'async',
+    label: labelPrefix + 'Asynchronous',
+    modelProperty: 'async',
+
+    get: function(element, node) {
+      var bo = getBusinessObject(element);
+      return {
+        async: isAsyncBefore(bo)
+      };
+    },
+
+    set: function(element, values) {
+      var bo = getBusinessObject(element);
+      var _async = !!values.async;
+
+      var props = {
+        'actio:async': _async
+      };
+
+      var commands = [];
+      if (!_async) {
+        props = assign({ 'actio:exclusive' : true }, props);
+        if (canRemoveFailedJobRetryTimeCycle(element)) {
+          commands.push(removeFailedJobRetryTimeCycle(bo, element));
+        }
+      }
+
+      commands.push(cmdHelper.updateBusinessObject(element, bo, props));
+      return commands;
+    }
+  });
+
 
   var exclusiveEntry = entryFactory.checkbox({
     id: idPrefix + 'exclusive',
@@ -5568,11 +5601,11 @@ module.exports = function(element, bpmnFactory, options) {
 
     hidden: function(element) {
       var bo = getBusinessObject(element);
-      return bo && !isAsyncAfter(bo) && !isAsyncBefore(bo);
+      return bo && !isAsyncBefore(bo);
     }
   });
 
-  return [ asyncBeforeEntry, asyncAfterEntry, exclusiveEntry ];
+  return [ asyncEntry, exclusiveEntry ];
 };
 
 },{"../../helper/AsyncCapableHelper":14,"../../helper/CmdHelper":15,"../../helper/EventDefinitionHelper":17,"bpmn-js-properties-panel/lib/factory/EntryFactory":77,"lodash/object/assign":555}],47:[function(require,module,exports){
@@ -7923,7 +7956,7 @@ module.exports = function(element, bpmnFactory, options) {
 
     hidden: function(element, node) {
       //return !isMail(element);
-    	return true;
+      return true;
     }
 
   });
@@ -10562,8 +10595,8 @@ var forEach = require('lodash/collection/forEach');
  * All updates are bundled on the command stack and executed in one step.
  * This also makes it possible to revert the changes in one step.
  *
- * Example use case: remove the actio:formKey attribute and in addition
- * add all form fields needed for the actio:formData property.
+ * Example use case: remove the camunda:formKey attribute and in addition
+ * add all form fields needed for the camunda:formData property.
  *
  * @class
  * @constructor
@@ -12311,7 +12344,7 @@ module.exports = function(group, element) {
       };
     }
 
-    group.entries.push(executableEntry);
+    // group.entries.push(executableEntry);
   }
 
 };
@@ -12652,7 +12685,7 @@ module.exports = function(group, element, bpmnFactory, conditionalEventDefinitio
 
   var getValue = function(modelProperty) {
     return function(element) {
-      var modelPropertyValue = conditionalEventDefinition.get('actio:' + modelProperty);
+      var modelPropertyValue = conditionalEventDefinition.get('camunda:' + modelProperty);
       var value = {};
 
       value[modelProperty] = modelPropertyValue;
@@ -12664,7 +12697,7 @@ module.exports = function(group, element, bpmnFactory, conditionalEventDefinitio
     return function(element, values) {
       var props = {};
 
-      props['actio:' + modelProperty] = values[modelProperty] || undefined;
+      props['camunda:' + modelProperty] = values[modelProperty] || undefined;
 
       return cmdHelper.updateBusinessObject(element, conditionalEventDefinition, props);
     };
@@ -12814,7 +12847,7 @@ module.exports = function(group, element, bpmnFactory, errorEventDefinition, sho
 
   var getValue = function(modelProperty) {
     return function(element) {
-      var modelPropertyValue = errorEventDefinition.get('actio:' + modelProperty);
+      var modelPropertyValue = errorEventDefinition.get('camunda:' + modelProperty);
       var value = {};
 
       value[modelProperty] = modelPropertyValue;
@@ -12826,7 +12859,7 @@ module.exports = function(group, element, bpmnFactory, errorEventDefinition, sho
     return function(element, values) {
       var props = {};
 
-      props['actio:' + modelProperty] = values[modelProperty] || undefined;
+      props['camunda:' + modelProperty] = values[modelProperty] || undefined;
 
       return cmdHelper.updateBusinessObject(element, errorEventDefinition, props);
     };
@@ -12928,7 +12961,7 @@ module.exports = function(group, element, bpmnFactory, escalationEventDefinition
       modelProperty : 'escalationCodeVariable',
 
       get: function(element) {
-        var codeVariable = escalationEventDefinition.get('actio:escalationCodeVariable');
+        var codeVariable = escalationEventDefinition.get('camunda:escalationCodeVariable');
         return {
           escalationCodeVariable: codeVariable
         };
@@ -12936,7 +12969,7 @@ module.exports = function(group, element, bpmnFactory, escalationEventDefinition
 
       set: function(element, values) {
         return cmdHelper.updateBusinessObject(element, escalationEventDefinition, {
-          'actio:escalationCodeVariable': values.escalationCodeVariable || undefined
+          'camunda:escalationCodeVariable': values.escalationCodeVariable || undefined
         });
       }
     }));

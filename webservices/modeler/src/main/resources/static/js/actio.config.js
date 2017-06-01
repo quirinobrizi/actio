@@ -56,7 +56,7 @@ angular.module('actio-modeler')
 	  });
 	  
 	  Bus.listen('actio.authentication.cleared', function(e, data) {
-		  event.preventDefault();
+		  e.preventDefault();
 		  $location.path('/login');
 		  return;
   	  });

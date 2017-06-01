@@ -1,31 +1,35 @@
 <div class="editor">
-	<div class="canvas" id="canvas"></div>
-	<div class="properties" id="properties"></div>
-	<div class="io-import-export">
-		<ul class="io-control-list">
-			<li>
-				<button title="open BPMN diagram from local file system">
-					<i class="material-icons">file_upload</i>
-				</button>
-			</li>
-			<li class="vr" style="margin-left: 2px"></li>
-			<li>
-				<button title="download BPMN diagram on local file system" ng-click="$ctrl.downloadBpmn($event)">
-					<i class="material-icons">file_download</i>
-				</button>
-			</li>
-			<li class="vr" style="margin-left: 2px"></li>
-			<li>
-				<button title="create new BPMN diagram">
-					<i class="material-icons">add</i>
-				</button>
-			</li>
-			<li class="vr" style="margin-left: 2px"></li>
-			<li>
-				<button title="publish BPMN diagram" ng-click="$ctrl.publishModel()">
-					<i class="material-icons">publish</i>
-				</button>
-			</li>
-		</ul>
+	<div class="canvas" id="canvas"></div><div class="controls">
+		<div class="io-import-export">
+			<ul class="io-control-list">
+				<li>
+					<span title="open BPMN diagram from local file system"
+						class="material-icons-background material-icons">
+						file_upload
+					</span>
+				</li>
+				<li>
+					<span title="download BPMN diagram on local file system" 
+						class="material-icons-background material-icons"
+						ng-click="$ctrl.downloadBpmn($event)">
+						file_download
+					</span>
+				</li>
+				<li>
+					<span title="create new BPMN diagram"
+						class="material-icons-background material-icons">
+						add
+					</span>
+				</li>
+				<li>
+					<span title="publish BPMN diagram" 
+						class="material-icons-background material-icons"
+						ng-click="$ctrl.publishModel()">
+						publish
+					</span>
+				</li>
+			</ul>
+		</div>
+		<div class="properties" id="properties"></div>
 	</div>
 </div>

@@ -24,7 +24,7 @@ a:link { text-decoration: none; }
     color: #FFFFFF;
 }
 
-.navbar { margin-bottom: 15px; }
+.navbar { margin-bottom: 15px; border-radius: 0; border: 0;}
 .navbar-default { 
 	background-color: #8FC1FF;
     /* For WebKit (Safari, Chrome, etc) */
@@ -42,10 +42,7 @@ a:link { text-decoration: none; }
 	background-color: transparent;
 }
 
-#view-container {
-	padding: 0; margin: 0 auto;
-	width: 98%; height: 78%;
-}
+#view-container { padding: 0; margin: 0 auto; width: 98%; }
 
 #single-value-widget {
 	width: 100%; min-width: 60px;
@@ -72,27 +69,20 @@ a:link { text-decoration: none; }
 	padding: 0; margin: 0;
 }
 
-.editor { margin: 0; padding: 20px 0 0 0; background-image: url(../images/ruler.png); background-repeat: no-repeat; }
-.editor .canvas { width: 80%; display: inline-block; padding: 0; margin: 0; }
-.editor .properties { width: 18%; height: 100%; vertical-align: top; display: inline-block; padding: 0; margin: 0; }
+.editor { margin: 0; padding: 20px 0 0 0; background-image: url(../images/ruler.png); background-repeat: no-repeat; height: 90%; }
+.editor .canvas { width: 75%; display: inline-block; padding: 0; margin: 0; }
+.editor .controls { width: 25%; vertical-align: top; display: inline-block; padding: 0; margin: 0; }
+.editor .controls .material-icons { color: black; font-size: 16px; text-decoration: none; }
+.editor .controls .material-icons-background { background: #8FC1FF; }
+.editor .controls .properties { width: 100%; height:90%; vertical-align: top; display: block; padding: 0 10px 0 0; margin: 0; overflow-y: auto;  }
 
 .io-control-list { list-style: none; padding: 5px; margin: 0; }
 .io-control-list li { display: inline-block; margin-right: 5px; }
 
-.vr {
-    height: 22px;
-    display: inline-block;
-    border-right: solid 1px #CCC
-}
+.vr { height: 22px; display: inline-block; border-right: solid 1px #CCC }
 
-.djs-palette{
-	margin-left: -20px;
-	margin-top: -20px;	
-}
-
-.bpp-properties-header .label {
-	color: inherit;
-}
+.djs-palette { margin-left: -20px; margin-top: -20px; }
+.bpp-properties-header .label { color: inherit; }
 
 /* Tiles template */
 .tile { border: 1px solid #8FC1FF; border-radius: 5px; padding: 5px; }
@@ -263,7 +253,7 @@ label.form-invalid:after {
 }
 /*=== 8. Custom Checkbox & Radio ===*/
 /* Base for label styling */
-[type="checkbox"]:not(:checked),
+/* [type="checkbox"]:not(:checked),
 [type="checkbox"]:checked,
 [type="radio"]:not(:checked),
 [type="radio"]:checked {
@@ -278,9 +268,9 @@ label.form-invalid:after {
   padding-left: 25px;
   padding-top: 1px;
   cursor: pointer;
-}
+} */
 /* checkbox aspect */
-[type="checkbox"]:not(:checked) + label:before,
+/* [type="checkbox"]:not(:checked) + label:before,
 [type="checkbox"]:checked + label:before,
 [type="radio"]:not(:checked) + label:before,
 [type="radio"]:checked + label:before {
@@ -294,27 +284,27 @@ label.form-invalid:after {
   background: #f0f0f0;
   border-radius: 3px;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
-}
+} */
 /* checked mark aspect */
-[type="checkbox"]:not(:checked) + label:after,
+/* [type="checkbox"]:not(:checked) + label:after,
 [type="checkbox"]:checked + label:after,
 [type="radio"]:not(:checked) + label:after,
 [type="radio"]:checked + label:after {
   position: absolute;
   color: #555555;
   transition: all .2s;
-}
+} */
 /* checked mark aspect changes */
-[type="checkbox"]:not(:checked) + label:after,
+/* [type="checkbox"]:not(:checked) + label:after,
 [type="radio"]:not(:checked) + label:after {
   opacity: 0;
   transform: scale(0);
-}
-[type="checkbox"]:checked + label:after,
+} */
+/* [type="checkbox"]:checked + label:after,
 [type="radio"]:checked + label:after {
   opacity: 1;
   transform: scale(1);
-}
+} */
 /* disabled checkbox */
 [type="checkbox"]:disabled:not(:checked) + label:before,
 [type="checkbox"]:disabled:checked + label:before,

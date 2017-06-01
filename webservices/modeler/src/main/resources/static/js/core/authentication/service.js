@@ -46,7 +46,6 @@ angular
 		  if(null == authentication) {
 			  return null;
 		  }
-		  console.log(authentication.expiryTime - new Date().getTime());
 		  return authentication != null && authentication.expiryTime > new Date().getTime() ? authentication : null;
 	  };
 	  

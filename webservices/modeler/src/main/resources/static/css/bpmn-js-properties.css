@@ -75,7 +75,7 @@
   display: inline-block;
   vertical-align: middle;
   color: #666;
-  margin-bottom: 3px;
+  margin-bottom: 0px;
   font-size: 85%;
 }
 .bpp-properties-panel label[for] {

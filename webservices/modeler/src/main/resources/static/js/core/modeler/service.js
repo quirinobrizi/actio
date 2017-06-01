@@ -135,18 +135,6 @@ angular.module('core.modeler').factory('Modeler', [ function() {
 				          "default": false
 				        },
 				        {
-				          "name": "asyncBefore",
-				          "isAttr": true,
-				          "type": "Boolean",
-				          "default": false
-				        },
-				        {
-				          "name": "asyncAfter",
-				          "isAttr": true,
-				          "type": "Boolean",
-				          "default": false
-				        },
-				        {
 				          "name": "exclusive",
 				          "isAttr": true,
 				          "type": "Boolean",
