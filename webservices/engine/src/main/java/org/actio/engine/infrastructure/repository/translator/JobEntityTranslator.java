@@ -29,17 +29,18 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class JobEntityTranslator implements Translator<Job, JobEntity> {
+public class JobEntityTranslator implements Translator<Job, org.activiti.engine.runtime.Job> {
 
     @Override
-    public Job translate(JobEntity entity) {
+    public Job translate(org.activiti.engine.runtime.Job job) {
+        JobEntity entity = (JobEntity) job;
         return new Job(entity.getId(), JobType.from(entity.getJobType()), entity.getDuedate());
     }
 
     @Override
-    public Collection<Job> translate(Collection<JobEntity> jobs) {
+    public Collection<Job> translate(Collection<org.activiti.engine.runtime.Job> jobs) {
         Collection<Job> answer = new HashSet<>();
-        for (JobEntity entity : jobs) {
+        for (org.activiti.engine.runtime.Job entity : jobs) {
             answer.add(translate(entity));
         }
         return answer;

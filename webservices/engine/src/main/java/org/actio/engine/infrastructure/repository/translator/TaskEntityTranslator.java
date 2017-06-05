@@ -20,7 +20,6 @@ import java.util.HashSet;
 
 import org.actio.engine.domain.model.bpmn.process.Task;
 import org.actio.engine.infrastructure.Translator;
-import org.activiti.engine.impl.persistence.entity.TaskEntity;
 import org.springframework.stereotype.Component;
 
 /**
@@ -28,17 +27,17 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class TaskEntityTranslator implements Translator<Task, TaskEntity> {
+public class TaskEntityTranslator implements Translator<Task, org.activiti.engine.task.Task> {
 
     @Override
-    public Task translate(TaskEntity entity) {
+    public Task translate(org.activiti.engine.task.Task entity) {
         return new Task(entity.getId(), entity.getAssignee(), entity.getDueDate());
     }
 
     @Override
-    public Collection<Task> translate(Collection<TaskEntity> tasks) {
+    public Collection<Task> translate(Collection<org.activiti.engine.task.Task> tasks) {
         Collection<Task> answer = new HashSet<>();
-        for (TaskEntity entity : tasks) {
+        for (org.activiti.engine.task.Task entity : tasks) {
             answer.add(translate(entity));
         }
         return answer;

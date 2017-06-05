@@ -15,7 +15,7 @@
  ******************************************************************************/
 angular.module('editor').component('editor', {
 	templateUrl : 'js/editor/template.html',
-	controller : [ 'Models', 'Modeler', '$routeParams', function EditorController(Models, Modeler, $routeParams) {
+	controller : [ 'Models', 'Modeler', 'growl', '$routeParams', function EditorController(Models, Modeler, growl, $routeParams) {
 		var self = this,
 			modelKey = $routeParams.modelKey;
 
@@ -34,7 +34,7 @@ angular.module('editor').component('editor', {
 		self.publishModel = function() {
 			modeler.saveXML({ format: true }, function(err, xml) {
 				if(err) {
-					alert('unable to export model to XML' + err);
+					growl.error('unable to export model to XML' + err);
 				} else {
 					var process = modeler.definitions.rootElements[0],
 						model = {'id': self.modelId, 'key': process.id, 'name': process.name, 'definition': xml};
@@ -44,9 +44,9 @@ angular.module('editor').component('editor', {
 						}
 						Models.save(model).$promise.then(function(newModel) { 
 							self.modelId = newModel.id;
-							alert("model " + newModel.key + " published");
+							growl.info("model " + newModel.key + " published");
 						}, function(error) {
-							alert("unable to publish model " + model.key + ", " + error);
+							growl.error("unable to publish model " + model.key + ", " + error);
 						});
 					});
 				}
@@ -63,7 +63,7 @@ angular.module('editor').component('editor', {
 			Models.get({key:modelKey}).$promise.then(function(model) {
 					self.modelId = model.id; openDiagram(model.definition); 
 			}, function(err) {
-				alert("unable to open model " + modelKey); openDiagram(Modeler.initialDiagram());
+				growl.alert("unable to open model " + modelKey); openDiagram(Modeler.initialDiagram());
 			});
 		} else {
 			openDiagram(Modeler.initialDiagram());

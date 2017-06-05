@@ -17,12 +17,17 @@ package org.actio.engine.infrastructure.repository.translator;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 import org.actio.engine.domain.model.bpmn.process.Instance;
 import org.actio.engine.domain.model.bpmn.process.InstanceId;
 import org.actio.engine.domain.model.bpmn.process.InstanceState;
 import org.actio.engine.infrastructure.Translator;
+import org.activiti.engine.ManagementService;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
+import org.activiti.engine.runtime.Job;
+import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -37,6 +42,10 @@ public class ExecutionEntityTranslator implements Translator<Instance, Execution
     private JobEntityTranslator jobEntityTranslator;
     @Autowired
     private TaskEntityTranslator taskEntityTranslator;
+    @Autowired
+    private TaskService taskService;
+    @Autowired
+    private ManagementService managementService;
 
     /*
      * (non-Javadoc)
@@ -58,16 +67,10 @@ public class ExecutionEntityTranslator implements Translator<Instance, Execution
         }
         instance.setInstanceState(instanceState);
         instance.setStartDate(entity.getLockTime());
-        try {
-            instance.setJobs(jobEntityTranslator.translate(entity.getJobs()));
-        } catch (Exception e) { // NOSONAR
-            // do nothing
-        }
-        try {
-            instance.setTasks(taskEntityTranslator.translate(entity.getTasks()));
-        } catch (Exception e) { // NOSONAR
-            // do nothing
-        }
+        List<Job> jobs = managementService.createJobQuery().executionId(entity.getId()).list();
+        instance.setJobs(jobEntityTranslator.translate(jobs));
+        List<Task> tasks = taskService.createTaskQuery().executionId(entity.getId()).list();
+        instance.setTasks(taskEntityTranslator.translate(tasks));
         return instance;
     }
 

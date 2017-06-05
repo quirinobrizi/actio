@@ -1,4 +1,4 @@
-package org.actio.engine.infrastructure.activiti;
+package org.actio.engine.infrastructure.repository;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyString;
