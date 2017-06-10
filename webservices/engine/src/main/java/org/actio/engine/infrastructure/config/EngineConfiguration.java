@@ -47,7 +47,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableJpaRepositories(basePackages = { "org.actio.engine.infrastructure.repository.jpa" })
 @ComponentScan(basePackages = { "org.actio.engine.interfaces", "org.actio.engine.app", "org.actio.engine.infrastructure.config",
         "org.actio.engine.infrastructure.bpmn", "org.actio.engine.infrastructure.repository", "org.actio.engine.infrastructure.command",
-        "org.actio.engine.interfaces.translator" })
+        "org.actio.engine.infrastructure.parser", "org.actio.engine.interfaces.translator" })
 public class EngineConfiguration { // NOSONAR
 
     public static void main(String[] args) {
