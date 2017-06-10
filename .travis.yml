@@ -6,7 +6,6 @@ jdk:
 services:
   - docker
 
-script: mvn clean package docker:build
-after_success:
+before_install:
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-  - mvn docker:push
+script: mvn clean docker:build docker:push
